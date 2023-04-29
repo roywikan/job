@@ -1,2 +1,2 @@
 # job
-demo job.web.id
+demo job.web
