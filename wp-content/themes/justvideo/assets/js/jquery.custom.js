@@ -29,24 +29,25 @@
         $('.entry-content .first-video').eq(1).removeClass('first-video').end();
 
         var video_height = $('.first-video').height();
-        $('article.has-embed').css('padding-top',video_height+25);
+        /* byroy $('article.has-embed').css('padding-top',video_height+25);*/
+		 $('article.has-embed').css('padding-top',25);
 
         var video_height = $('.wp-video').height();
-        $('article.has-embed').css('padding-top',video_height+25);
+        $('article.has-embed').css('padding-top',25);
 
         var video_height = $('.wp-block-video').height();
-        $('article.has-embed').css('padding-top',video_height+25);
+        $('article.has-embed').css('padding-top',25);
 
         $(window).on('resize', function() {
 
             var video_height_r = $('.first-video').height();
-            $('article.has-embed').css('padding-top',video_height_r+25);
+            $('article.has-embed').css('padding-top',25);
 
             var video_height_r = $('.wp-video').height();
-            $('article.has-embed').css('padding-top',video_height_r+25);   
+            $('article.has-embed').css('padding-top',25);   
 
             var video_height_r = $('.wp-block-video').height();
-            $('article.has-embed').css('padding-top',video_height_r+25);   
+            $('article.has-embed').css('padding-top',25);   
 
         });
 

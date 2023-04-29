@@ -5,9 +5,6 @@
 		<loc>/sitemap-post-type-post.xml</loc>
 	</sitemap>
 	<sitemap>
-		<loc>/sitemap-post-type-page.xml</loc>
-	</sitemap>
-	<sitemap>
 		<loc>/sitemap-taxonomy-category.xml</loc>
 	</sitemap>
 	<sitemap>

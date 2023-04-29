@@ -2,9 +2,9 @@
 <?xml-stylesheet type="text/xsl" href="/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<url>
-		<loc>/country/indonesia/</loc>
+		<loc>/country/id/</loc>
 	</url>
 	<url>
-		<loc>/country/usa/</loc>
+		<loc>/country/us/</loc>
 	</url>
 </urlset>
