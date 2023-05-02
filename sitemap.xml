@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
+<?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<sitemap>
-		<loc>/sitemap-post-type-post.xml</loc>
+		<loc>https://job.web.id/sitemap-post-type-post.xml</loc>
 	</sitemap>
 	<sitemap>
-		<loc>/sitemap-post-type-page.xml</loc>
+		<loc>https://job.web.id/sitemap-post-type-page.xml</loc>
 	</sitemap>
 	<sitemap>
-		<loc>/sitemap-taxonomy-category.xml</loc>
+		<loc>https://job.web.id/sitemap-taxonomy-category.xml</loc>
 	</sitemap>
 	<sitemap>
-		<loc>/sitemap-taxonomy-post_tag.xml</loc>
+		<loc>https://job.web.id/sitemap-taxonomy-post_tag.xml</loc>
 	</sitemap>
 </sitemapindex>
