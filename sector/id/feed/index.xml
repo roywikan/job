@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>id &#8211; Job Web</title>
+	<atom:link href="/sector/id/feed/" rel="self" type="application/rss+xml" />
+	<link>/</link>
+	<description>Job And Vacancy Positions Information</description>
+	<lastBuildDate>Mon, 01 May 2023 13:46:51 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.2</generator>
+
+<image>
+	<url>/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
+	<title>id &#8211; Job Web</title>
+	<link>/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Karyawan Pabrik Sidoarjo, Jawa Timur</title>
+		<link>/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/</link>
+					<comments>/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/#respond</comments>
+		
+		<dc:creator><![CDATA[jobs]]></dc:creator>
+		<pubDate>Fri, 28 Apr 2023 10:43:15 +0000</pubDate>
+				<category><![CDATA[Sidoarjo]]></category>
+		<category><![CDATA[5 jt per bulan]]></category>
+		<category><![CDATA[5 jt–rp 6]]></category>
+		<category><![CDATA[bahasaindonesia]]></category>
+		<category><![CDATA[id]]></category>
+		<category><![CDATA[indonesia]]></category>
+		<category><![CDATA[jawa]]></category>
+		<category><![CDATA[jawa timur]]></category>
+		<category><![CDATA[kabupaten]]></category>
+		<category><![CDATA[kabupaten sidoarjo]]></category>
+		<category><![CDATA[karyawan]]></category>
+		<category><![CDATA[pabrik]]></category>
+		<category><![CDATA[pekerjaan tetap]]></category>
+		<category><![CDATA[sidoarjo]]></category>
+		<category><![CDATA[timur]]></category>
+		<guid isPermaLink="false">http://None/</guid>
+
+					<description><![CDATA[Mencari Tenaga Kerja Yang Serius Dan Siap Kerja Penempatan kerja untuk Pabrik PLASTIK, KARTON &#038; GUDANG, Surabaya / Sidoarjo / Gresik
+<p><a href="/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/" rel="nofollow">Source</a></p>]]></description>
+		
+					<wfw:commentRss>/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>

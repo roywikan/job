@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>admin &#8211; Job Web</title>
+	<atom:link href="/sector/admin/feed/" rel="self" type="application/rss+xml" />
+	<link>/</link>
+	<description>Job And Vacancy Positions Information</description>
+	<lastBuildDate>Mon, 01 May 2023 13:20:26 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.2</generator>
+
+<image>
+	<url>/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
+	<title>admin &#8211; Job Web</title>
+	<link>/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Office Admin Jmax Properties Llc &#8211;  Roseville, CA</title>
+		<link>/us/california/office-admin-jmax-properties-llc-roseville-ca/</link>
+					<comments>/us/california/office-admin-jmax-properties-llc-roseville-ca/#respond</comments>
+		
+		<dc:creator><![CDATA[jobs]]></dc:creator>
+		<pubDate>Sat, 29 Apr 2023 09:19:22 +0000</pubDate>
+				<category><![CDATA[California]]></category>
+		<category><![CDATA[20–28 an hour]]></category>
+		<category><![CDATA[admin]]></category>
+		<category><![CDATA[ca]]></category>
+		<category><![CDATA[dental insurance]]></category>
+		<category><![CDATA[full-time]]></category>
+		<category><![CDATA[health insurance]]></category>
+		<category><![CDATA[jmax]]></category>
+		<category><![CDATA[jmax properties llc -]]></category>
+		<category><![CDATA[llc]]></category>
+		<category><![CDATA[office]]></category>
+		<category><![CDATA[office jobs]]></category>
+		<category><![CDATA[properties]]></category>
+		<category><![CDATA[roseville]]></category>
+		<category><![CDATA[usa]]></category>
+		<guid isPermaLink="false">http://None/</guid>
+
+					<description><![CDATA[Estimated Salary 20 to 28 per hour based on qualifications Job Description Quick Apply Full-time Looking for a skilled OFFICE ADMIN to join our growing team
+<p><a href="/us/california/office-admin-jmax-properties-llc-roseville-ca/" rel="nofollow">Source</a></p>]]></description>
+		
+					<wfw:commentRss>/us/california/office-admin-jmax-properties-llc-roseville-ca/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>

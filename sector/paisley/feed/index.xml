@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>paisley &#8211; Job Web</title>
+	<atom:link href="/sector/paisley/feed/" rel="self" type="application/rss+xml" />
+	<link>/</link>
+	<description>Job And Vacancy Positions Information</description>
+	<lastBuildDate>Mon, 01 May 2023 13:52:09 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=6.2</generator>
+
+<image>
+	<url>/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
+	<title>paisley &#8211; Job Web</title>
+	<link>/</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Range Cowboy 1 (ZX Ranch) Simplot   Paisley, OR</title>
+		<link>/us/range-cowboy-1-zx-ranch-simplot-paisley/</link>
+					<comments>/us/range-cowboy-1-zx-ranch-simplot-paisley/#respond</comments>
+		
+		<dc:creator><![CDATA[jobs]]></dc:creator>
+		<pubDate>Fri, 28 Apr 2023 07:02:11 +0000</pubDate>
+				<category><![CDATA[USA]]></category>
+		<category><![CDATA[cowboy]]></category>
+		<category><![CDATA[full-time]]></category>
+		<category><![CDATA[or]]></category>
+		<category><![CDATA[paisley]]></category>
+		<category><![CDATA[ranch]]></category>
+		<category><![CDATA[range]]></category>
+		<category><![CDATA[simplot]]></category>
+		<category><![CDATA[united states]]></category>
+		<category><![CDATA[usa]]></category>
+		<category><![CDATA[zx]]></category>
+		<guid isPermaLink="false">http://None/</guid>
+
+					<description><![CDATA[Specific vision abilities required by this job include distance  and depth perception. The work environment characteristics described here are representative
+<p><a href="/us/range-cowboy-1-zx-ranch-simplot-paisley/" rel="nofollow">Source</a></p>]]></description>
+		
+					<wfw:commentRss>/us/range-cowboy-1-zx-ranch-simplot-paisley/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>

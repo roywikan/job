@@ -5,11 +5,10 @@
 		<loc>/</loc>
 	</url>
 	<url>
-		<loc>/myai-account/</loc>
-		<lastmod>2023-04-27T05:53:15+00:00</lastmod>
-	</url>
-	<url>
-		<loc>/sample-page/</loc>
-		<lastmod>2023-04-25T01:11:13+00:00</lastmod>
+		<loc>/logo-logo-online/</loc>
+		<lastmod>2023-05-02T01:11:11+00:00</lastmod>
+		<image:image>
+			<image:loc>/wp-content/uploads/2023/05/cropped-job-web-loker.png</image:loc>
+		</image:image>
 	</url>
 </urlset>
