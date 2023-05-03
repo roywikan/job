@@ -9,8 +9,8 @@
 
 <channel>
 	<title>kabupaten sidoarjo &#8211; Job Web</title>
-	<atom:link href="/sector/kabupaten-sidoarjo/feed/" rel="self" type="application/rss+xml" />
-	<link>/</link>
+	<atom:link href="https://job.web.id/sector/kabupaten-sidoarjo/feed/" rel="self" type="application/rss+xml" />
+	<link>https://job.web.id/</link>
 	<description>Job And Vacancy Positions Information</description>
 	<lastBuildDate>Mon, 01 May 2023 13:46:51 +0000</lastBuildDate>
 	<language>en-US</language>
@@ -21,16 +21,16 @@
 	<generator>https://wordpress.org/?v=6.2</generator>
 
 <image>
-	<url>/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
+	<url>https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
 	<title>kabupaten sidoarjo &#8211; Job Web</title>
-	<link>/</link>
+	<link>https://job.web.id/</link>
 	<width>32</width>
 	<height>32</height>
 </image> 
 	<item>
 		<title>Karyawan Pabrik Sidoarjo, Jawa Timur</title>
-		<link>/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/</link>
-					<comments>/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/#respond</comments>
+		<link>https://job.web.id/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/</link>
+					<comments>https://job.web.id/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/#respond</comments>
 		
 		<dc:creator><![CDATA[jobs]]></dc:creator>
 		<pubDate>Fri, 28 Apr 2023 10:43:15 +0000</pubDate>
@@ -52,9 +52,9 @@
 		<guid isPermaLink="false">http://None/</guid>
 
 					<description><![CDATA[Mencari Tenaga Kerja Yang Serius Dan Siap Kerja Penempatan kerja untuk Pabrik PLASTIK, KARTON &#038; GUDANG, Surabaya / Sidoarjo / Gresik
-<p><a href="/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/" rel="nofollow">Source</a></p>]]></description>
+<p><a href="https://job.web.id/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/" rel="nofollow">Source</a></p>]]></description>
 		
-					<wfw:commentRss>/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/feed/</wfw:commentRss>
+					<wfw:commentRss>https://job.web.id/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/feed/</wfw:commentRss>
 			<slash:comments>0</slash:comments>
 		
 		

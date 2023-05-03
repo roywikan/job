@@ -9,8 +9,8 @@
 
 <channel>
 	<title>Jawa Barat &#8211; Job Web</title>
-	<atom:link href="/country/id/jawa-barat/feed/" rel="self" type="application/rss+xml" />
-	<link>/</link>
+	<atom:link href="https://job.web.id/country/id/jawa-barat/feed/" rel="self" type="application/rss+xml" />
+	<link>https://job.web.id/</link>
 	<description>Job And Vacancy Positions Information</description>
 	<lastBuildDate>Mon, 01 May 2023 13:39:56 +0000</lastBuildDate>
 	<language>en-US</language>
@@ -21,16 +21,16 @@
 	<generator>https://wordpress.org/?v=6.2</generator>
 
 <image>
-	<url>/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
+	<url>https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
 	<title>Jawa Barat &#8211; Job Web</title>
-	<link>/</link>
+	<link>https://job.web.id/</link>
 	<width>32</width>
 	<height>32</height>
 </image> 
 	<item>
 		<title>Lowongan Kerja PT Epson Karyawan Pabrik Bekasi</title>
-		<link>/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/</link>
-					<comments>/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/#respond</comments>
+		<link>https://job.web.id/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/</link>
+					<comments>https://job.web.id/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/#respond</comments>
 		
 		<dc:creator><![CDATA[jobs]]></dc:creator>
 		<pubDate>Fri, 28 Apr 2023 17:37:35 +0000</pubDate>
@@ -57,9 +57,9 @@
 		<guid isPermaLink="false">http://None/</guid>
 
 					<description><![CDATA[Perusahaan ini membuka kesempatan karir untuk bergabung bersama mereka. Saat ini, mereka sedang mencari kandidat untuk posisi Operator Produksi, Operator Assembling, Operator Quality Control, Staff Administrasi, dan Staff Gudang. Jika Anda tertarik, silakan ajukan lamaran Anda segera.
-<p><a href="/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/" rel="nofollow">Source</a></p>]]></description>
+<p><a href="https://job.web.id/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/" rel="nofollow">Source</a></p>]]></description>
 		
-					<wfw:commentRss>/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/feed/</wfw:commentRss>
+					<wfw:commentRss>https://job.web.id/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/feed/</wfw:commentRss>
 			<slash:comments>0</slash:comments>
 		
 		

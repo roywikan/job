@@ -9,8 +9,8 @@
 
 <channel>
 	<title>Cikarang &#8211; Job Web</title>
-	<atom:link href="/country/id/jawa-barat/cikarang/feed/" rel="self" type="application/rss+xml" />
-	<link>/</link>
+	<atom:link href="https://job.web.id/country/id/jawa-barat/cikarang/feed/" rel="self" type="application/rss+xml" />
+	<link>https://job.web.id/</link>
 	<description>Job And Vacancy Positions Information</description>
 	<lastBuildDate>Mon, 01 May 2023 13:42:51 +0000</lastBuildDate>
 	<language>en-US</language>
@@ -21,16 +21,16 @@
 	<generator>https://wordpress.org/?v=6.2</generator>
 
 <image>
-	<url>/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
+	<url>https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
 	<title>Cikarang &#8211; Job Web</title>
-	<link>/</link>
+	<link>https://job.web.id/</link>
 	<width>32</width>
 	<height>32</height>
 </image> 
 	<item>
 		<title>Lowongan Kerja Karyawan Pabrik PT. Omron Manufacturing</title>
-		<link>/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/</link>
-					<comments>/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/#respond</comments>
+		<link>https://job.web.id/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/</link>
+					<comments>https://job.web.id/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/#respond</comments>
 		
 		<dc:creator><![CDATA[jobs]]></dc:creator>
 		<pubDate>Fri, 28 Apr 2023 17:29:18 +0000</pubDate>
@@ -54,9 +54,9 @@
 		<guid isPermaLink="false">http://None/</guid>
 
 					<description><![CDATA[Apabila Anda berminat dengan lowongan kerja di PT Omron Manufacturing of Indonesia, Anda dapat mengajukan lamaran melalui online pada alamat yang tertera di bawah ini.
-<p><a href="/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/" rel="nofollow">Source</a></p>]]></description>
+<p><a href="https://job.web.id/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/" rel="nofollow">Source</a></p>]]></description>
 		
-					<wfw:commentRss>/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/feed/</wfw:commentRss>
+					<wfw:commentRss>https://job.web.id/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/feed/</wfw:commentRss>
 			<slash:comments>0</slash:comments>
 		
 		

@@ -9,8 +9,8 @@
 
 <channel>
 	<title>properties &#8211; Job Web</title>
-	<atom:link href="/sector/properties/feed/" rel="self" type="application/rss+xml" />
-	<link>/</link>
+	<atom:link href="https://job.web.id/sector/properties/feed/" rel="self" type="application/rss+xml" />
+	<link>https://job.web.id/</link>
 	<description>Job And Vacancy Positions Information</description>
 	<lastBuildDate>Mon, 01 May 2023 13:20:26 +0000</lastBuildDate>
 	<language>en-US</language>
@@ -21,16 +21,16 @@
 	<generator>https://wordpress.org/?v=6.2</generator>
 
 <image>
-	<url>/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
+	<url>https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png</url>
 	<title>properties &#8211; Job Web</title>
-	<link>/</link>
+	<link>https://job.web.id/</link>
 	<width>32</width>
 	<height>32</height>
 </image> 
 	<item>
 		<title>Office Admin Jmax Properties Llc &#8211;  Roseville, CA</title>
-		<link>/us/california/office-admin-jmax-properties-llc-roseville-ca/</link>
-					<comments>/us/california/office-admin-jmax-properties-llc-roseville-ca/#respond</comments>
+		<link>https://job.web.id/us/california/office-admin-jmax-properties-llc-roseville-ca/</link>
+					<comments>https://job.web.id/us/california/office-admin-jmax-properties-llc-roseville-ca/#respond</comments>
 		
 		<dc:creator><![CDATA[jobs]]></dc:creator>
 		<pubDate>Sat, 29 Apr 2023 09:19:22 +0000</pubDate>
@@ -52,9 +52,9 @@
 		<guid isPermaLink="false">http://None/</guid>
 
 					<description><![CDATA[Estimated Salary 20 to 28 per hour based on qualifications Job Description Quick Apply Full-time Looking for a skilled OFFICE ADMIN to join our growing team
-<p><a href="/us/california/office-admin-jmax-properties-llc-roseville-ca/" rel="nofollow">Source</a></p>]]></description>
+<p><a href="https://job.web.id/us/california/office-admin-jmax-properties-llc-roseville-ca/" rel="nofollow">Source</a></p>]]></description>
 		
-					<wfw:commentRss>/us/california/office-admin-jmax-properties-llc-roseville-ca/feed/</wfw:commentRss>
+					<wfw:commentRss>https://job.web.id/us/california/office-admin-jmax-properties-llc-roseville-ca/feed/</wfw:commentRss>
 			<slash:comments>0</slash:comments>
 		
 		
