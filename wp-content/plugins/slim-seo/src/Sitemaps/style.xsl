@@ -103,7 +103,7 @@
 				</table>
 			</div>
 			<div class="info">
-				This XML Sitemap Index file contains <xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/> sitemaps.
+				This XML Sitemap Index file contains <xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/> sitemaps. <a href="https://www.google.com/ping?sitemap=https://job.web.id/sitemap.xml" target="_blank" >Ping!</a>
 			</div>
 		</xsl:if>
 
@@ -132,7 +132,7 @@
 				</table>
 			</div>
 			<div class="info">
-				This XML Sitemap contains <xsl:value-of select="count(sitemap:urlset/sitemap:url)"/> URLs.
+				This XML Sitemap contains <xsl:value-of select="count(sitemap:urlset/sitemap:url)"/> URLs. <a href="https://www.google.com/ping?sitemap=https://job.web.id/sitemap.xml" target="_blank" >Ping!</a>
 			</div>
 		</xsl:if>
 	</main>
