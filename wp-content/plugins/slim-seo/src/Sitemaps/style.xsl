@@ -14,8 +14,10 @@
 			* {
 				box-sizing: border-box;
 			}
+			
+
 			body {
-				font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+
 			    font-size: 14px;
 			    line-height: 1.6;
 			    color: #495057;
