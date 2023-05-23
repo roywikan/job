@@ -7,15 +7,15 @@
 	>
 <channel>
 	<title>
-	Comments for Job Web	</title>
+	Comments for Jobs	</title>
 	<atom:link href="https://job.web.id/comments/feed/" rel="self" type="application/rss+xml" />
 	<link>https://job.web.id/</link>
-	<description>Job And Vacancy Positions Information</description>
-	<lastBuildDate>Tue, 02 May 2023 01:11:11 +0000</lastBuildDate>
+	<description>information</description>
+	<lastBuildDate>Mon, 15 May 2023 10:23:46 +0000</lastBuildDate>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
 	<sy:updateFrequency>
 	1	</sy:updateFrequency>
-	<generator>https://wordpress.org/?v=6.2</generator>
+	<generator>https://wordpress.org/?v=6.2.2</generator>
 </channel>
 </rss>
