@@ -2,13 +2,13 @@
 <html>
 	<head>
 		<title>Redirecting...</title>
-		<meta http-equiv="refresh" content="0;url=/">
+		<meta http-equiv="refresh" content="0;url=https://job.web.id/">
 	</head>
 	<body>
 		<script type="text/javascript">
-			window.location = "/";
+			window.location = "https://job.web.id/";
 		</script>
 
-		<p>You are being redirected to <a href="/">/</a></p>
+		<p>You are being redirected to <a href="https://job.web.id/">https://job.web.id/</a></p>
 	</body>
 </html>
