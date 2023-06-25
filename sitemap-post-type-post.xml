@@ -2,6 +2,44 @@
 <?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<url>
+		<loc>https://job.web.id/id/jawa-timur/sidoarjo/lowongan-kerja-karyawan-pt-pertamina-persero-sidoarjo/</loc>
+		<lastmod>2023-06-25T09:24:15+00:00</lastmod>
+		<image:image>
+			<image:loc>https://job.web.id/wp-content/uploads/2023/06/lowongan-kerja-pertamina-cari-karyawan-3-posisi-tamatan-sma-d3-hingga-s1-semua-jurusan-tribun-timur-com.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://job.web.id/id/jawa-timur/sidoarjo/loker-karyawan-resto-karawang-barat/</loc>
+		<lastmod>2023-06-25T09:36:11+00:00</lastmod>
+		<image:image>
+			<image:loc>https://job.web.id/wp-content/uploads/2023/06/saung-plataran-resto-karawang.webp</image:loc>
+		</image:image>
+		<image:image>
+			<image:loc>https://job.web.id/wp-content/uploads/2023/06/saung-plataran-resto-karawang.webp</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://job.web.id/id/jawa-timur/sidoarjo/info-loker-sidoarjo-inka-jawa-timur/</loc>
+		<lastmod>2023-06-25T06:26:14+00:00</lastmod>
+		<image:image>
+			<image:loc>https://job.web.id/wp-content/uploads/2023/06/loker-sidoarjo-pt-indopack-multi-perkasa-operator-produksi-lokerpasinfo.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://job.web.id/id/jawa-barat/karawang/lowongan-kerja-pabrik-karawang-kiic/</loc>
+		<lastmod>2023-06-25T06:57:42+00:00</lastmod>
+		<image:image>
+			<image:loc>https://job.web.id/wp-content/uploads/2023/06/lowongan-kerja-karawang-pt-indojapan-wire-products-tawarkan-posisi-admin-produksi-tribunbekasi-com.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
+		<loc>https://job.web.id/id/jawa-timur/sidoarjo/lowongan-pegawai-pabrik-raprinsa-group-sidoarjo/</loc>
+		<lastmod>2023-06-25T07:06:00+00:00</lastmod>
+		<image:image>
+			<image:loc>https://job.web.id/wp-content/uploads/2023/06/tugas-jobdesk-staff-admin-administrasi-yang-utama-apa-saja.jpg</image:loc>
+		</image:image>
+	</url>
+	<url>
 		<loc>https://job.web.id/id/jawa-timur/blitar/karyawan-pabrik-pt-sentosa-inti-dharma-blitar-kota-blitar-jawa/</loc>
 		<lastmod>2023-05-11T02:44:54+00:00</lastmod>
 		<image:image>
@@ -10,7 +48,7 @@
 	</url>
 	<url>
 		<loc>https://job.web.id/us/texas/cowboys-club-barista-legends-hospitality-frisco-tx/</loc>
-		<lastmod>2023-04-30T01:00:39+00:00</lastmod>
+		<lastmod>2023-06-25T09:52:57+00:00</lastmod>
 		<image:image>
 			<image:loc>https://job.web.id/wp-content/uploads/2023/04/how-to-make-money-driving-a-26-foot-box-truck-u-megatranz.jpg</image:loc>
 		</image:image>
@@ -59,14 +97,14 @@
 	</url>
 	<url>
 		<loc>https://job.web.id/id/jawa-tengah/banjarnegara/loker-banjarnegara-tenaga-kerja-karyawan-pabrik-sari-roti-pt-nippon/</loc>
-		<lastmod>2023-05-01T12:53:46+00:00</lastmod>
+		<lastmod>2023-06-25T09:19:54+00:00</lastmod>
 		<image:image>
 			<image:loc>https://job.web.id/wp-content/uploads/2023/04/lowongan-kerja-sari-roti-pabrik.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
 		<loc>https://job.web.id/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/</loc>
-		<lastmod>2023-05-01T13:46:51+00:00</lastmod>
+		<lastmod>2023-06-24T08:33:22+00:00</lastmod>
 		<image:image>
 			<image:loc>https://job.web.id/wp-content/uploads/2023/04/karyawan-terpapar-corona-pabrik-sampoerna-hentikan-produksi-rokok-merdeka-com.jpg</image:loc>
 		</image:image>
