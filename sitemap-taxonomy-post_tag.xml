@@ -1,184 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<url>
-		<loc>https://job.web.id/sector/5-jt-per-bulan/</loc>
+		<loc>/sector/5-jt-per-bulan/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/admin/</loc>
+		<loc>/sector/admin/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/administrasi/</loc>
+		<loc>/sector/administrasi/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/auto/</loc>
+		<loc>/sector/auto/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/barista/</loc>
+		<loc>/sector/barista/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/box/</loc>
+		<loc>/sector/box/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/club/</loc>
+		<loc>/sector/club/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/cowboy/</loc>
+		<loc>/sector/cowboy/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/data/</loc>
+		<loc>/sector/data/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/dental-insurance/</loc>
+		<loc>/sector/dental-insurance/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/driver/</loc>
+		<loc>/sector/driver/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/elektronik/</loc>
+		<loc>/sector/elektronik/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/epson/</loc>
+		<loc>/sector/epson/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/finansial/</loc>
+		<loc>/sector/finansial/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/full-time/</loc>
+		<loc>/sector/full-time/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/health-insurance/</loc>
+		<loc>/sector/health-insurance/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/hospitality/</loc>
+		<loc>/sector/hospitality/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/industrial/</loc>
+		<loc>/sector/industrial/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/industry/</loc>
+		<loc>/sector/industry/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/integrasi/</loc>
+		<loc>/sector/integrasi/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/kabupaten/</loc>
+		<loc>/sector/kabupaten/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/kalteng/</loc>
+		<loc>/sector/kalteng/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/kantor/</loc>
+		<loc>/sector/kantor/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/karton/</loc>
+		<loc>/sector/karton/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/karyawan/</loc>
+		<loc>/sector/karyawan/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/kepala/</loc>
+		<loc>/sector/kepala/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/kontraktor/</loc>
+		<loc>/sector/kontraktor/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/koordinator/</loc>
+		<loc>/sector/koordinator/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/kotawaringin/</loc>
+		<loc>/sector/kotawaringin/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/kurir/</loc>
+		<loc>/sector/kurir/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/legends/</loc>
+		<loc>/sector/legends/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/manufacturing/</loc>
+		<loc>/sector/manufacturing/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/murung/</loc>
+		<loc>/sector/murung/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/nunukan/</loc>
+		<loc>/sector/nunukan/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/office/</loc>
+		<loc>/sector/office/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/operator/</loc>
+		<loc>/sector/operator/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pabrik/</loc>
+		<loc>/sector/pabrik/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/paid-time-off/</loc>
+		<loc>/sector/paid-time-off/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pegawai/</loc>
+		<loc>/sector/pegawai/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pekerjaan-tetap/</loc>
+		<loc>/sector/pekerjaan-tetap/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pendataan/</loc>
+		<loc>/sector/pendataan/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pertamina/</loc>
+		<loc>/sector/pertamina/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/produksi/</loc>
+		<loc>/sector/produksi/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/promotion/</loc>
+		<loc>/sector/promotion/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/properties/</loc>
+		<loc>/sector/properties/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pt/</loc>
+		<loc>/sector/pt/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pt-pertamina-persero/</loc>
+		<loc>/sector/pt-pertamina-persero/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/pt-siantar-top-tbk/</loc>
+		<loc>/sector/pt-siantar-top-tbk/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/ranch/</loc>
+		<loc>/sector/ranch/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/resto/</loc>
+		<loc>/sector/resto/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/roti/</loc>
+		<loc>/sector/roti/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/sales/</loc>
+		<loc>/sector/sales/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/siantar/</loc>
+		<loc>/sector/siantar/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/staff/</loc>
+		<loc>/sector/staff/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/sungai/</loc>
+		<loc>/sector/sungai/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/tbk/</loc>
+		<loc>/sector/tbk/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/tekno/</loc>
+		<loc>/sector/tekno/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/tenaga/</loc>
+		<loc>/sector/tenaga/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/tidung/</loc>
+		<loc>/sector/tidung/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/sector/truck/</loc>
+		<loc>/sector/truck/</loc>
 	</url>
 </urlset>

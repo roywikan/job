@@ -475,8 +475,8 @@ a {
 -------------------------------------------------------------- */
 @font-face {
   font-family: 'Genericons';
-  src: url("https://job.web.id/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.eot");
-  src: url("https://job.web.id/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.eot#iefix") format("embedded-opentype"), url("https://job.web.id/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.woff") format("woff"), url("https://job.web.id/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.ttf") format("truetype"), url("https://job.web.id/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.svg#genericonsregular") format("svg");
+  src: url("/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.eot");
+  src: url("/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.eot#iefix") format("embedded-opentype"), url("/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.woff") format("woff"), url("/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.ttf") format("truetype"), url("/wp-content/themes/justvideo/genericons/font/genericons-regular-webfont.svg#genericonsregular") format("svg");
   font-weight: normal;
   font-style: normal; }
 /* Genericons */
@@ -1072,7 +1072,7 @@ a {
     text-overflow: ellipsis;
     white-space: nowrap; }
     .breadcrumbs .breadcrumbs-nav a {
-      background: url("https://job.web.id/wp-content/themes/justvideo/assets/img/arrow-right.png") no-repeat right center;
+      background: url("/wp-content/themes/justvideo/assets/img/arrow-right.png") no-repeat right center;
       background-size: 7px 7px;
       color: #999;
       padding-right: 14px;
@@ -2095,7 +2095,7 @@ ul.bxslider {
 /* LOADER */
 .bx-wrapper .bx-loading {
   min-height: 50px;
-  background: url("https://job.web.id/wp-content/themes/justvideo/assets/img/bx_loader.gif") center center no-repeat #ffffff;
+  background: url("/wp-content/themes/justvideo/assets/img/bx_loader.gif") center center no-repeat #ffffff;
   height: 100%;
   width: 100%;
   position: absolute;
@@ -2147,12 +2147,12 @@ ul.bxslider {
 /* DIRECTION CONTROLS (NEXT / PREV) */
 .bx-wrapper .bx-prev {
   left: 0;
-  background: url("https://job.web.id/wp-content/themes/justvideo/assets/img/left-chevron.png") no-repeat;
+  background: url("/wp-content/themes/justvideo/assets/img/left-chevron.png") no-repeat;
   margin-right: 5px; }
 
 .bx-wrapper .bx-next {
   right: 0;
-  background: url("https://job.web.id/wp-content/themes/justvideo/assets/img/right-chevron.png") no-repeat; }
+  background: url("/wp-content/themes/justvideo/assets/img/right-chevron.png") no-repeat; }
 
 .bx-wrapper .bx-controls-direction {
   position: absolute;
@@ -2190,7 +2190,7 @@ ul.bxslider {
   width: 10px;
   height: 11px;
   outline: 0;
-  background: url("https://job.web.id/wp-content/themes/justvideo/assets/img/controls.png") -86px -11px no-repeat;
+  background: url("/wp-content/themes/justvideo/assets/img/controls.png") -86px -11px no-repeat;
   margin: 0 3px; }
 
 .bx-wrapper .bx-controls-auto .bx-start:hover,
@@ -2204,7 +2204,7 @@ ul.bxslider {
   width: 9px;
   height: 11px;
   outline: 0;
-  background: url("https://job.web.id/wp-content/themes/justvideo/assets/img/controls.png") -86px -44px no-repeat;
+  background: url("/wp-content/themes/justvideo/assets/img/controls.png") -86px -44px no-repeat;
   margin: 0 3px; }
 
 .bx-wrapper .bx-controls-auto .bx-stop:hover,

@@ -1,227 +1,227 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<url>
-		<loc>https://job.web.id/</loc>
+		<loc>/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-timur/nunukan/lowongan-kerja-staff-kantor-pt-multinindo/</loc>
+		<loc>/id/kalimantan-timur/nunukan/lowongan-kerja-staff-kantor-pt-multinindo/</loc>
 		<lastmod>2023-11-10T02:18:16+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/temiria-purwa-on-linkedin-my-mission-safety.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/temiria-purwa-on-linkedin-my-mission-safety.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-tengah/murung-raya/administrasi-kantor-pt-pratama-auto-tan-kalteng/</loc>
+		<loc>/id/kalimantan-tengah/murung-raya/administrasi-kantor-pt-pratama-auto-tan-kalteng/</loc>
 		<lastmod>2023-11-10T02:18:44+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/kantor-bupati-murung-raya-diserbu-puluhan-anak-tk-edisi-15-september-2023-kalteng-pos.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/kantor-bupati-murung-raya-diserbu-puluhan-anak-tk-edisi-15-september-2023-kalteng-pos.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-tengah/kotawaringin-barat/administrasi-kantor-pt-pratama-auto-tan/</loc>
+		<loc>/id/kalimantan-tengah/kotawaringin-barat/administrasi-kantor-pt-pratama-auto-tan/</loc>
 		<lastmod>2023-11-10T02:19:13+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/kalapas-pangkalan-bun-hadiri-pelepasan-kepala-kejaksaan-negeri-kotawaringin-barat.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/kalapas-pangkalan-bun-hadiri-pelepasan-kepala-kejaksaan-negeri-kotawaringin-barat.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-selatan/hulu-sungai-selatan/administrasi-kantor-pt-kalimantan-selatan/</loc>
+		<loc>/id/kalimantan-selatan/hulu-sungai-selatan/administrasi-kantor-pt-kalimantan-selatan/</loc>
 		<lastmod>2023-11-10T02:19:45+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/persoalan-internal-membuat-2-parpol-di-kabupaten-hss-tak-ajukan-perbaikan-berkas-bacaleg-pemilu-2024-banjarmasinpost.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/persoalan-internal-membuat-2-parpol-di-kabupaten-hss-tak-ajukan-perbaikan-berkas-bacaleg-pemilu-2024-banjarmasinpost.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-barat/pontianak/kurir-kantor-pt-core-pontianak-kalimantan-barat/</loc>
+		<loc>/id/kalimantan-barat/pontianak/kurir-kantor-pt-core-pontianak-kalimantan-barat/</loc>
 		<lastmod>2023-11-10T02:21:00+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/kurir-kantor-untuk-antar-038-kirim-dokumen-walk-in-interview-atmago.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/kurir-kantor-untuk-antar-038-kirim-dokumen-walk-in-interview-atmago.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-timur/samarinda/administrasi-data-finansial-kantor-samarinda-pt-kalimantan-timur/</loc>
+		<loc>/id/kalimantan-timur/samarinda/administrasi-data-finansial-kantor-samarinda-pt-kalimantan-timur/</loc>
 		<lastmod>2023-11-10T02:21:30+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/gunakan-kantor-sementara-pelayanan-tetap-jalan-berau-post.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/gunakan-kantor-sementara-pelayanan-tetap-jalan-berau-post.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-utara/tana-tidung/staff-kantor-area-tana-tidung-pt-kalimantan-utara/</loc>
+		<loc>/id/kalimantan-utara/tana-tidung/staff-kantor-area-tana-tidung-pt-kalimantan-utara/</loc>
 		<lastmod>2023-11-10T02:21:47+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/dprd-tana-tidung-tempati-gedung-baru-bupati-ibrahim-ali-ucapkan-selamat-kantor-sementara-tribunkaltara-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/dprd-tana-tidung-tempati-gedung-baru-bupati-ibrahim-ali-ucapkan-selamat-kantor-sementara-tribunkaltara-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/lampung/bandar-lampung/operator-produksi-pt-tekno/</loc>
+		<loc>/id/lampung/bandar-lampung/operator-produksi-pt-tekno/</loc>
 		<lastmod>2023-11-10T02:22:18+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/anda-mau-bekerja-sebagai-operator-produksi-ini-anda-harus-ketahui-awstom-indonesia.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/anda-mau-bekerja-sebagai-operator-produksi-ini-anda-harus-ketahui-awstom-indonesia.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/lampung/bandar-lampung/operator-produksi-industrial-pt-bandar-lampung/</loc>
+		<loc>/id/lampung/bandar-lampung/operator-produksi-industrial-pt-bandar-lampung/</loc>
 		<lastmod>2023-11-10T02:22:45+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/pekerjaan-operator-produksi-gaji-besar-dan-tanggungjawab-yang-berat-sekolah-menengah-kerja-perawatan.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/pekerjaan-operator-produksi-gaji-besar-dan-tanggungjawab-yang-berat-sekolah-menengah-kerja-perawatan.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/lampung/bandar-lampung/sales-promotion-lampung-pt-jaya-fermex/</loc>
+		<loc>/id/lampung/bandar-lampung/sales-promotion-lampung-pt-jaya-fermex/</loc>
 		<lastmod>2023-11-10T02:24:12+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/website-resmi-dealer-suzuki-plr-persada-lampungraya-tulang-bawang.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/website-resmi-dealer-suzuki-plr-persada-lampungraya-tulang-bawang.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-timur/surabaya/karyawan-pabrik-pt-sentosa-surabaya-jawa-timur/</loc>
+		<loc>/id/jawa-timur/surabaya/karyawan-pabrik-pt-sentosa-surabaya-jawa-timur/</loc>
 		<lastmod>2023-11-10T02:24:35+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/produksi-iphone-seri-pro-anjlok-6-juta-imbas-eksodus-karyawan-pabrik-zhengzhou-tribunnews-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/produksi-iphone-seri-pro-anjlok-6-juta-imbas-eksodus-karyawan-pabrik-zhengzhou-tribunnews-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/lampung/bandar-lampung/lowongan-pendataan-area-sumatera-pt-bandar-lampung/</loc>
+		<loc>/id/lampung/bandar-lampung/lowongan-pendataan-area-sumatera-pt-bandar-lampung/</loc>
 		<lastmod>2023-11-10T02:25:01+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/pekerjaan-operator-produksi-gaji-besar-dan-tanggungjawab-yang-berat-sekolah-menengah-kerja-perawatan.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/pekerjaan-operator-produksi-gaji-besar-dan-tanggungjawab-yang-berat-sekolah-menengah-kerja-perawatan.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/lampung/bandar-lampung/loker-operator-produksi-pt-kota-bandar-lampung/</loc>
+		<loc>/id/lampung/bandar-lampung/loker-operator-produksi-pt-kota-bandar-lampung/</loc>
 		<lastmod>2023-11-10T02:25:27+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/menilik-peran-operator-produksi-jobdesk-dan-skill-yang-harus-dimiliki-istilah-ekonomi-katadata-co-id.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/menilik-peran-operator-produksi-jobdesk-dan-skill-yang-harus-dimiliki-istilah-ekonomi-katadata-co-id.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/kalimantan-timur/berau/lowongan-kerja-administrasi-kantor-pt-pratama/</loc>
+		<loc>/id/kalimantan-timur/berau/lowongan-kerja-administrasi-kantor-pt-pratama/</loc>
 		<lastmod>2023-11-10T02:25:55+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/11/gunakan-kantor-sementara-pelayanan-tetap-jalan-berau-post.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/11/gunakan-kantor-sementara-pelayanan-tetap-jalan-berau-post.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-barat/karawang/karyawan-pabrik-karawang-pt-aneka-karton-box-karawang-barat-karawang/</loc>
+		<loc>/id/jawa-barat/karawang/karyawan-pabrik-karawang-pt-aneka-karton-box-karawang-barat-karawang/</loc>
 		<lastmod>2023-11-10T02:26:25+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/heboh-uang-pesangon-ratusan-karyawan-pabrik-sepatu-di-karawang-dipotong-hingga-rp-20-juta-tribunbekasi-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/heboh-uang-pesangon-ratusan-karyawan-pabrik-sepatu-di-karawang-dipotong-hingga-rp-20-juta-tribunbekasi-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/</loc>
+		<loc>/id/jawa-barat/bekasi/lowongan-kerja-2023-pt-epson-indonesia-karyawan-pabrik-elektronik-pt/</loc>
 		<lastmod>2023-11-10T02:32:10+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/lowongan-kerja-terbaru-dan-terupdate-2022-forum-hrd-indonesia.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/lowongan-kerja-terbaru-dan-terupdate-2022-forum-hrd-indonesia.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-timur/sidoarjo/loker-karyawan-resto-karawang-barat/</loc>
+		<loc>/id/jawa-timur/sidoarjo/loker-karyawan-resto-karawang-barat/</loc>
 		<lastmod>2023-11-10T02:32:48+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/06/saung-plataran-resto-karawang.webp</image:loc>
+			<image:loc>/wp-content/uploads/2023/06/saung-plataran-resto-karawang.webp</image:loc>
 		</image:image>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/06/saung-plataran-resto-karawang.webp</image:loc>
+			<image:loc>/wp-content/uploads/2023/06/saung-plataran-resto-karawang.webp</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-timur/sidoarjo/lowongan-kerja-karyawan-pt-pertamina-persero-sidoarjo/</loc>
+		<loc>/id/jawa-timur/sidoarjo/lowongan-kerja-karyawan-pt-pertamina-persero-sidoarjo/</loc>
 		<lastmod>2023-11-10T02:33:39+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/06/lowongan-kerja-pertamina-cari-karyawan-3-posisi-tamatan-sma-d3-hingga-s1-semua-jurusan-tribun-timur-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/06/lowongan-kerja-pertamina-cari-karyawan-3-posisi-tamatan-sma-d3-hingga-s1-semua-jurusan-tribun-timur-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-timur/sidoarjo/info-loker-sidoarjo-inka-jawa-timur/</loc>
+		<loc>/id/jawa-timur/sidoarjo/info-loker-sidoarjo-inka-jawa-timur/</loc>
 		<lastmod>2023-11-10T02:34:37+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/06/loker-sidoarjo-pt-indopack-multi-perkasa-operator-produksi-lokerpasinfo.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/06/loker-sidoarjo-pt-indopack-multi-perkasa-operator-produksi-lokerpasinfo.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-barat/karawang/lowongan-kerja-pabrik-karawang-kiic/</loc>
+		<loc>/id/jawa-barat/karawang/lowongan-kerja-pabrik-karawang-kiic/</loc>
 		<lastmod>2023-11-10T02:35:27+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/06/lowongan-kerja-karawang-pt-indojapan-wire-products-tawarkan-posisi-admin-produksi-tribunbekasi-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/06/lowongan-kerja-karawang-pt-indojapan-wire-products-tawarkan-posisi-admin-produksi-tribunbekasi-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-timur/sidoarjo/lowongan-pegawai-pabrik-raprinsa-group-sidoarjo/</loc>
+		<loc>/id/jawa-timur/sidoarjo/lowongan-pegawai-pabrik-raprinsa-group-sidoarjo/</loc>
 		<lastmod>2023-11-10T02:39:47+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/06/tugas-jobdesk-staff-admin-administrasi-yang-utama-apa-saja.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/06/tugas-jobdesk-staff-admin-administrasi-yang-utama-apa-saja.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-timur/blitar/karyawan-pabrik-pt-sentosa-inti-dharma-blitar-kota-blitar-jawa/</loc>
+		<loc>/id/jawa-timur/blitar/karyawan-pabrik-pt-sentosa-inti-dharma-blitar-kota-blitar-jawa/</loc>
 		<lastmod>2023-11-10T02:44:37+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/karyawan-terpapar-corona-pabrik-sampoerna-hentikan-produksi-rokok-merdeka-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/karyawan-terpapar-corona-pabrik-sampoerna-hentikan-produksi-rokok-merdeka-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/us/texas/cowboys-club-barista-legends-hospitality-frisco-tx/</loc>
+		<loc>/us/texas/cowboys-club-barista-legends-hospitality-frisco-tx/</loc>
 		<lastmod>2023-11-10T03:06:42+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/how-to-make-money-driving-a-26-foot-box-truck-u-megatranz.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/how-to-make-money-driving-a-26-foot-box-truck-u-megatranz.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/us/california/sales-representative-us-office-glocalize-los-angeles-ca/</loc>
+		<loc>/us/california/sales-representative-us-office-glocalize-los-angeles-ca/</loc>
 		<lastmod>2023-11-10T03:07:20+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/field-sales-outside-sales-representative-job-description-template-workable.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/field-sales-outside-sales-representative-job-description-template-workable.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/us/california/office-admin-jmax-properties-llc-roseville-ca/</loc>
+		<loc>/us/california/office-admin-jmax-properties-llc-roseville-ca/</loc>
 		<lastmod>2023-11-10T03:07:52+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/25-administrative-assistant-interview-questions-robert-half.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/25-administrative-assistant-interview-questions-robert-half.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/us/south-carolina/class-b-driver-26-box-truck-cowboy-usa-llc-north/</loc>
+		<loc>/us/south-carolina/class-b-driver-26-box-truck-cowboy-usa-llc-north/</loc>
 		<lastmod>2023-11-10T03:09:00+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/how-to-make-money-driving-a-26-foot-box-truck-u-megatranz.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/how-to-make-money-driving-a-26-foot-box-truck-u-megatranz.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/</loc>
+		<loc>/id/jawa-barat/cikarang/lowongan-kerja-karyawan-pabrik-area-purwakarta-juni-2022-pt-omron/</loc>
 		<lastmod>2023-11-10T03:09:49+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/pt-kereta-api-pariwisata-buka-lowongan-kerja-di-banyak-kota-simak-persyaratannya-halaman-all-kompas-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/pt-kereta-api-pariwisata-buka-lowongan-kerja-di-banyak-kota-simak-persyaratannya-halaman-all-kompas-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-barat/purwakarta/lowongan-kerja-2023-karyawan-pabrik-info-lowongan-kerja-april-pt/</loc>
+		<loc>/id/jawa-barat/purwakarta/lowongan-kerja-2023-karyawan-pabrik-info-lowongan-kerja-april-pt/</loc>
 		<lastmod>2023-11-10T03:10:25+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/bumn-pelni-buka-lowongan-kerja-terbaru-2023-ini-syarat-dan-posisinya-halaman-all-kompas-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/bumn-pelni-buka-lowongan-kerja-terbaru-2023-ini-syarat-dan-posisinya-halaman-all-kompas-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-tengah/banjarnegara/loker-banjarnegara-tenaga-kerja-karyawan-pabrik-sari-roti-pt-nippon/</loc>
+		<loc>/id/jawa-tengah/banjarnegara/loker-banjarnegara-tenaga-kerja-karyawan-pabrik-sari-roti-pt-nippon/</loc>
 		<lastmod>2023-11-10T03:11:20+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/lowongan-kerja-sari-roti-pabrik.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/lowongan-kerja-sari-roti-pabrik.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/</loc>
+		<loc>/id/jawa-timur/sidoarjo/karyawan-pabrik-job-loker-sidoarjo-kabupaten-sidoarjo-jawa-timur/</loc>
 		<lastmod>2023-11-10T03:12:02+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/karyawan-terpapar-corona-pabrik-sampoerna-hentikan-produksi-rokok-merdeka-com.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/karyawan-terpapar-corona-pabrik-sampoerna-hentikan-produksi-rokok-merdeka-com.jpg</image:loc>
 		</image:image>
 	</url>
 	<url>
-		<loc>https://job.web.id/us/oregon/range-cowboy-1-zx-ranch-simplot-paisley/</loc>
+		<loc>/us/oregon/range-cowboy-1-zx-ranch-simplot-paisley/</loc>
 		<lastmod>2023-11-10T03:13:36+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id/wp-content/uploads/2023/04/american-cowboy-the-zx-ranch-american-cowboy-zx-ranch-paisley-oregon.jpg</image:loc>
+			<image:loc>/wp-content/uploads/2023/04/american-cowboy-the-zx-ranch-american-cowboy-zx-ranch-paisley-oregon.jpg</image:loc>
 		</image:image>
 	</url>
 </urlset>

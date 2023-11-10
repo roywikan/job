@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
+<?xml-stylesheet type="text/xsl" href="/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<url>
-		<loc>https://job.web.id/country/id/lampung/bandar-lampung/</loc>
+		<loc>/country/id/lampung/bandar-lampung/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-tengah/banjarnegara/</loc>
+		<loc>/country/id/jawa-tengah/banjarnegara/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-barat/bekasi/</loc>
+		<loc>/country/id/jawa-barat/bekasi/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-timur/berau/</loc>
+		<loc>/country/id/kalimantan-timur/berau/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-timur/blitar/</loc>
+		<loc>/country/id/jawa-timur/blitar/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/us/california/</loc>
+		<loc>/country/us/california/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-barat/cikarang/</loc>
+		<loc>/country/id/jawa-barat/cikarang/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-selatan/hulu-sungai-selatan/</loc>
+		<loc>/country/id/kalimantan-selatan/hulu-sungai-selatan/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-barat/karawang/</loc>
+		<loc>/country/id/jawa-barat/karawang/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-tengah/kotawaringin-barat/</loc>
+		<loc>/country/id/kalimantan-tengah/kotawaringin-barat/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-tengah/murung-raya/</loc>
+		<loc>/country/id/kalimantan-tengah/murung-raya/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-timur/nunukan/</loc>
+		<loc>/country/id/kalimantan-timur/nunukan/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/us/oregon/</loc>
+		<loc>/country/us/oregon/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-barat/pontianak/</loc>
+		<loc>/country/id/kalimantan-barat/pontianak/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-barat/purwakarta/</loc>
+		<loc>/country/id/jawa-barat/purwakarta/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-timur/samarinda/</loc>
+		<loc>/country/id/kalimantan-timur/samarinda/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-timur/sidoarjo/</loc>
+		<loc>/country/id/jawa-timur/sidoarjo/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/us/south-carolina/</loc>
+		<loc>/country/us/south-carolina/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/jawa-timur/surabaya/</loc>
+		<loc>/country/id/jawa-timur/surabaya/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/id/kalimantan-utara/tana-tidung/</loc>
+		<loc>/country/id/kalimantan-utara/tana-tidung/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id/country/us/texas/</loc>
+		<loc>/country/us/texas/</loc>
 	</url>
 </urlset>
