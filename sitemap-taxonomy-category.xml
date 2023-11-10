@@ -2,10 +2,16 @@
 <?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<url>
+		<loc>https://job.web.id/country/id/lampung/bandar-lampung/</loc>
+	</url>
+	<url>
 		<loc>https://job.web.id/country/id/jawa-tengah/banjarnegara/</loc>
 	</url>
 	<url>
 		<loc>https://job.web.id/country/id/jawa-barat/bekasi/</loc>
+	</url>
+	<url>
+		<loc>https://job.web.id/country/id/kalimantan-timur/berau/</loc>
 	</url>
 	<url>
 		<loc>https://job.web.id/country/id/jawa-timur/blitar/</loc>
@@ -17,19 +23,43 @@
 		<loc>https://job.web.id/country/id/jawa-barat/cikarang/</loc>
 	</url>
 	<url>
+		<loc>https://job.web.id/country/id/kalimantan-selatan/hulu-sungai-selatan/</loc>
+	</url>
+	<url>
 		<loc>https://job.web.id/country/id/jawa-barat/karawang/</loc>
+	</url>
+	<url>
+		<loc>https://job.web.id/country/id/kalimantan-tengah/kotawaringin-barat/</loc>
+	</url>
+	<url>
+		<loc>https://job.web.id/country/id/kalimantan-tengah/murung-raya/</loc>
+	</url>
+	<url>
+		<loc>https://job.web.id/country/id/kalimantan-timur/nunukan/</loc>
 	</url>
 	<url>
 		<loc>https://job.web.id/country/us/oregon/</loc>
 	</url>
 	<url>
+		<loc>https://job.web.id/country/id/kalimantan-barat/pontianak/</loc>
+	</url>
+	<url>
 		<loc>https://job.web.id/country/id/jawa-barat/purwakarta/</loc>
+	</url>
+	<url>
+		<loc>https://job.web.id/country/id/kalimantan-timur/samarinda/</loc>
 	</url>
 	<url>
 		<loc>https://job.web.id/country/id/jawa-timur/sidoarjo/</loc>
 	</url>
 	<url>
 		<loc>https://job.web.id/country/us/south-carolina/</loc>
+	</url>
+	<url>
+		<loc>https://job.web.id/country/id/jawa-timur/surabaya/</loc>
+	</url>
+	<url>
+		<loc>https://job.web.id/country/id/kalimantan-utara/tana-tidung/</loc>
 	</url>
 	<url>
 		<loc>https://job.web.id/country/us/texas/</loc>
