@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://job.web.id.ku/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
+<?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<url>
-		<loc>https://job.web.id.ku/</loc>
+		<loc>https://job.web.id/</loc>
 	</url>
 	<url>
-		<loc>https://job.web.id.ku/sector/</loc>
+		<loc>https://job.web.id/sector/</loc>
 		<lastmod>2023-05-15T10:23:46+00:00</lastmod>
 	</url>
 	<url>
-		<loc>https://job.web.id.ku/categories-grid/</loc>
+		<loc>https://job.web.id/categories-grid/</loc>
 		<lastmod>2023-11-08T06:32:45+00:00</lastmod>
 	</url>
 	<url>
-		<loc>https://job.web.id.ku/logo-logo-online/</loc>
+		<loc>https://job.web.id/logo-logo-online/</loc>
 		<lastmod>2023-05-02T01:11:11+00:00</lastmod>
 		<image:image>
-			<image:loc>https://job.web.id.ku/wp-content/uploads/2023/05/cropped-job-web-loker.png</image:loc>
+			<image:loc>https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker.png</image:loc>
 		</image:image>
 	</url>
 </urlset>
