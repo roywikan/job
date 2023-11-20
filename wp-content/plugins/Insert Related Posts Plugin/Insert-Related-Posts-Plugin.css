@@ -1,0 +1,49 @@
+/* Related Post Item with Featured Image */
+.insert-related-post{
+display: flex;
+    border: 1px solid #0000ff42;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    transition: transform 0.3s ease-in-out;
+    background-color: #fff;
+    margin: 10px 2px 10px 2px;
+    padding: 1px;
+    position: relative;
+    z-index: 800;
+	
+}
+
+.insert-related-post:hover {
+    transform: translateY(-5px);
+}
+
+
+.job-lowongan-kerja-related{
+	font-size: xx-small; 
+	display: inline-block; 
+	padding: 2px 5px; 
+	border-radius: 4px; 
+	background-color: #0000ff96; 
+	color: white; 
+	margin-right: 6px;
+}
+
+.job-lowongan-kerja-related-h5{
+	font-style: normal;
+}
+
+.job-lowongan-kerja-related-deskripsi{
+	padding: 5px 5px 5px 15px;
+	font-style: normal;     
+	font-size: small;
+    line-height: 1.4;
+    color: #666;
+    margin-bottom: 15px;
+	
+}
+
+.mce-toolbar .mce-btn-group>div {
+    white-space: inherit;
+}
+	
