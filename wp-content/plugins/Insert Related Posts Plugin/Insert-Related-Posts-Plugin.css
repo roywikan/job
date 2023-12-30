@@ -24,13 +24,28 @@ display: flex;
 	display: inline-block; 
 	padding: 2px 5px; 
 	border-radius: 4px; 
-	background-color: #0000ff96; 
+	background-color: #0096888a; 
 	color: white; 
 	margin-right: 6px;
+	text-shadow: 2px 2px 2px black; 
+	
+}
+
+
+.loker-lowongan-kerja-div-judul-related-post{
+	width: 180px !important;
 }
 
 .job-lowongan-kerja-related-h5{
 	font-style: normal;
+	font-size: small !important;
+	color:#00645a !important;
+	text-decoration: none !important;
+}
+
+.job-lowongan-kerja-related-h5 a {
+    text-decoration: none !important; /* Remove underline from the link */
+    color:#00645a !important; /* Inherit the color from the parent (.job-lowongan-kerja-related-h5) */
 }
 
 .job-lowongan-kerja-related-deskripsi{
@@ -38,11 +53,16 @@ display: flex;
 	font-style: normal;     
 	font-size: small;
     line-height: 1.4;
-    color: #666;
-    margin-bottom: 15px;
+    color: #576c6a;
+    margin-bottom: 13px;
 	
 }
 
+
+.nav-links{
+	margin:60px;
+	
+}
 .mce-toolbar .mce-btn-group>div {
     white-space: inherit;
 }

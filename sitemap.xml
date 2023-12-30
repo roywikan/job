@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://job.web.id/wp-content/plugins/slim-seo/src/Sitemaps/style.xsl"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	<sitemap>
-		<loc>https://job.web.id/sitemap-post-type-post.xml</loc>
-	</sitemap>
-	<sitemap>
-		<loc>https://job.web.id/sitemap-post-type-page.xml</loc>
-	</sitemap>
-	<sitemap>
-		<loc>https://job.web.id/sitemap-taxonomy-category.xml</loc>
-	</sitemap>
-	<sitemap>
-		<loc>https://job.web.id/sitemap-taxonomy-post_tag.xml</loc>
-	</sitemap>
+<?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap-stylesheet.xsl?template=sitemap-index"?>
+<!-- byroy -->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
+  <sitemap>
+    <loc>https://job.web.id/page-sitemap.xml</loc>
+    <lastmod>2023-12-30T06:39:36+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/post-sitemap.xml</loc>
+    <lastmod>2023-12-17T01:03:39+07:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/category-sitemap.xml</loc>
+    <lastmod>2023-12-17T01:03:39+07:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/author-sitemap.xml</loc>
+    <lastmod>2023-12-17T01:03:39+07:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/archive-sitemap.xml</loc>
+    <lastmod>2023-12-16T18:03:39+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/image-sitemap.xml</loc>
+    <lastmod>2023-12-30T06:39:36+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/video-sitemap.xml</loc>
+    <lastmod>2023-12-30T06:39:36+00:00</lastmod>
+  </sitemap>
 </sitemapindex>
