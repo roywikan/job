@@ -4,7 +4,7 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
   <sitemap>
     <loc>https://job.web.id/page-sitemap.xml</loc>
-    <lastmod>2023-12-30T06:39:36+00:00</lastmod>
+    <lastmod>2023-12-31T01:51:25+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/post-sitemap.xml</loc>
@@ -24,10 +24,10 @@
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/image-sitemap.xml</loc>
-    <lastmod>2023-12-30T06:39:36+00:00</lastmod>
+    <lastmod>2023-12-31T01:51:25+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/video-sitemap.xml</loc>
-    <lastmod>2023-12-30T06:39:36+00:00</lastmod>
+    <lastmod>2023-12-31T01:51:25+00:00</lastmod>
   </sitemap>
 </sitemapindex>
