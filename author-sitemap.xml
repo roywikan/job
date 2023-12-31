@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap-stylesheet.xsl?template=inner-sitemap"?>
-<!-- byroy -->
+<!--sitemap-generator-url="https://wpgrim.net/" sitemap-generator-version="1.7.5"-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc/>
-    <lastmod>2023-12-11T06:23:45+07:00</lastmod>
-    <changefreq>never</changefreq>
+    <lastmod>2023-12-17T01:03:39+07:00</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc/>
-    <lastmod>2023-12-17T01:03:39+07:00</lastmod>
-    <changefreq>never</changefreq>
+    <lastmod>2023-12-11T06:23:45+07:00</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
 </urlset>

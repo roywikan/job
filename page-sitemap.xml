@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap-stylesheet.xsl?template=inner-sitemap"?>
-<!-- byroy -->
+<!--sitemap-generator-url="https://wpgrim.net/" sitemap-generator-version="1.7.5"-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://job.web.id/</loc>
-    <lastmod>2023-12-31T01:54:38+00:00</lastmod>
+    <lastmod>2023-12-31T03:47:05+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://job.web.id/about/</loc>
-    <lastmod>2023-12-23T11:02:07+07:00</lastmod>
+    <loc>https://job.web.id/privacy-policy/</loc>
+    <lastmod>2023-12-23T13:31:08+07:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
-    <loc>https://job.web.id/categories-grid/</loc>
-    <lastmod>2023-11-08T13:32:45+07:00</lastmod>
+    <loc>https://job.web.id/about/</loc>
+    <lastmod>2023-12-23T11:02:07+07:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
@@ -45,14 +45,14 @@
     <priority>0.1</priority>
   </url>
   <url>
-    <loc>https://job.web.id/privacy-policy/</loc>
-    <lastmod>2023-12-23T13:31:08+07:00</lastmod>
+    <loc>https://job.web.id/sector/</loc>
+    <lastmod>2023-12-21T08:17:07+07:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
-    <loc>https://job.web.id/sector/</loc>
-    <lastmod>2023-12-21T08:17:07+07:00</lastmod>
+    <loc>https://job.web.id/categories-grid/</loc>
+    <lastmod>2023-11-08T13:32:45+07:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>

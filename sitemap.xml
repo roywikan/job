@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap-stylesheet.xsl?template=sitemap-index"?>
-<!-- byroy -->
+<!--sitemap-generator-url="https://wpgrim.net/" sitemap-generator-version="1.7.5"-->
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
   <sitemap>
     <loc>https://job.web.id/page-sitemap.xml</loc>
-    <lastmod>2023-12-31T01:51:25+00:00</lastmod>
+    <lastmod>2023-12-31T03:44:59+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/post-sitemap.xml</loc>
-    <lastmod>2023-12-17T01:03:39+07:00</lastmod>
+    <lastmod>2023-12-31T10:09:55+07:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/category-sitemap.xml</loc>
-    <lastmod>2023-12-17T01:03:39+07:00</lastmod>
+    <lastmod>2023-12-31T10:09:55+07:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/author-sitemap.xml</loc>
@@ -20,14 +20,14 @@
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/archive-sitemap.xml</loc>
-    <lastmod>2023-12-16T18:03:39+00:00</lastmod>
+    <lastmod>2023-12-31T03:09:55+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/image-sitemap.xml</loc>
-    <lastmod>2023-12-31T01:51:25+00:00</lastmod>
+    <lastmod>2023-12-31T03:44:59+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/video-sitemap.xml</loc>
-    <lastmod>2023-12-31T01:51:25+00:00</lastmod>
+    <lastmod>2023-12-31T03:44:59+00:00</lastmod>
   </sitemap>
 </sitemapindex>

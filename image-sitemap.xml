@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap-stylesheet.xsl?template=image-sitemap"?>
-<!-- byroy -->
+<!--sitemap-generator-url="https://wpgrim.net/" sitemap-generator-version="1.7.5"-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://job.web.id/disclaimer/</loc>
+    <loc>https://job.web.id/id/kalimantan/kalimantan-timur/samarinda/dibutuhkan-karyawan-agroteknologi-smk-d3-s1/</loc>
     <image:image>
-      <image:loc>https://job.web.id/wp-content/uploads/2023/12/PENAFIAN-219x300.gif</image:loc>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://job.web.id/id/jawa/banten/tangerang-selatan/peluang-karier-di-pt-epson-indonesia/</loc>
-    <image:image>
-      <image:loc>https://job.web.id/wp-content/uploads/2023/11/loker-epson-pabrik-factory-lowongan-kerja-300x200.jpeg</image:loc>
+      <image:loc>https://job.web.id/wp-content/uploads/2023/11/Lowongan-Karyawan-Agroteknologi-1-209x300.jpeg</image:loc>
     </image:image>
   </url>
   <url>
@@ -36,15 +30,9 @@
     </image:image>
   </url>
   <url>
-    <loc>https://job.web.id/id/kalimantan/kalimantan-timur/samarinda/dibutuhkan-karyawan-agroteknologi-smk-d3-s1/</loc>
+    <loc>https://job.web.id/id/jawa/banten/tangerang-selatan/peluang-karier-di-pt-epson-indonesia/</loc>
     <image:image>
-      <image:loc>https://job.web.id/wp-content/uploads/2023/11/Lowongan-Karyawan-Agroteknologi-1-209x300.jpeg</image:loc>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://job.web.id/logo-logo-online/</loc>
-    <image:image>
-      <image:loc>https://cdn-icons-png.flaticon.com/512/522/522536.png</image:loc>
+      <image:loc>https://job.web.id/wp-content/uploads/2023/11/loker-epson-pabrik-factory-lowongan-kerja-300x200.jpeg</image:loc>
     </image:image>
   </url>
 </urlset>
