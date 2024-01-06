@@ -1,0 +1,79 @@
+/* Related Post Item with Featured Image */
+.insert-related-post{
+	 display: flex;
+    /* border: 1px solid #0000ff42; */
+	
+	
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    transition: transform 0.3s ease-in-out;
+    background-color: #fff;
+    margin: 10px 2px 10px 2px;
+    padding: 1px;
+    position: relative;
+    z-index: 800;
+		    float: left;
+			    width: -webkit-fill-available;
+}
+
+.insert-related-post:hover {
+    transform: translateY(-5px);
+}
+
+
+.job-lowongan-kerja-related{
+	font-size: xx-small; 
+	display: inline-block; 
+	/* padding: 2px 5px; */
+	padding: 36px 14px;
+	border-radius: 4px; 
+	background-color: #0096888a; 
+	color: white; 
+	margin-right: 6px;
+	text-shadow: 2px 2px 2px black; 
+	
+	    height: fit-content;
+    margin-right: 4px;
+
+	
+}
+
+
+.loker-lowongan-kerja-div-judul-related-post{
+	width: 180px !important;
+	
+	/* float: right; */
+}
+
+.job-lowongan-kerja-related-h5{
+	font-style: normal;
+	font-size: small !important;
+	color:#00645a !important;
+	text-decoration: none !important;
+}
+
+.job-lowongan-kerja-related-h5 a {
+    text-decoration: none !important; /* Remove underline from the link */
+    color:#00645a !important; /* Inherit the color from the parent (.job-lowongan-kerja-related-h5) */
+}
+
+.job-lowongan-kerja-related-deskripsi{
+	padding: 5px 5px 5px 15px;
+	font-style: normal;     
+	font-size: small;
+    line-height: 1.4;
+    color: #576c6a;
+    margin-bottom: 13px;
+	
+}
+
+
+.nav-links{
+	margin:60px;
+	
+}
+.mce-toolbar .mce-btn-group>div {
+    white-space: inherit;
+}
+	
