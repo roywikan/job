@@ -5,9 +5,14 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes" />
 	<xsl:template match="/">
-		<html xmlns="http://www.w3.org/1999/xhtml">
+
+		<html lang="en" dir="ltr"> xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<title>XML Sitemap</title>
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
 				<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 				<style type="text/css">
 					body {
@@ -78,7 +83,7 @@
         <h1>XML Sitemap</h1>
         <div id="intro">
             <p>
-customized byroy in the root directory. Job Loker Lowongan Pekerjaan Kerja Pabrik PT BUMN Kantor Perusahaan.
+customized byroy in the plugin directory. Job Loker Lowongan Pekerjaan Kerja Pabrik PT BUMN Kantor Perusahaan.
             </p>
             <p>
 
@@ -130,7 +135,7 @@ customized byroy in the root directory. Job Loker Lowongan Pekerjaan Kerja Pabri
         <h1>XML Sitemap Index</h1>
         <div id="intro">
             <p>
-
+index customized byroy in the plugin directory. Job Loker Lowongan Pekerjaan Kerja Pabrik PT BUMN Kantor Perusahaan.
             </p>
             <p>
        
