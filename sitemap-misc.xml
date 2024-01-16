@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://job.web.id/sitemap.xsl'?><!-- generated-on='January 14, 2024 23:48' -->
+<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://job.web.id/sitemap.xsl'?><!-- generated-on='January 16, 2024 11:57' -->
 <urlset xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>	<url>
 		<loc>https://job.web.id/</loc>
 		<lastmod>2024-01-12T08:57:20+00:00</lastmod>
@@ -11,4 +11,4 @@
 		<changefreq>monthly</changefreq>
 		<priority>0.5</priority>
 	</url>
-</urlset><!-- Request ID: b88eb402f73e6d71b474bb148d133690; Queries for sitemap: 3; Total queries: 155; Seconds: $end_time; Memory for sitemap: 0MB; Total memory: 2MB -->
+</urlset><!-- Request ID: 3b7cfe7ddf9b9b0175fc1615fd303a03; Queries for sitemap: 3; Total queries: 155; Seconds: $end_time; Memory for sitemap: 0MB; Total memory: 2MB -->
