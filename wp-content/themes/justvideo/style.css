@@ -2421,8 +2421,11 @@ button.sub-menu-toggle.active svg {
   font-weight: 500; }
 
 /* Main menu animation ----------------------- */
+
 .menu-wrapper {
-  width: 100%; }
+    width: 100%;
+    background: #f8f9fa;
+}
 
 .menu-wrapper .menu-item {
   position: relative; }
