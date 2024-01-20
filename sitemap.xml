@@ -1,15 +1,15 @@
-<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://job.web.id/sitemap.xsl'?><!-- generated-on='January 17, 2024 12:54' -->
+<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://job.web.id/sitemap.xsl'?><!-- generated-on='January 19, 2024 23:55' -->
 <sitemapindex xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>	<sitemap>
 		<loc>https://job.web.id/sitemap-misc.xml</loc>
-		<lastmod>2024-01-12T08:57:20+00:00</lastmod>
+		<lastmod>2024-01-17T02:26:44+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://job.web.id/post_tag-sitemap.xml</loc>
-		<lastmod>2024-01-12T08:57:20+00:00</lastmod>
+		<lastmod>2024-01-17T02:26:44+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://job.web.id/category-sitemap.xml</loc>
-		<lastmod>2024-01-12T08:57:20+00:00</lastmod>
+		<lastmod>2024-01-17T02:26:44+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://job.web.id/post-sitemap.xml</loc>
@@ -17,10 +17,10 @@
 	</sitemap>
 	<sitemap>
 		<loc>https://job.web.id/page-sitemap.xml</loc>
-		<lastmod>2024-01-12T01:22:05+00:00</lastmod>
+		<lastmod>2024-01-17T02:26:44+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://job.web.id/archives-sitemap.xml</loc>
-		<lastmod>2024-01-12T08:57:20+00:00</lastmod>
+		<lastmod>2024-01-17T02:26:44+00:00</lastmod>
 	</sitemap>
-</sitemapindex><!-- Request ID: 4c2ca0745da8cd4e6c359bdc3269df64; Queries for sitemap: 11; Total queries: 163; Seconds: $end_time; Memory for sitemap: 0MB; Total memory: 6MB -->
+</sitemapindex><!-- Request ID: 18c73cbf87aeae91bcfce620c4ce04ca; Queries for sitemap: 11; Total queries: 162; Seconds: $end_time; Memory for sitemap: 0MB; Total memory: 2MB -->

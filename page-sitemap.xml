@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://job.web.id/sitemap.xsl'?><!-- generated-on='January 17, 2024 12:56' -->
+<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://job.web.id/sitemap.xsl'?><!-- generated-on='January 19, 2024 23:57' -->
 <urlset xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>	<url>
 		<loc>https://job.web.id/cookie-policy/</loc>
 		<lastmod>2024-01-12T01:21:31+00:00</lastmod>
@@ -37,7 +37,7 @@
 	</url>
 	<url>
 		<loc>https://job.web.id/logo-logo-online/</loc>
-		<lastmod>2023-12-22T02:30:54+00:00</lastmod>
+		<lastmod>2024-01-17T02:26:44+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.4</priority>
 	</url>
@@ -47,4 +47,4 @@
 		<changefreq>weekly</changefreq>
 		<priority>0.4</priority>
 	</url>
-</urlset><!-- Request ID: 5cb1504279bc9e9934edf5c9e09a3cdd; Queries for sitemap: 2; Total queries: 149; Seconds: $end_time; Memory for sitemap: 0MB; Total memory: 2MB -->
+</urlset><!-- Request ID: 96f6c3f412f61ceb50c37609cfe61413; Queries for sitemap: 2; Total queries: 148; Seconds: $end_time; Memory for sitemap: 0MB; Total memory: 2MB -->
