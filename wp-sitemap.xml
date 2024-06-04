@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap-stylesheet.xsl?template=sitemap-index"?>
+<!--sitemap-generator-url="https://wpgrim.com/" sitemap-generator-version="1.9.1"-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
+  <sitemap>
+    <loc>https://job.web.id/page-sitemap.xml</loc>
+    <lastmod>2024-06-04T11:13:39+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/post-sitemap.xml</loc>
+    <lastmod>2024-06-04T17:53:27+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/category-sitemap.xml</loc>
+    <lastmod>2024-06-04T17:53:27+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/image-sitemap.xml</loc>
+    <lastmod>2024-06-04T11:13:39+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://job.web.id/video-sitemap.xml</loc>
+    <lastmod>2024-06-04T11:13:39+00:00</lastmod>
+  </sitemap>
+</sitemapindex>
