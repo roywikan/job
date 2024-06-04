@@ -4,15 +4,15 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
   <sitemap>
     <loc>https://job.web.id/page-sitemap.xml</loc>
-    <lastmod>2024-06-04T16:30:38+00:00</lastmod>
+    <lastmod>2024-06-04T17:14:42+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/post-sitemap.xml</loc>
-    <lastmod>2024-06-04T17:53:27+00:00</lastmod>
+    <lastmod>2024-06-04T23:33:32+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/category-sitemap.xml</loc>
-    <lastmod>2024-06-04T17:53:27+00:00</lastmod>
+    <lastmod>2024-06-04T23:33:32+00:00</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/archive-sitemap.xml</loc>
@@ -20,6 +20,6 @@
   </sitemap>
   <sitemap>
     <loc>https://job.web.id/image-sitemap.xml</loc>
-    <lastmod>2024-06-04T16:34:33+00:00</lastmod>
+    <lastmod>2024-06-04T17:15:05+00:00</lastmod>
   </sitemap>
 </sitemapindex>
