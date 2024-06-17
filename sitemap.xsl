@@ -1,166 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" 
-                xmlns:html="http://www.w3.org/TR/REC-html40"
-                xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes" />
+<xsl:stylesheet version="2.0"
+				xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9"
+				xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes"/>
 	<xsl:template match="/">
-		<html xmlns="http://www.w3.org/1999/xhtml">
+		<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 			<head>
-				<title>XML Sitemap</title>
-				<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-				<style type="text/css">
-					body {
-						font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana;
-						font-size:13px;
-					}
-					
-					#intro {
-						background-color:#cfebf7;
-						border:1px #2580B2 solid;
-						padding:5px 13px 5px 13px;
-						margin:10px;
-					}
-					
-					#intro p {
-						line-height:16.8667px;
-					}
-					#intro strong {
-						font-weight:normal;
-					}
-					
-					td {
-						font-size:12px;
-					}
-					
-					th {
-						text-align:left;
-						padding-right:30px;
-						font-size:12px;
-					}
-					
-					tr.high {
-						background-color:whitesmoke;
-					}
-					
-					#footer {
-						padding:2px;
-						margin-top:10px;
-						font-size:8pt;
-						color:gray;
-					}
-					
-					#footer a {
-						color:gray;
-					}
-					
-					a {
-						color:black;
-					}
-				</style>
+				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<xsl:variable name="tableMinWidth" select="'727'"/><xsl:variable name="colorMain" select="'#222222'"/><xsl:variable name="colorAccent" select="'#00a0d2'"/><xsl:variable name="relativeFontColor" select="'#ffffff'"/><title>XML Sitemap &#x2d; JobWeb</title>
+<style style="text/css">
+html{font-size:62.5%;height:100%;}body{font-size:1.4rem;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;min-height:100%;display:grid;grid-template-rows:auto 1fr auto;margin:0;}.wrap{max-width:<xsl:value-of select="concat($tableMinWidth,'px')" />;margin:0 auto;overflow-wrap:break-word;}a{color:#05809e;text-decoration:none;}h1{font-size:2.4rem;font-family:Verdana,Geneva,sans-serif;font-weight:normal;margin:0;color:<xsl:value-of select="$colorAccent" />;}h1 img{vertical-align:bottom;margin-right:1.4rem;image-rendering:-webkit-optimize-contrast;}.rtl h1 img{margin-right:unset;margin-left:1.4rem;}#description{background-color:<xsl:value-of select="$colorMain" />;border-bottom:.7rem solid <xsl:value-of select="$colorAccent" />;color:<xsl:value-of select="$relativeFontColor" />;padding:2rem 2rem 1.3rem;}#description a{color:<xsl:value-of select="$relativeFontColor" />;}#content{padding:2rem;background:#fff;}a:hover{border-bottom:1px solid;}table{border-spacing:0;table-layout:fixed;}th,td{font-size:1.2rem;border:0px solid;padding:1rem 1.5rem;width:100%;max-width:<xsl:value-of select="concat($tableMinWidth - 173,'px')" />;min-width:113px;overflow-wrap:anywhere;}th{text-align:left;border-bottom:1px solid <xsl:value-of select="$colorAccent" />;}.rtl th{text-align:right;}tr:nth-of-type(2n){background-color:#eaeaea;}#footer{padding:0 3rem 2rem;font-size:1.1rem;color:#999;}#footer a{color:inherit;}#description a,#footer a{border-bottom:1px solid;}#description a:hover,#footer a:hover{border-bottom:none;}</style>
+<link rel="icon" href="https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-180x180.png" />
+<meta name="msapplication-TileImage" content="https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-270x270.png" />
 			</head>
-			<body>
-				<xsl:apply-templates></xsl:apply-templates>
+			<body class="ltr">
+				<div id="description">
+					<div class="wrap">
+						<a href="https://job.web.id/"><h1><img src="https://job.web.id/wp-content/uploads/2023/05/cropped-job-web-loker-32x32.png" width="29" height="29" />JobWeb — XML Sitemap</h1></a>
+<p>
+	This is an optimized XML sitemap meant to be processed quickly by search engines like <a href="https://www.google.com/" target="_blank" rel="nofollow noreferrer noopener">Google</a> or <a href="https://www.bing.com/" target="_blank" rel="nofollow noreferrer noopener">Bing</a>.</p>
+<p>
+	</p>
+					</div>
+				</div>
+				<div id="content">
+					<div class="wrap">
+						<table>
+	<thead>
+		<tr>
+			<th>URL</th>			<th>Last Updated</th>		</tr>
+	</thead>
+	<tbody>
+	<xsl:for-each select="sitemap:urlset/sitemap:url">
+		<xsl:variable name="itemURL" select="sitemap:loc"/><xsl:variable name="lastmod" select="concat(substring(sitemap:lastmod,0,11),concat(' ',substring(sitemap:lastmod,12,8)))"/>		<tr>
+			<td><a href="{$itemURL}"><xsl:choose><xsl:when test="string-length($itemURL)&gt;95"><xsl:value-of select="substring($itemURL,0,93)" />...</xsl:when><xsl:otherwise><xsl:value-of select="$itemURL" /></xsl:otherwise></xsl:choose></a></td>			<td><xsl:value-of select="$lastmod" /></td>		</tr>
+	</xsl:for-each>
+	</tbody>
+</table>
+					</div>
+				</div>
 				<div id="footer">
-					<p>
+					<div class="wrap">
 
-            		</p>
-            		<p>
-
-            		</p>
+					</div>
 				</div>
 			</body>
 		</html>
-	</xsl:template>
-	
-	
-	<xsl:template match="sitemap:urlset">
-        <h1>XML Sitemap</h1>
-        <div id="intro">
-            <p>
-customized byroy in the root directory. Job Loker Lowongan Pekerjaan Kerja Pabrik PT BUMN Kantor Perusahaan.
-            </p>
-            <p>
-
-            </p>
-            <p>
-                
-            </p>
-        </div>
-		<div id="content">
-			<table cellpadding="5">
-				<tr style="border-bottom:1px black solid;">
-					<th>URL</th>
-					<th>Priority</th>
-					<th>Change frequency</th>
-					<th>Last modified (GMT)</th>
-				</tr>
-				<xsl:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'"/>
-				<xsl:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
-				<xsl:for-each select="./sitemap:url">
-					<tr>
-						<xsl:if test="position() mod 2 != 1">
-							<xsl:attribute  name="class">high</xsl:attribute>
-						</xsl:if>
-						<td>
-							<xsl:variable name="itemURL">
-								<xsl:value-of select="sitemap:loc"/>
-							</xsl:variable>
-							<a href="{$itemURL}">
-								<xsl:value-of select="sitemap:loc"/>
-							</a>
-						</td>
-						<td>
-							<xsl:value-of select="concat(sitemap:priority*100,'%')"/>
-						</td>
-						<td>
-							<xsl:value-of select="concat(translate(substring(sitemap:changefreq, 1, 1),concat($lower, $upper),concat($upper, $lower)),substring(sitemap:changefreq, 2))"/>
-						</td>
-						<td>
-							<xsl:value-of select="sitemap:lastmod"/>
-						</td>
-					</tr>
-				</xsl:for-each>
-			</table>
-		</div>
-	</xsl:template>
-	
-	
-	<xsl:template match="sitemap:sitemapindex">
-        <h1>XML Sitemap Index</h1>
-        <div id="intro">
-            <p>
-index customized byroy in the root directory. Job Loker Lowongan Pekerjaan Kerja Pabrik PT BUMN Kantor Perusahaan.
-            </p>
-            <p>
-       
-            </p>
-        </div>
-		<div id="content">
-			<table cellpadding="5">
-				<tr style="border-bottom:1px black solid;">
-					<th>URL of sub-sitemap</th>
-					<th>Last modified (GMT)</th>
-				</tr>
-				<xsl:for-each select="./sitemap:sitemap">
-					<tr>
-						<xsl:if test="position() mod 2 != 1">
-							<xsl:attribute  name="class">high</xsl:attribute>
-						</xsl:if>
-						<td>
-							<xsl:variable name="itemURL">
-								<xsl:value-of select="sitemap:loc"/>
-							</xsl:variable>
-							<a href="{$itemURL}">
-								<xsl:value-of select="sitemap:loc"/>
-							</a>
-						</td>
-						<td>
-							<xsl:value-of select="sitemap:lastmod"/>
-						</td>
-					</tr>
-				</xsl:for-each>
-			</table>
-		</div>
 	</xsl:template>
 </xsl:stylesheet>
