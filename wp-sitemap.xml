@@ -1,25 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap-stylesheet.xsl?template=sitemap-index"?>
-<!--sitemap-generator-url="https://wpgrim.com/" sitemap-generator-version="1.9.1"-->
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
-  <sitemap>
-    <loc>https://job.web.id/page-sitemap.xml</loc>
-    <lastmod>2024-06-07T15:47:49+00:00</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://job.web.id/post-sitemap.xml</loc>
-    <lastmod>2024-06-07T22:42:08+00:00</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://job.web.id/category-sitemap.xml</loc>
-    <lastmod>2024-06-07T22:42:08+00:00</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://job.web.id/archive-sitemap.xml</loc>
-    <lastmod>2024-06-01T07:39:42+00:00</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://job.web.id/image-sitemap.xml</loc>
-    <lastmod>2024-06-07T15:47:49+00:00</lastmod>
-  </sitemap>
-</sitemapindex>
+
+<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://job.web.id/wp-content/plugins/google-sitemap-generator/sitemap.xsl'?><!-- sitemap-generator-url='http://www.arnebrachhold.de/' sitemap-generator-version='4.1.21' -->
+<!-- generated-on='August 10, 2024 13:06' -->
+<urlset xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'></urlset><!-- Request ID: 9843be22cfb4bc131ae75cb3c45a3890; Queries for sitemap: 1; Total queries: 6; Seconds: 0; Memory for sitemap: 1KB; Total memory: 54MB -->
