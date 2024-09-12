@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="https://job.web.id/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- Sitemap is generated on 2024-08-10 20:06:00 GMT -->
+<!-- Sitemap is generated on 2024-09-12 09:34:29 GMT -->
 	<url>
 		<loc>https://job.web.id/</loc>
-		<lastmod>2024-08-09T01:11:36+00:00</lastmod>
+		<lastmod>2024-09-12T01:54:13+00:00</lastmod>
 	</url>
 	<url>
 		<loc>https://job.web.id/cookie-policy/</loc>
@@ -37,6 +37,10 @@
 	<url>
 		<loc>https://job.web.id/privacy-policy/</loc>
 		<lastmod>2024-01-12T01:19:25+00:00</lastmod>
+	</url>
+	<url>
+		<loc>https://job.web.id/id/lowongan-pegawai-pemerintah-dengan-perjanjian-kerja-pppk/</loc>
+		<lastmod>2024-09-12T01:58:31+00:00</lastmod>
 	</url>
 	<url>
 		<loc>https://job.web.id/id/jawaban-pertanyaan-wawancara-kerja-tak-terduga-cara-menjawab/</loc>
@@ -233,10 +237,6 @@
 	<url>
 		<loc>https://job.web.id/id/jawa/dki-jakarta/lowongan-kerja-produksi-industry-kertas-karton-box/</loc>
 		<lastmod>2024-05-02T09:05:01+00:00</lastmod>
-	</url>
-	<url>
-		<loc>https://job.web.id/id/jawa/dki-jakarta/trading-services-officer-indonesia-stock-exchange-jobs/</loc>
-		<lastmod>2024-05-02T07:22:47+00:00</lastmod>
 	</url>
 </urlset>
 <!-- Sitemap is generated for this view -->
