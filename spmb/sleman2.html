@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Kelayakan SPMB SMP Sleman 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .pathway-card { transition: all 0.2s; }
+        .pathway-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    <div class="max-w-3xl mx-auto px-4 py-6 sm:py-10">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-indigo-700">SPMB SMP Sleman 2026</h1>
+            <p class="text-sm sm:text-base text-slate-600 mt-1">Simulasi & Pengecekan Kelayakan Jalur Masuk Berdasarkan Juknis Resmi</p>
+        </header>
+
+        <!-- Wizard Container -->
+        <main id="wizard" class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 sm:p-8">
+            <!-- Progress -->
+            <div class="flex justify-between mb-6 text-xs font-semibold text-slate-400">
+                <span class="w-1/6 text-indigo-600">Data Diri</span>
+                <span class="w-1/6">KK & Domisili</span>
+                <span class="w-1/6">Status Khusus</span>
+                <span class="w-1/6">Nilai & TKAD</span>
+                <span class="w-1/6">Prestasi</span>
+                <span class="w-1/6">Hasil</span>
+            </div>
+
+            <!-- Step 1: Data Diri -->
+            <div id="step1" class="step-content active">
+                <h2 class="text-xl font-semibold mb-4">1. Data Diri & Kelulusan</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tanggal Lahir</label>
+                        <input type="date" id="dob" class="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tahun Lulus SD/MI/Paket A</label>
+                        <select id="gradYear" class="w-full p-2 border rounded">
+                            <option value="2026">2025/2026</option>
+                            <option value="2025">2024/2025</option>
+                            <option value="2024">2023/2024</option>
+                        </select>
+                    </div>
+                    <p class="text-xs text-slate-500">⚠️ Usia maksimal 15 tahun pada 1 Juli 2026. Pengecualian untuk disabilitas & ekonomi tidak mampu.</p>
+                </div>
+            </div>
+
+            <!-- Step 2: KK & Domisili -->
+            <div id="step2" class="step-content">
+                <h2 class="text-xl font-semibold mb-4">2. Kartu Keluarga & Zonasi</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tanggal Terbit KK</label>
+                        <input type="date" id="kkDate" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Alasan KK Baru / Perubahan Data (<1 Tahun)</label>
+                        <select id="kkReason" class="w-full p-2 border rounded">
+                            <option value="normal">Lebih dari 1 tahun / Tidak berubah</option>
+                            <option value="pindah_sleman">Pindah domisili dalam Sleman</option>
+                            <option value="data_non_pindah">Perubahan data non-pindah (lahir/meninggal/hilang)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Kelurahan Tempat Tinggal (di KK)</label>
+                        <input type="text" id="kelurahan" placeholder="Contoh: Caturtunggal, Sinduharjo, dll" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">SMP Negeri Tujuan</label>
+                        <select id="targetSMP" class="w-full p-2 border rounded">
+                            <option value="">-- Pilih Sekolah --</option>
+                            <option value="SMP Negeri 1 Berbah">SMP Negeri 1 Berbah</option>
+                            <option value="SMP Negeri 1 Depok">SMP Negeri 1 Depok</option>
+                            <option value="SMP Negeri 1 Gamping">SMP Negeri 1 Gamping</option>
+                            <option value="SMP Negeri 1 Ngaglik">SMP Negeri 1 Ngaglik</option>
+                            <option value="SMP Negeri 1 Sleman">SMP Negeri 1 Sleman</option>
+                            <!-- Tambahkan sesuai kebutuhan -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Jarak ke Sekolah (meter) / Dalam Radius?</label>
+                        <select id="radiusStatus" class="w-full p-2 border rounded">
+                            <option value="tidak">Tidak / Jarak > Radius</option>
+                            <option value="ya">Ya, dalam radius yang ditetapkan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Status Khusus -->
+            <div id="step3" class="step-content">
+                <h2 class="text-xl font-semibold mb-4">3. Status Afirmasi & Mutasi</h2>
+                <div class="space-y-4">
+                    <label class="flex items-center space-x-3 p-3 bg-slate-50 rounded border cursor-pointer">
+                        <input type="checkbox" id="isPoor" class="w-4 h-4 text-indigo-600">
+                        <span class="text-sm">Memiliki KKM Tahun 2026 / Terdaftar di Dinsos Sleman</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 bg-slate-50 rounded border cursor-pointer">
+                        <input type="checkbox" id="isDisabled" class="w-4 h-4 text-indigo-600">
+                        <span class="text-sm">Menyandang Disabilitas (Ada Surat Asesmen RSUD Sleman 1-30 Mei 2026)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 p-3 bg-slate-50 rounded border cursor-pointer">
+                        <input type="checkbox" id="hasMutation" class="w-4 h-4 text-indigo-600">
+                        <span class="text-sm">Orang Tua/Wali Pindah Tugas (Mutasi)</span>
+                    </label>
+                    <div id="mutationDateWrapper" class="hidden">
+                        <label class="block text-sm font-medium mb-1">Tanggal SK Mutasi Orang Tua</label>
+                        <input type="date" id="mutationDate" class="w-full p-2 border rounded">
+                        <p class="text-xs text-slate-500 mt-1">⚠️ SK Mutasi maksimal diterbitkan 1 Juli 2025.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Nilai & TKAD -->
+            <div id="step4" class="step-content">
+                <h2 class="text-xl font-semibold mb-4">4. Nilai Akademik & TKAD</h2>
+                <div class="space-y-4">
+                    <label class="flex items-center space-x-3 p-3 bg-slate-50 rounded border cursor-pointer">
+                        <input type="checkbox" id="outsideDIY" class="w-4 h-4 text-indigo-600">
+                        <span class="text-sm">Asal SD di Luar DIY (Wajib ikut TKAD)</span>
+                    </label>
+                    <div id="tkadScoreWrapper" class="hidden">
+                        <label class="block text-sm font-medium mb-1">Nilai Hasil TKAD</label>
+                        <input type="number" id="tkadScore" step="0.01" class="w-full p-2 border rounded" placeholder="0-100">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Nilai Rapor (Rata-rata 5 sem)</label>
+                            <input type="number" id="raporAvg" step="0.01" class="w-full p-2 border rounded" placeholder="0-100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Nilai TKA</label>
+                            <input type="number" id="tkaScore" step="0.01" class="w-full p-2 border rounded" placeholder="0-100">
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500">Rumus: <code>(TKA + TKAD) x 80% + Rapor x 20%</code></p>
+                </div>
+            </div>
+
+            <!-- Step 5: Prestasi -->
+            <div id="step5" class="step-content">
+                <h2 class="text-xl font-semibold mb-4">5. Prestasi Akademik/Nonakademik</h2>
+                <div class="space-y-4">
+                    <label class="flex items-center space-x-3 p-3 bg-slate-50 rounded border cursor-pointer">
+                        <input type="checkbox" id="hasAchievement" class="w-4 h-4 text-indigo-600">
+                        <span class="text-sm">Memiliki Sertifikat Kejuaraan (diterbitkan ≥ 1 Juli 2023)</span>
+                    </label>
+                    <div id="achieveWrapper" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Tingkat Kejuaraan</label>
+                            <select id="achieveLevel" class="w-full p-2 border rounded">
+                                <option value="internasional">Internasional</option>
+                                <option value="nasional">Nasional (Juara 1/2/3)</option>
+                                <option value="provinsi">Provinsi/DIY</option>
+                                <option value="kabupaten">Kabupaten Sleman</option>
+                                <option value="nonkompetitif">Nonkompetitif/Eksibisi Resmi</option>
+                                <option value="swasta">Swasta/Lembaga Nonpemerintah</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Kategori Peserta</label>
+                            <select id="achieveType" class="w-full p-2 border rounded">
+                                <option value="perorangan">Perorangan/Double</option>
+                                <option value="beregu">Beregu (3-11 orang)</option>
+                                <option value="massal">Massal (12+ orang)</option>
+                            </select>
+                        </div>
+                        <div id="starRatingWrapper" class="hidden">
+                            <label class="block text-sm font-medium mb-1">Bintang Kurasi Pusat Prestasi Nasional (jika swasta)</label>
+                            <select id="starRating" class="w-full p-2 border rounded">
+                                <option value="3">≥ Bintang 3</option>
+                                <option value="2">Bintang 2</option>
+                                <option value="1">Bintang 1</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Juara ke-</label>
+                            <select id="achieveRank" class="w-full p-2 border rounded">
+                                <option value="1">Juara 1</option>
+                                <option value="2">Juara 2</option>
+                                <option value="3">Juara 3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6: Hasil -->
+            <div id="step6" class="step-content">
+                <h2 class="text-xl font-semibold mb-4">6. Analisis & Rekomendasi Jalur</h2>
+                <div id="resultContainer" class="space-y-4">
+                    <!-- Results injected here -->
+                </div>
+                <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-800">
+                    <strong>⚠️ Disclaimer:</strong> Simulasi ini berdasarkan Juknis SPMB SMP Sleman 2026/2027. Pastikan verifikasi dokumen asli ke sekolah tujuan & Dinas Pendidikan. Keputusan akhir berada di tangan panitia SPMB.
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between mt-8">
+                <button id="prevBtn" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded hidden">Sebelumnya</button>
+                <button id="nextBtn" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded font-medium ml-auto">Selanjutnya</button>
+            </div>
+        </main>
+
+        <footer class="text-center mt-6 text-xs text-slate-400">
+            Dibuat berdasarkan SK Bupati Sleman tentang Juknis SPMB TH 2026 | Siap Hosting di GitHub Pages
+        </footer>
+    </div>
+
+    <script>
+        // State & DOM Elements
+        const steps = document.querySelectorAll('.step-content');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentStep = 0;
+
+        // Event Listeners
+        nextBtn.addEventListener('click', () => handleNext());
+        prevBtn.addEventListener('click', () => handlePrev());
+        document.getElementById('hasMutation').addEventListener('change', e => {
+            document.getElementById('mutationDateWrapper').classList.toggle('hidden', !e.target.checked);
+        });
+        document.getElementById('outsideDIY').addEventListener('change', e => {
+            document.getElementById('tkadScoreWrapper').classList.toggle('hidden', !e.target.checked);
+        });
+        document.getElementById('hasAchievement').addEventListener('change', e => {
+            document.getElementById('achieveWrapper').classList.toggle('hidden', !e.target.checked);
+            document.getElementById('starRatingWrapper').classList.toggle('hidden', 
+                !(e.target.checked && document.getElementById('achieveLevel').value === 'swasta'));
+        });
+        document.getElementById('achieveLevel').addEventListener('change', e => {
+            document.getElementById('starRatingWrapper').classList.toggle('hidden', e.target.value !== 'swasta');
+        });
+
+        function handleNext() {
+            if (currentStep === steps.length - 1) return;
+            if (currentStep === 0 && !validateStep1()) return;
+            if (currentStep === steps.length - 2) evaluateAndRender();
+            steps[currentStep].classList.remove('active');
+            currentStep++;
+            steps[currentStep].classList.add('active');
+            updateButtons();
+        }
+
+        function handlePrev() {
+            if (currentStep === 0) return;
+            steps[currentStep].classList.remove('active');
+            currentStep--;
+            steps[currentStep].classList.add('active');
+            updateButtons();
+        }
+
+        function updateButtons() {
+            prevBtn.classList.toggle('hidden', currentStep === 0);
+            nextBtn.textContent = currentStep === steps.length - 2 ? 'Analisis Jalur' : (currentStep === steps.length - 1 ? 'Reset' : 'Selanjutnya');
+            if (currentStep === steps.length - 1) {
+                nextBtn.onclick = () => location.reload();
+            }
+        }
+
+        function validateStep1() {
+            const dob = new Date(document.getElementById('dob').value);
+            const targetDate = new Date('2026-07-01');
+            let age = targetDate.getFullYear() - dob.getFullYear();
+            const monthDiff = targetDate.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && targetDate.getDate() < dob.getDate())) age--;
+            if (age > 15) { alert('Usia melebihi batas maksimal 15 tahun pada 1 Juli 2026.'); return false; }
+            return true;
+        }
+
+        // Logic Evaluation
+        function evaluateAndRender() {
+            const data = gatherData();
+            const paths = [];
+            const warnings = [];
+
+            // 1. Afirmasi KKM
+            if (data.isPoor && data.kkValid) {
+                paths.push(createPathway('Jalur Afirmasi (Keluarga Tidak Mampu)', 
+                    'Memiliki KKM 2026 / Terdaftar Dinsos. Tidak ada tes akademik khusus, seleksi berdasarkan usia & domisili.', 
+                    '17-18 Juni 2026', 'Sekolah Tujuan 1'));
+            }
+
+            // 2. Afirmasi Disabilitas
+            if (data.isDisabled && data.kkValid) {
+                paths.push(createPathway('Jalur Afirmasi (Disabilitas)', 
+                    'Wajib membawa surat asesmen RSUD Sleman (1-30 Mei 2026). Kuota 5%.', 
+                    '17-18 Juni 2026', 'Sekolah Tujuan (1 pilihan)'));
+            }
+
+            // 3. Mutasi
+            if (data.hasMutation && data.mutationValid) {
+                if (data.outsideDIY && !data.tkadFilled) warnings.push('Wajib ikut TKAD 3 Juni 2026 di SMPN 1 Sleman.');
+                paths.push(createPathway('Jalur Mutasi', 
+                    'Pindahan tugas orang tua. Seleksi: Nilai Gabungan → Urutan Waktu Daftar.', 
+                    '17-18 Juni 2026', 'Sekolah Tujuan (1 pilihan)'));
+            }
+
+            // 4. Prestasi Khusus
+            if (data.achieveLevel === 'nasional' && ['1','2','3'].includes(data.achieveRank) && data.achieveYear >= 2023) {
+                paths.push(createPathway('Jalur Prestasi Khusus', 
+                    'Juara Nasional 1/2/3 (OSN/O2SN/KSM/FLS2N dll). Kuota 5%.', 
+                    '9-10 Juni 2026', 'Sekolah Tujuan (1 pilihan)'));
+            }
+
+            // 5. Prestasi Daerah
+            if (data.achieveLevel === 'provinsi' && data.representsSleman && data.achieveYear >= 2023) {
+                paths.push(createPathway('Jalur Prestasi Daerah', 
+                    'Mewakili Sleman di PORDA/POPDA/PON. Kuota 2%.', 
+                    '9-10 Juni 2026', 'Sekolah Tujuan (maks 2 pilihan)'));
+            }
+
+            // 6. Prestasi Umum
+            if (data.combined >= 245 || data.combinedWithAch >= 245) {
+                if (data.outsideDIY && !data.tkadFilled) warnings.push('Wajib ikut TKAD untuk jalur prestasi.');
+                paths.push(createPathway('Jalur Prestasi Umum', 
+                    `Nilai Gabungan: ${data.combined.toFixed(2)} (+Poin: ${data.achievePoints.toFixed(2)}). Minimal 245.`, 
+                    '23-24 Juni 2026', 'Maks 3 Sekolah'));
+            } else {
+                warnings.push(`Nilai gabungan ${data.combinedWithAch.toFixed(2)} < 245. Tidak memenuhi syarat Prestasi Umum.`);
+            }
+
+            // 7. Domisili Radius
+            if (data.radiusStatus === 'ya') {
+                paths.push(createPathway('Jalur Domisili Radius', 
+                    'Berada dalam radius sekolah. WAJIB diterima jika verifikasi koordinat valid.', 
+                    '17-18 Juni 2026', '1 Sekolah Tujuan'));
+            }
+
+            // 8. Domisili Wilayah
+            if (data.kkValid && checkZoneMatch(data.targetSMP, data.kelurahan)) {
+                paths.push(createPathway('Jalur Domisili Wilayah', 
+                    'Kelurahan sesuai zonasi sekolah. Seleksi: Poin Domisili → Nilai Gabungan → Urutan Waktu.', 
+                    '23-25 Juni 2026', 'Maks 3 Sekolah'));
+            } else if (!data.kkValid) {
+                warnings.push('KK belum memenuhi syarat 1 tahun & tidak termasuk pengecualian.');
+            }
+
+            // Render
+            const container = document.getElementById('resultContainer');
+            container.innerHTML = '';
+            if (paths.length === 0) container.innerHTML = '<div class="p-4 bg-red-50 text-red-700 rounded">Tidak ada jalur yang memenuhi syarat saat ini. Periksa kembali data Anda.</div>';
+            
+            paths.forEach(p => container.innerHTML += p);
+            if (warnings.length > 0) {
+                container.innerHTML += `<div class="mt-4 p-3 bg-orange-50 border border-orange-200 rounded text-sm text-orange-800"><strong>Catatan Penting:</strong><ul class="list-disc ml-5 mt-1">${warnings.map(w=>`<li>${w}</li>`).join('')}</ul></div>`;
+            }
+            container.innerHTML += `
+                <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded text-sm">
+                    <strong>📅 Jadwal Umum & Lokasi:</strong><br>
+                    • Pendaftaran: Online via <code>sleman.spmb.id</code> & verifikasi berkas di sekolah tujuan.<br>
+                    • Daftar Ulang: Biasanya 1-3 hari setelah pengumuman di sekolah penerima.<br>
+                    • Biaya: Dibebankan pada BOS, <strong>DILARANG ADA PUNGGUTAN</strong>.<br>
+                    • Kontak Posko: 0811-2500-028 (WA) | 0274-868512
+                </div>
+            `;
+        }
+
+        function gatherData() {
+            const dob = new Date(document.getElementById('dob').value);
+            const gradYear = parseInt(document.getElementById('gradYear').value);
+            const kkDate = new Date(document.getElementById('kkDate').value);
+            const kkCutoff = new Date('2025-07-01');
+            const kkReason = document.getElementById('kkReason').value;
+            const targetSMP = document.getElementById('targetSMP').value;
+            const kelurahan = document.getElementById('kelurahan').value.trim().toLowerCase();
+            const radiusStatus = document.getElementById('radiusStatus').value;
+            const isPoor = document.getElementById('isPoor').checked;
+            const isDisabled = document.getElementById('isDisabled').checked;
+            const hasMutation = document.getElementById('hasMutation').checked;
+            const mutationDate = document.getElementById('mutationDate').value ? new Date(document.getElementById('mutationDate').value) : null;
+            const outsideDIY = document.getElementById('outsideDIY').checked;
+            const tkadFilled = document.getElementById('tkadScore').value !== '';
+            const rapor = parseFloat(document.getElementById('raporAvg').value) || 0;
+            const tka = parseFloat(document.getElementById('tkaScore').value) || 0;
+            const tkad = parseFloat(document.getElementById('tkadScore').value) || 0;
+            const hasAchievement = document.getElementById('hasAchievement').checked;
+            const achieveLevel = document.getElementById('achieveLevel').value;
+            const achieveType = document.getElementById('achieveType').value;
+            const starRating = parseInt(document.getElementById('starRating').value) || 3;
+            const achieveRank = document.getElementById('achieveRank').value;
+            
+            // Combined Score
+            const combined = ((tka + tkad) * 0.8) + (rapor * 0.2);
+            
+            // Achievement Points Calculation (Simplified from Table G)
+            let achievePoints = 0;
+            const typeMap = { perorangan: 0, beregu: -1, massal: -2 };
+            const basePoints = { internasional: 7.5, nasional: 6.0, provinsi: 4.5, kabupaten: 3.0, nonkompetitif: 1.0, swasta: 0.5 };
+            if (hasAchievement) {
+                let base = basePoints[achieveLevel] || 0;
+                if (achieveRank === '2') base -= 0.5;
+                if (achieveRank === '3') base -= 1.0;
+                if (achieveType === 'beregu') base -= 1.0;
+                if (achieveType === 'massal') base -= 2.0;
+                if (achieveLevel === 'swasta' && starRating < 3) base = 0.005;
+                achievePoints = Math.max(0, base);
+            }
+
+            return {
+                kkValid: kkDate <= kkCutoff || ['pindah_sleman', 'data_non_pindah'].includes(kkReason),
+                targetSMP, kelurahan, radiusStatus,
+                isPoor, isDisabled, hasMutation, mutationValid: hasMutation && mutationDate <= kkCutoff,
+                outsideDIY, tkadFilled,
+                combined, achievePoints, combinedWithAch: combined + achievePoints,
+                achieveLevel, achieveRank, achieveYear: gradYear, representsSleman: achieveLevel === 'provinsi' // Simplified logic for demo
+            };
+        }
+
+        function checkZoneMatch(school, kelurahan) {
+            if (!school || !kelurahan) return false;
+            // Simplified zone checker based on Table 8. In production, use full JSON map.
+            const zoneMap = {
+                'SMP Negeri 1 Berbah': ['berbah', 'kalitirto', 'purwomartani', 'tirtomartani', 'madurejo', 'maguwoharjo'],
+                'SMP Negeri 1 Depok': ['caturtunggal', 'condongcatur', 'maguwoharjo', 'sinduadi', 'minomartani', 'wedomartani'],
+                'SMP Negeri 1 Gamping': ['ambarketawang', 'balecatur', 'banyuraden', 'nogotirto', 'sidoarum', 'sidokarto'],
+                'SMP Negeri 1 Ngaglik': ['sendangadi', 'donoharjo', 'sardonoharjo', 'sariharjo', 'sinduharjo', 'sukoharjo', 'pandowoharjo', 'candibinangun', 'trimulyo', 'donokerto'],
+                'SMP Negeri 1 Sleman': ['sendangadi', 'sumberadi', 'caturharjo', 'tridadi', 'triharjo', 'margoagung', 'mororejo', 'sumberrejo', 'bangunkerto']
+            };
+            const allowed = zoneMap[school] || [];
+            return allowed.some(z => kelurahan.includes(z));
+        }
+
+        function createPathway(title, desc, dates, loc) {
+            return `
+                <div class="pathway-card p-4 border border-indigo-200 bg-indigo-50 rounded-lg">
+                    <h3 class="font-bold text-indigo-800">${title}</h3>
+                    <p class="text-sm text-indigo-700 mt-1">${desc}</p>
+                    <div class="flex flex-wrap gap-2 mt-3 text-xs">
+                        <span class="bg-white px-2 py-1 rounded border">📅 ${dates}</span>
+                        <span class="bg-white px-2 py-1 rounded border">📍 ${loc}</span>
+                        <span class="bg-white px-2 py-1 rounded border">🌐 sleman.spmb.id</span>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
