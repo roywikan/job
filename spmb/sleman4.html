@@ -552,14 +552,42 @@ function analyzeStudent(){
     let allowed = true;
     let reasons = [];
 
-    if(kk === 'outsideDIY'){
+    const kalurahanMap = {
+      "SMPN 1 Sleman":["Trimulyo","Triharjo","Tridadi"],
+      "SMPN 2 Sleman":["Caturharjo","Pandowoharjo"],
+      "SMPN 1 Ngaglik":["Sariharjo","Minomartani","Sinduharjo"],
+      "SMPN 4 Pakem":["Pakembinangun","Candibinangun"]
+    };
+
+    let schoolOptions = [];
+
+    if(kk !== 'sleman'){
       allowed = false;
-      reasons.push('KK luar DIY sangat sulit masuk jalur domisili wilayah.');
+      reasons.push('Jalur Domisili Wilayah wajib KK Kabupaten Sleman.');
     }
 
     if(kkDuration !== 'yes'){
       allowed = false;
-      reasons.push('KK belum 1 tahun.');
+      reasons.push('KK belum berusia minimal 1 tahun.');
+    }
+
+    const kalurahanInput = prompt('Masukkan nama kalurahan sesuai KK untuk cek Domisili Wilayah:');
+
+    if(kalurahanInput){
+
+      for(const school in kalurahanMap){
+
+        if(kalurahanMap[school].map(x=>x.toLowerCase()).includes(kalurahanInput.toLowerCase())){
+          schoolOptions.push(school);
+        }
+      }
+    }
+
+    if(schoolOptions.length === 0){
+      allowed = false;
+      reasons.push('Kalurahan tidak terdeteksi masuk tabel Domisili Wilayah SMPN tujuan.');
+    } else {
+      reasons.push('Kalurahan sesuai tabel Domisili Wilayah SMPN.');
     }
 
     if(allowed){
@@ -570,14 +598,16 @@ function analyzeStudent(){
       'Jalur Domisili Wilayah',
       allowed,
       reasons,
-      'Maksimal 3 SMP Negeri sesuai wilayah domisili.',
+      schoolOptions.length > 0
+        ? 'Sekolah yang sesuai zonasi kalurahan: <b>' + schoolOptions.join(', ') + '</b>'
+        : 'Tidak ditemukan SMPN yang sesuai zonasi kalurahan.',
       [
-        'Urutkan sekolah dari yang peluang masuknya paling aman.',
-        'Jangan semua memilih sekolah favorit padat.',
-        'Perhatikan wilayah kalurahan sekolah tujuan.'
+        'Sekolah hanya boleh dipilih jika kalurahan masuk tabel Domisili Wilayah.',
+        'Urutkan sekolah dari peluang paling aman.',
+        'Jangan memilih sekolah yang sangat padat jika NG mepet.'
       ],
       [
-        'KK',
+        'KK minimal 1 tahun',
         'Akta lahir',
         'Surat lulus',
         'Hasil TKA/TKAD'
@@ -851,6 +881,18 @@ function analyzeStudent(){
     </div>
   `;
 
+  output += `
+    <div class="card">
+      <h2>Bagikan ke Grup WhatsApp</h2>
+      <div class="notice">
+        Banyak orang tua dan siswa masih bingung menentukan jalur SMPN Sleman yang benar.
+        Jika aplikasi ini membantu, bagikan ke grup WhatsApp sekolah, wali murid, dan komunitas SD agar mereka tidak salah strategi memilih jalur dan sekolah.
+        <br><br>
+        Semakin banyak yang memahami juknis dengan benar, semakin kecil risiko salah pilih jalur.
+      </div>
+    </div>
+  `;
+
   document.getElementById('result').innerHTML = output;
 
 }
@@ -859,3 +901,4 @@ function analyzeStudent(){
 
 </body>
 </html>
+
