@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8">
-  <title>{{ page.title }}</title>
+  {% include head.html %}
 </head>
+
 <body>
 
-<a href="/edukasi/">Home Edukasi</a>
+  {% include header.html %}
 
-{{ content }}
+  <main class="container">
+    {{ content }}
+
+    <a href="/edukasi/">Home Edukasi</a>
+  </main>
+
+  {% include footer.html %}
 
 </body>
 </html>
