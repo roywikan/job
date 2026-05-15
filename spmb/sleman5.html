@@ -1758,7 +1758,7 @@ const KELURAHAN_TO_SMPN =
     </button>
 
     <h2>
-      Gunakan Versi Lengkap
+      Gunakan Alat Yang Tepat
     </h2>
 
     <p>
@@ -1797,19 +1797,21 @@ const KELURAHAN_TO_SMPN =
   <script>
 
 setTimeout(() => {
-
-  document
-    .getElementById('popupOverlay')
-    .style
-    .display = 'flex';
-
+  const overlay = document.getElementById('popupOverlay');
+  
+  // Hanya jalankan jika elemen sudah ada di layar
+  if (overlay) {
+    overlay.style.display = 'flex';
+  } else {
+    console.log("Popup belum tersedia karena Analisis Jalur belum diklik.");
+  }
 }, 30000);
 
-
-
-    document.addEventListener('click', (e) => {
+// Gunakan Event Delegation untuk tombol Close agar tidak eror
+document.addEventListener('click', (e) => {
   if (e.target && e.target.id === 'closePopup') {
-    document.getElementById('popupOverlay').style.display = 'none';
+    const overlay = document.getElementById('popupOverlay');
+    if (overlay) overlay.style.display = 'none';
   }
 });
 
