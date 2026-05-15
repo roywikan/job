@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proyek's Sleman Logic System</title>
+<title>SPMB Sleman Logic System</title>
 
 <style>
 :root{
@@ -235,20 +235,20 @@ th{
 <div class="container">
 
 <div class="hero">
-  <h1>Proyek's Sleman Logic System</h1>
+  <h1>SPMB SMP Sleman Logic System</h1>
   <p>
-    Sistem logika pak @proyek untuk membantu analisis jalur SPMB SMP Negeri Sleman 2026,
+    Sistem logika untuk membantu menyarankan jalur SPMB SMP Negeri Sleman 2026,
     syarat dokumen, strategi pemilihan sekolah, dan jadwal kegiatan.
   </p>
 </div>
 
 <div class="card">
-  <h2>Input Kondisi Calon Siswa</h2>
+  <h2>Data Calon Siswa :</h2>
 
   <div class="grid">
 
     <div>
-      <label>Usia pada 1 Juli 2026</label>
+      <label>Usia pada tanggal 1 Juli 2026</label>
       <input type="number" id="age" placeholder="Contoh: 12">
     </div>
 
@@ -263,7 +263,7 @@ th{
     </div>
 
     <div>
-      <label>Domisili KK</label>
+      <label>Domisili KK siswa</label>
       <select id="kk">
         <option value="sleman">Kabupaten Sleman</option>
         <option value="diy">Kabupaten/Kota lain di DIY</option>
@@ -272,7 +272,7 @@ th{
     </div>
 
     <div>
-      <label>Asal SD</label>
+      <label>Asal SD siswa</label>
       <select id="sdOrigin">
         <option value="sleman">SD Sleman</option>
         <option value="diy">SD luar Sleman tetapi DIY</option>
@@ -281,18 +281,18 @@ th{
     </div>
 
     <div>
-      <label>Masa KK</label>
+      <label>Masa tercatat di KK</label>
       <select id="kkDuration">
-        <option value="yes">≥ 1 Tahun</option>
+        <option value="yes">≥ 1 Tahun pada tanggal 1 Juli 2026</option>
         <option value="no">< 1 Tahun</option>
       </select>
     </div>
 
     <div>
-      <label>Nilai Gabungan (NG)</label>
+      <label>Nilai Gabungan (NG) Sleman</label>
       <input type="number" id="ng" placeholder="Contoh: 287.55">
       <div class="small">
-        Hitung NG dahulu menggunakan:
+        Jika belum tahu NG, Hitung NG Slemandahulu menggunakan:
         <a href="https://tkatkad.github.io/smp-sleman/" target="_blank">
           Kalkulator NG Sleman
         </a>
@@ -301,12 +301,12 @@ th{
 
   </div>
 
-  <div class="section-title">Kondisi Tambahan</div>
+  <div class="section-title">Data Tambahan :</div>
 
   <div class="checks">
 
     <div class="check-item">
-      <label><input type="checkbox" id="radius"> Rumah dalam radius sekolah</label>
+      <label><input type="checkbox" id="radius"> Rumah dalam radius sekolah (lihat di juknis Sleman)</label>
     </div>
 
     <div class="check-item">
@@ -352,7 +352,7 @@ th{
 <div id="result"></div>
 
 <div class="footer">
-  Pak Proyek's Sleman Logic System • Eagle Fly Free Engine• 2026
+  SPMB Sleman Logic System • Eagle Fly Free Engine • 2026
 </div>
 
 </div>
