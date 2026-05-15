@@ -1,4 +1,4 @@
-<style>
+
   /* Animasi halus untuk modal */
   #spo-modal-container {
     animation: spoFadeIn 0.2s ease-out;
@@ -15,4 +15,3 @@
     outline: 2px solid #28a745;
     outline-offset: 2px;
   }
-</style>
