@@ -1,0 +1,18 @@
+<style>
+  /* Animasi halus untuk modal */
+  #spo-modal-container {
+    animation: spoFadeIn 0.2s ease-out;
+  }
+  @keyframes spoFadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Aksesibilitas: fokus visible */
+  #spo-fallback-link:focus,
+  #spo-modal-container a:focus,
+  #spo-modal-container button:focus {
+    outline: 2px solid #28a745;
+    outline-offset: 2px;
+  }
+</style>
