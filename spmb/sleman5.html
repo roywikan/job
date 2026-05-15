@@ -1805,16 +1805,13 @@ setTimeout(() => {
 
 }, 30000);
 
-document
-  .getElementById('closePopup')
-  .addEventListener('click', () => {
 
-    document
-      .getElementById('popupOverlay')
-      .style
-      .display = 'none';
 
-  });
+    document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'closePopup') {
+    document.getElementById('popupOverlay').style.display = 'none';
+  }
+});
 
 </script>
 </body>
