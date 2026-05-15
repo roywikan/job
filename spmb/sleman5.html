@@ -228,6 +228,63 @@ th{
   background:#eff6ff;
 }
 
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  padding:20px;
+}
+
+.popup-box{
+  background:#fff;
+  width:100%;
+  max-width:400px;
+  border-radius:18px;
+  padding:28px;
+  position:relative;
+  animation:fadePopup .25s ease;
+}
+
+.popup-close{
+  position:absolute;
+  right:12px;
+  top:12px;
+  border:none;
+  background:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
+.popup-main-btn{
+  display:block;
+  margin-top:22px;
+  text-align:center;
+  text-decoration:none;
+  background:#111827;
+  color:#fff;
+  padding:14px;
+  border-radius:12px;
+  font-weight:700;
+}
+
+@keyframes fadePopup{
+
+  from{
+    opacity:0;
+    transform:translateY(18px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+  
 </style>
 </head>
 <body>
@@ -1680,7 +1737,7 @@ const KELURAHAN_TO_SMPN =
 
         <a 
           href="https://wa.me/?text=${encodeURIComponent(
-            'Saya menemukan aplikasi Proyek\'s Sleman Logic System untuk membantu analisis pemilihan jalur SMPN Sleman sesuai juknis resmi. Coba gunakan di: https://job.web.id/spmb/sleman/'
+            'Bingung mau milih jalur di Sleman? Saya menemukan aplikasi SPMB Sleman Logic System untuk membantu analisis pemilihan jalur SMPN Sleman sesuai juknis resmi. Coba gunakan di: https://job.web.id/spmb/smpn-sleman/'
           )}"
           target="_blank"
           class="wa-share-btn"
@@ -1690,6 +1747,39 @@ const KELURAHAN_TO_SMPN =
 
         
       </div>
+
+
+      <div id="popupOverlay" class="popup-overlay">
+
+  <div class="popup-box">
+
+    <button id="closePopup" class="popup-close">
+      ×
+    </button>
+
+    <h2>
+      Gunakan Versi Lengkap
+    </h2>
+
+    <p>
+      Coba versi terbaru SPMB Sleman Logic System dengan fitur lebih lengkap,
+      update juknis terbaru, dan simulasi strategi sekolah.
+    </p>
+
+    <a
+      class="popup-main-btn"
+      target="_blank"
+      href="https://s.shopee.co.id/2LV8zySGbQ"
+    >
+      Buka Website Utama
+    </a>
+
+  </div>
+
+</div>
+
+
+
     </div>
   `;
 
@@ -1699,6 +1789,34 @@ const KELURAHAN_TO_SMPN =
 
 </script>
 
+
+
+
+
+
+  <script>
+
+setTimeout(() => {
+
+  document
+    .getElementById('popupOverlay')
+    .style
+    .display = 'flex';
+
+}, 30000);
+
+document
+  .getElementById('closePopup')
+  .addEventListener('click', () => {
+
+    document
+      .getElementById('popupOverlay')
+      .style
+      .display = 'none';
+
+  });
+
+</script>
 </body>
 </html>
 
