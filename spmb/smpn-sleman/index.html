@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
+<!-- 🎯 OPEN GRAPH & SOCIAL SHARING -->
 <meta property="og:title" content="SPMB Sleman Logic System 2026">
 <meta property="og:description" content="Analisis logika jalur SPMB SMP Negeri Sleman: cek syarat, strategi sekolah, jadwal TKAD, dan dokumen yang diperlukan. Gratis & berbasis juknis resmi.">
 <meta property="og:type" content="website">
@@ -16,10 +16,10 @@
 <meta name="twitter:title" content="SPMB Sleman Logic System 2026">
 <meta name="twitter:description" content="Analisis jalur SPMB SMP Sleman: domisili, afirmasi, prestasi. Gratis, akurat, berbasis juknis.">
 
-
+<!-- 🎨 Smart Popup CSS -->
 <link rel="stylesheet" href="https://job.web.id/smart.css" />
 
-<!-- 🧠 Structured Data (Schema.org) untuk legitimasi di WhatsApp/Google -->
+<!--  Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -38,7 +38,7 @@
 }
 </script>
 
-<title>SPMB Sleman Jalur Logic System</title>
+<title>SPMB Sleman Logic System</title>
 
 <style>
 :root{
@@ -280,6 +280,24 @@ th{
 .wa-share-btn:hover{
   background:#128C7E;
 }
+
+/*  Dropdown Domisili Styling */
+#domisili-dropdowns select {
+  background: white;
+  cursor: pointer;
+}
+
+#domisili-dropdowns select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+  color: #9ca3af;
+}
+
+#domisili-dropdowns select:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+}
 </style>
 </head>
 <body>
@@ -287,7 +305,7 @@ th{
 <div class="container">
 
 <div class="hero">
-  <h1>Jalur Apa di SPMB SMP Sleman?</h1>
+  <h1>SPMB SMP Sleman Logic System</h1>
   <p>
     Sistem logika untuk membantu menyarankan jalur SPMB SMP Negeri Sleman 2026,
     syarat dokumen, strategi pemilihan sekolah, dan jadwal kegiatan.
@@ -353,6 +371,31 @@ th{
 
   </div>
 
+  <!-- 🏠 DROPDOWN DOMISILI (Hanya untuk KK Sleman) -->
+  <div class="section-title" id="domisili-section-title" style="display:none;">
+    Pilih Domisili Anda :
+  </div>
+
+  <div class="grid" id="domisili-dropdowns" style="display:none;">
+    <div>
+      <label>Kapanewon (Kecamatan)</label>
+      <select id="kepanewonan-select">
+        <option value="">-- Pilih Kecamatan --</option>
+      </select>
+    </div>
+    
+    <div>
+      <label>Kalurahan (Kelurahan)</label>
+      <select id="kalurahan-select" disabled>
+        <option value="">-- Pilih Kecamatan dulu --</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="small" id="domisili-hint" style="display:none;">
+    Pilih sesuai data di KK Anda
+  </div>
+
   <div class="section-title">Data Tambahan :</div>
 
   <div class="checks">
@@ -397,7 +440,7 @@ th{
 
   <br>
 
-  <!-- 🔗 Tombol utama: trigger popup + analisis -->
+  <!-- 🔗 Tombol utama -->
   <button id="btn-analyze" type="button">Analisis Jalur</button>
 
 </div>
@@ -405,45 +448,158 @@ th{
 <div id="result"></div>
 
 <div class="footer">
-  SPMB Sleman Logic System • Eagle Fly Free Engine • 2026
+  Rekomendasi Jalur SPMB Sleman Logic System • Eagle Fly Free Engine • 2026
 </div>
 
 </div>
+
+<!-- 📦 Load Data Domisili -->
+<script src="data-sleman.js"></script>
 
 <!-- 🧠 Smart Popup Module -->
 <script src="https://job.web.id/smart.js"></script>
 
 <script>
 
+// ================= DROPDOWN DOMISILI FUNCTIONS =================
+
+// Extract unique Kepanewonan dan Kelurahan dari data
+function extractDomisiliData() {
+  const kepanewonanSet = new Set();
+  const kalurahanByKepanewonan = {};
+  
+  // Parse semua data SMPN_DOMISILI
+  for(const sekolah in SMPN_DOMISILI) {
+    SMPN_DOMISILI[sekolah].forEach(entry => {
+      const parts = entry.split(',').map(s => s.trim());
+      if(parts.length === 2) {
+        const [kepanewonan, kalurahan] = parts;
+        kepanewonanSet.add(kepanewonan);
+        
+        if(!kalurahanByKepanewonan[kepanewonan]) {
+          kalurahanByKepanewonan[kepanewonan] = new Set();
+        }
+        kalurahanByKepanewonan[kepanewonan].add(kalurahan);
+      }
+    });
+  }
+  
+  return {
+    kepanewonan: Array.from(kepanewonanSet).sort(),
+    kalurahanByKepanewonan: Object.fromEntries(
+      Object.entries(kalurahanByKepanewonan).map(([kep, kals]) => [kep, Array.from(kals).sort()])
+    )
+  };
+}
+
+// Populate dropdown
+function populateDomisiliDropdowns() {
+  const kk = document.getElementById('kk').value;
+  const sectionTitle = document.getElementById('domisili-section-title');
+  const dropdowns = document.getElementById('domisili-dropdowns');
+  const hint = document.getElementById('domisili-hint');
+  
+  // ✅ Hanya tampilkan jika KK di Sleman
+  if(kk !== 'sleman') {
+    sectionTitle.style.display = 'none';
+    dropdowns.style.display = 'none';
+    hint.style.display = 'none';
+    return;
+  }
+  
+  // Tampilkan dropdown
+  sectionTitle.style.display = 'block';
+  dropdowns.style.display = 'grid';
+  hint.style.display = 'block';
+  
+  const domisiliData = extractDomisiliData();
+  const kepanewonanSelect = document.getElementById('kepanewonan-select');
+  const kalurahanSelect = document.getElementById('kalurahan-select');
+  
+  // Clear options lama (keep first option)
+  kepanewonanSelect.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+  kalurahanSelect.innerHTML = '<option value="">-- Pilih Kecamatan dulu --</option>';
+  
+  // Populate Kecamatan
+  domisiliData.kepanewonan.forEach(kep => {
+    const option = document.createElement('option');
+    option.value = kep;
+    option.textContent = kep;
+    kepanewonanSelect.appendChild(option);
+  });
+  
+  // Event listener: saat Kecamatan berubah
+  kepanewonanSelect.addEventListener('change', function() {
+    const selectedKep = this.value;
+    
+    if(!selectedKep) {
+      kalurahanSelect.disabled = true;
+      kalurahanSelect.innerHTML = '<option value="">-- Pilih Kecamatan dulu --</option>';
+      return;
+    }
+    
+    // Populate Kelurahan berdasarkan Kecamatan
+    kalurahanSelect.innerHTML = '<option value="">-- Pilih Kelurahan --</option>';
+    const kalurahans = domisiliData.kalurahanByKepanewonan[selectedKep] || [];
+    
+    kalurahans.forEach(kal => {
+      const option = document.createElement('option');
+      option.value = kal;
+      option.textContent = kal;
+      kalurahanSelect.appendChild(option);
+    });
+    
+    kalurahanSelect.disabled = false;
+  });
+}
+
 // ================= INISIALISASI SMART POPUP =================
 document.addEventListener('DOMContentLoaded', function() {
   
-  // Daftar affiliate URLs (URL pertama = prioritas utama)
+  // ✅ Cek apakah popup sudah pernah dibuka di sesi ini
+  const popupAlreadyOpened = sessionStorage.getItem('spmb_popup_shown') === 'true';
+  
+  // Daftar affiliate URLs
   const affiliateUrls = [
-    'https://s.shopee.co.id/2LV8zySGbQ',  // ✅ Prioritas #1 (sesuai request)
+    'https://s.shopee.co.id/2LV8zySGbQ',
     'https://s.shopee.co.id/AA4ETmAQ4H',
-    // Tambahkan URL lain di sini jika perlu
   ];
   
-  // Pilih URL pertama sebagai default
   const primaryAffiliate = affiliateUrls[0];
   
   // Inisialisasi SmartPopupOpener
   SmartPopupOpener.init({
-    intermediatePage: 'https://job.web.id/spmb.html',  // Halaman perantara Anda
-    affiliateUrl: primaryAffiliate,                     // URL affiliate prioritas
-    clickThreshold: 2,                                  // ✅ Muncul di klik ke-2 (karena jarang dipakai)
-    enablePopUnder: true,                               // Aktifkan trik blur/focus
+    intermediatePage: 'https://job.web.id/spmb.html',
+    affiliateUrl: primaryAffiliate,
+    clickThreshold: 2,
+    enablePopUnder: true,
     modalTitle: '🎁 Butuh Perlengkapan Sekolah?',
     modalText: 'Browser memblokir tab baru. Klik tombol di bawah untuk cek penawaran hemat perlengkapan SPMB:',
     modalButtonText: 'Cek Penawaran →',
     
-    // Notifikasi halus sebelum trigger (Strategi #4: transparansi)
     onBeforeOpen: function(url) {
       if (SmartPopupOpener._state.clickCount === 1) {
-        // Tampilkan hint kecil di console/toast (opsional, tidak mengganggu)
-        console.log('💡 Klik berikutnya akan membuka penawaran spesial di tab baru');
+        console.log('💡 Klik berikutnya akan membuka penawaran spesial');
       }
+    },
+    
+    // ✅ Callback setelah popup/modal berhasil dibuka
+    onAfterOpen: function(url) {
+      sessionStorage.setItem('spmb_popup_shown', 'true');
+    },
+    
+    // ✅ Callback jika modal fallback ditampilkan + auto-close
+    onBlocked: function(url) {
+      sessionStorage.setItem('spmb_popup_shown', 'true');
+      
+      // ✅ Auto-close modal setelah 8 detik
+      setTimeout(() => {
+        const modalContainer = document.getElementById('spo-modal-container');
+        if (modalContainer && modalContainer.style.display !== 'none') {
+          modalContainer.style.display = 'none';
+          console.log('ℹ️ Modal auto-close setelah 8 detik');
+        }
+      }, 8000);
     }
   });
   
@@ -451,16 +607,28 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnAnalyze = document.getElementById('btn-analyze');
   if (btnAnalyze) {
     btnAnalyze.addEventListener('click', function(e) {
-      // ✅ Trigger popup dengan threshold (klik ke-2)
-      SmartPopupOpener.openWithThreshold();
+      // ✅ Hanya trigger popup jika belum pernah dibuka di sesi ini
+      if (!popupAlreadyOpened) {
+        SmartPopupOpener.openWithThreshold();
+      } else {
+        console.log('ℹ️ Popup sudah dibuka sebelumnya, skip trigger');
+      }
       
-      // ✅ Jalankan fungsi analisis normal
+      // Jalankan fungsi analisis normal
       analyzeStudent();
     });
   }
+  
+  // ✅ Event listener untuk KK dropdown
+  document.getElementById('kk').addEventListener('change', function() {
+    populateDomisiliDropdowns();
+  });
+  
+  // ✅ Initial population
+  populateDomisiliDropdowns();
 });
 
-// ================= LOGIKA APLIKASI (TIDAK DIUBAH) =================
+// ================= LOGIKA APLIKASI =================
 
 const schedules = {
 
@@ -489,9 +657,9 @@ const schedules = {
   ],
 
   tkad: [
-    ["Pendaftaran TKAD","4 Mei – 29 Mei 2026","Online"],
-    ["Pelaksanaan TKAD","3 Juni 2026 pukul 07.00","SMP Negeri 1 Sleman"],
-    ["Pengumuman TKAD","5 Juni 2026","Grup WhatsApp peserta"]
+    ["Pendaftaran TKAD Luar Daerah","4 Mei – 29 Mei 2026","Online"],
+    ["Pelaksanaan TKAD Luar Daerah","3 Juni 2026 pukul 07.00","SMP Negeri 1 Sleman"],
+    ["Pengumuman TKAD Luar Daerah","5 Juni 2026","Grup WhatsApp peserta Luar Daerah"]
   ]
 
 };
@@ -569,8 +737,21 @@ function analyzeStudent(){
   const teacherChild = document.getElementById('teacherChild').checked;
   const tkad = document.getElementById('tkad').checked;
 
-  let output = '';
+  // ✅ Ambil nilai dari dropdown (jika KK Sleman)
+  let selectedKepanewonan = '';
+  let selectedKalurahan = '';
+  
+  if(kk === 'sleman') {
+    const kepSelect = document.getElementById('kepanewonan-select');
+    const kalSelect = document.getElementById('kalurahan-select');
+    
+    if(kepSelect && kalSelect) {
+      selectedKepanewonan = kepSelect.value;
+      selectedKalurahan = kalSelect.value;
+    }
+  }
 
+  let output = '';
   let globalProblems = [];
 
   if(age > 15){
@@ -649,792 +830,11 @@ function analyzeStudent(){
     );
   }
 
-  // DOMISILI WILAYAH
+  // DOMISILI WILAYAH - ✅ UPDATED WITH DROPDOWNS
 
   {
     let allowed = true;
     let reasons = [];
-
-    // DATABASE RESMI CONTOH (SAMPLE)
-const SMPN_DOMISILIT = {
-
-  "SMP Negeri 1 Depok": [
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Mlati, Sinduadi",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngemplak, Wedomartani"
-  ],
-
-  "SMP Negeri 2 Depok": [
-    "Berbah, Kalitirto",
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Kalasan, Purwomartani",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sinduharjo",
-    "Ngemplak, Wedomartani"
-  ],
-
-  "SMP Negeri 5 Depok": [
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Mlati, Sinduadi",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngaglik, Sukoharjo"
-  ],
-
-  "SMP Negeri 2 Mlati": [
-    "Depok, Caturtunggal",
-    "Gamping, Trihanggo",
-    "Mlati, Sendangadi",
-    "Mlati, Sinduadi",
-    "Mlati, Sumberadi",
-    "Mlati, Tirtoadi",
-    "Mlati, Tlogoadi",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Sleman, Tridadi"
-  ]
-};
-
-///////////////////////
-
-const SMPN_DOMISILI = {
-  "SMP Negeri 1 Berbah": [
-    "Berbah, Jogotirto",
-    "Berbah, Kalitirto",
-    "Berbah, Sendangtirto",
-    "Berbah, Tegaltirto",
-    "Kalasan, Purwomartani",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Prambanan, Madurejo",
-    "Depok, Maguwoharjo"
-  ],
-  "SMP Negeri 2 Berbah": [
-    "Berbah, Jogotirto",
-    "Berbah, Kalitirto",
-    "Berbah, Sendangtirto",
-    "Berbah, Tegaltirto",
-    "Depok, Maguwoharjo",
-    "Kalasan, Purwomartani",
-    "Prambanan, Madurejo",
-    "Prambanan, Sumberharjo"
-  ],
-  "SMP Negeri 3 Berbah": [
-    "Berbah, Jogotirto",
-    "Berbah, Kalitirto",
-    "Berbah, Sendangtirto",
-    "Berbah, Tegaltirto",
-    "Prambanan, Madurejo",
-    "Prambanan, Sumberharjo"
-  ],
-  "SMP Negeri 1 Cangkringan": [
-    "Cangkringan, Argomulyo",
-    "Cangkringan, Glagaharjo",
-    "Cangkringan, Kepuharjo",
-    "Cangkringan, Umbulharjo",
-    "Cangkringan, Wukirsari",
-    "Ngemplak, Bimomartani",
-    "Ngemplak, Sindumartani",
-    "Ngemplak, Umbulmartani",
-    "Ngemplak, Widodomartani",
-    "Pakem, Pakembinangun"
-  ],
-  "SMP Negeri 2 Cangkringan": [
-    "Cangkringan, Argomulyo",
-    "Cangkringan, Glagaharjo",
-    "Cangkringan, Kepuharjo",
-    "Cangkringan, Umbulharjo",
-    "Cangkringan, Wukirsari",
-    "Pakem, Hargobinangun",
-    "Pakem, Pakembinangun",
-    "Ngemplak, Bimomartani",
-    "Ngemplak, Sindumartani"
-  ],
-  "SMP Negeri 1 Depok": [
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Mlati, Sinduadi",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngemplak, Wedomartani"
-  ],
-  "SMP Negeri 2 Depok": [
-    "Berbah, Kalitirto",
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Kalasan, Purwomartani",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sinduharjo",
-    "Ngemplak, Wedomartani"
-  ],
-  "SMP Negeri 3 Depok": [
-    "Berbah, Kalitirto",
-    "Berbah, Sendangtirto",
-    "Berbah, Tegaltirto",
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Kalasan, Purwomartani",
-    "Ngaglik, Minomartani",
-    "Ngemplak, Wedomartani"
-  ],
-  "SMP Negeri 4 Depok": [
-    "Berbah, Kalitirto",
-    "Berbah, Tegaltirto",
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Kalasan, Purwomartani",
-    "Ngaglik, Minomartani",
-    "Ngemplak, Wedomartani"
-  ],
-  "SMP Negeri 5 Depok": [
-    "Depok, Caturtunggal",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Mlati, Sinduadi",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngaglik, Sukoharjo"
-  ],
-  "SMP Negeri 1 Gamping": [
-    "Gamping, Ambarketawang",
-    "Gamping, Balecatur",
-    "Gamping, Banyuraden",
-    "Gamping, Nogotirto",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidomulyo"
-  ],
-  "SMP Negeri 2 Gamping": [
-    "Gamping, Ambarketawang",
-    "Gamping, Banyuraden",
-    "Gamping, Nogotirto",
-    "Gamping, Trihanggo",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidomoyo",
-    "Mlati, Sendangadi",
-    "Mlati, Sinduadi",
-    "Mlati, Tirtoadi",
-    "Mlati, Tlogoadi"
-  ],
-  "SMP Negeri 3 Gamping": [
-    "Gamping, Ambarketawang",
-    "Gamping, Balecatur",
-    "Gamping, Banyuraden",
-    "Gamping, Nogotirto",
-    "Gamping, Trihanggo",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidomoyo",
-    "Mlati, Tirtoadi",
-    "Mlati, Tlogoadi"
-  ],
-  "SMP Negeri 4 Gamping": [
-    "Gamping, Ambarketawang",
-    "Gamping, Balecatur",
-    "Gamping, Banyuraden",
-    "Gamping, Nogotirto",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidomulyo"
-  ],
-  "SMP Negeri 1 Godean": [
-    "Gamping, Balecatur",
-    "Godean, Sidoagung",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidoluhur",
-    "Godean, Sidomoyo",
-    "Godean, Sidomulyo",
-    "Godean, Sidorejo",
-    "Minggir, Sendangagung",
-    "Minggir, Sendangarum",
-    "Minggir, Sendangmulyo",
-    "Minggir, Sendangrejo",
-    "Minggir, Sendangsari",
-    "Moyudan, Sumberagung",
-    "Moyudan, Sumberarum",
-    "Moyudan, Sumberrahayu",
-    "Moyudan, Sumbersari",
-    "Seyegan, Margodadi",
-    "Seyegan, Margoluwih",
-    "Seyegan, Margokaton"
-  ],
-  "SMP Negeri 2 Godean": [
-    "Gamping, Ambarketawang",
-    "Gamping, Nogotirto",
-    "Godean, Sidoagung",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidoluhur",
-    "Godean, Sidomoyo",
-    "Godean, Sidomulyo",
-    "Godean, Sidorejo",
-    "Mlati, Tirtoadi",
-    "Moyudan, Sumberarum",
-    "Seyegan, Margodadi",
-    "Seyegan, Margoluwih",
-    "Gamping, Banyuraden"
-  ],
-  "SMP Negeri 3 Godean": [
-    "Gamping, Ambarketawang",
-    "Gamping, Balecatur",
-    "Gamping, Banyuraden",
-    "Gamping, Nogotirto",
-    "Godean, Sidoagung",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidoluhur",
-    "Godean, Sidomoyo",
-    "Godean, Sidomulyo",
-    "Godean, Sidorejo",
-    "Moyudan, Sumberagung",
-    "Moyudan, Sumbersari",
-    "Seyegan, Margoluwih"
-  ],
-  "SMP Negeri 1 Kalasan": [
-    "Berbah, Kalitirto",
-    "Berbah, Tegaltirto",
-    "Depok, Maguwoharjo",
-    "Kalasan, Purwomartani",
-    "Kalasan, Selomartani",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Prambanan, Bokoharjo",
-    "Prambanan, Madurejo",
-    "Prambanan, Sumberharjo"
-  ],
-  "SMP Negeri 2 Kalasan": [
-    "Berbah, Kalitirto",
-    "Kalasan, Purwomartani",
-    "Kalasan, Selomartani",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Ngemplak, Bimomartani",
-    "Ngemplak, Wedomartani",
-    "Ngemplak, Widodomartani"
-  ],
-  "SMP Negeri 3 Kalasan": [
-    "Berbah, Kalitirto",
-    "Depok, Condongcatur",
-    "Depok, Maguwoharjo",
-    "Kalasan, Purwomartani",
-    "Kalasan, Selomartani",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Ngemplak, Wedomartani"
-  ],
-  "SMP Negeri 4 Kalasan": [
-    "Berbah, Kalitirto",
-    "Kalasan, Purwomartani",
-    "Kalasan, Selomartani",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Ngemplak, Bimomartani",
-    "Ngemplak, Sindumartani",
-    "Prambanan, Bokoharjo",
-    "Prambanan, Madurejo"
-  ],
-  "SMP Negeri 1 Minggir": [
-    "Godean, Sidorejo",
-    "Minggir, Sendangagung",
-    "Minggir, Sendangarum",
-    "Minggir, Sendangmulyo",
-    "Minggir, Sendangrejo",
-    "Minggir, Sendangsari",
-    "Moyudan, Sumberagung",
-    "Moyudan, Sumberarum",
-    "Moyudan, Sumberrahayu",
-    "Seyegan, Margokaton",
-    "Tempel, Banyurejo"
-  ],
-  "SMP Negeri 1 Mlati": [
-    "Gamping, Trihanggo",
-    "Godean, Sidomoyo",
-    "Mlati, Sendangadi",
-    "Mlati, Sinduadi",
-    "Mlati, Sumberadi",
-    "Mlati, Tirtoadi",
-    "Mlati, Tlogoadi",
-    "Seyegan, Margodadi",
-    "Seyegan, Margokaton",
-    "Seyegan, Margoluwih",
-    "Seyegan, Margomulyo",
-    "Sleman, Tridadi"
-  ],
-  "SMP Negeri 2 Mlati": [
-    "Depok, Caturtunggal",
-    "Gamping, Trihanggo",
-    "Mlati, Sendangadi",
-    "Mlati, Sinduadi",
-    "Mlati, Sumberadi",
-    "Mlati, Tirtoadi",
-    "Mlati, Tlogoadi",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Sleman, Tridadi"
-  ],
-  "SMP Negeri 3 Mlati": [
-    "Gamping, Nogotirto",
-    "Gamping, Trihanggo",
-    "Godean, Sidomoyo",
-    "Mlati, Sendangadi",
-    "Mlati, Sinduadi",
-    "Mlati, Sumberadi",
-    "Mlati, Tirtoadi",
-    "Mlati, Tlogoadi",
-    "Seyegan, Margomulyo",
-    "Sleman, Tridadi"
-  ],
-  "SMP Negeri 1 Moyudan": [
-    "Godean, Sidoagung",
-    "Godean, Sidoarum",
-    "Godean, Sidokarto",
-    "Godean, Sidoluhur",
-    "Godean, Sidomulyo",
-    "Godean, Sidorejo",
-    "Minggir, Sendangagung",
-    "Minggir, Sendangarum",
-    "Minggir, Sendangmulyo",
-    "Moyudan, Sumberagung",
-    "Moyudan, Sumberarum",
-    "Moyudan, Sumberrahayu",
-    "Moyudan, Sumbersari"
-  ],
-  "SMP Negeri 2 Moyudan": [
-    "Godean, Sidorejo",
-    "Godean, Sidoluhur",
-    "Minggir, Sendangagung",
-    "Minggir, Sendangarum",
-    "Minggir, Sendangmulyo",
-    "Minggir, Sendangrejo",
-    "Moyudan, Sumberagung",
-    "Moyudan, Sumberarum",
-    "Moyudan, Sumberrahayu",
-    "Moyudan, Sumbersari"
-  ],
-  "SMP Negeri 1 Ngaglik": [
-    "Mlati, Sendangadi",
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngaglik, Sukoharjo",
-    "Pakem, Purwobinangun",
-    "Pakem, Candibinangun",
-    "Sleman, Pandowoharjo",
-    "Sleman, Tridadi",
-    "Sleman, Trimulyo",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 2 Ngaglik": [
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngaglik, Sukoharjo",
-    "Ngemplak, Umbulmartani",
-    "Ngemplak, Wedomartani",
-    "Pakem, Candibinangun",
-    "Pakem, Harjobinangun",
-    "Depok, Condongcatur"
-  ],
-  "SMP Negeri 3 Ngaglik": [
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngaglik, Sukoharjo",
-    "Ngemplak, Umbulmartani",
-    "Ngemplak, Wedomartani",
-    "Pakem, Harjobinangun",
-    "Pakem, Pakembinangun",
-    "Pakem, Purwobinangun",
-    "Sleman, Pandowoharjo",
-    "Depok, Condongcatur"
-  ],
-  "SMP Negeri 4 Ngaglik": [
-    "Depok, Condongcatur",
-    "Mlati, Sendangadi",
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Minomartani",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sariharjo",
-    "Ngaglik, Sinduharjo",
-    "Pakem, Candibinangun",
-    "Pakem, Harjobinangun",
-    "Sleman, Pandowoharjo",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 1 Ngemplak": [
-    "Cangkringan, Argomulyo",
-    "Cangkringan, Wukirsari",
-    "Depok, Maguwoharjo",
-    "Kalasan, Selomartani",
-    "Ngaglik, Sukoharjo",
-    "Ngemplak, Bimomartani",
-    "Ngemplak, Sindumartani",
-    "Ngemplak, Umbulmartani",
-    "Ngemplak, Wedomartani",
-    "Ngemplak, Widodomartani"
-  ],
-  "SMP Negeri 2 Ngemplak": [
-    "Cangkringan, Argomulyo",
-    "Kalasan, Purwomartani",
-    "Kalasan, Selomartani",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Ngaglik, Sukoharjo",
-    "Ngemplak, Bimomartani",
-    "Ngemplak, Sindumartani",
-    "Ngemplak, Umbulmartani",
-    "Ngemplak, Wedomartani",
-    "Ngemplak, Widodomartani"
-  ],
-  "SMP Negeri 1 Pakem": [
-    "Cangkringan, Glagaharjo",
-    "Cangkringan, Kepuharjo",
-    "Cangkringan, Umbulharjo",
-    "Cangkringan, Wukirsari",
-    "Cangkringan, Argomulyo",
-    "Ngaglik, Sukoharjo",
-    "Ngemplak, Umbulmartani",
-    "Pakem, Candibinangun",
-    "Pakem, Hargobinangun",
-    "Pakem, Harjobinangun",
-    "Pakem, Pakembinangun",
-    "Pakem, Purwobinangun",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 2 Pakem": [
-    "Cangkringan, Glagaharjo",
-    "Cangkringan, Kepuharjo",
-    "Cangkringan, Umbulharjo",
-    "Cangkringan, Wukirsari",
-    "Cangkringan, Argomulyo",
-    "Ngemplak, Umbulmartani",
-    "Pakem, Candibinangun",
-    "Pakem, Hargobinangun",
-    "Pakem, Harjobinangun",
-    "Pakem, Pakembinangun",
-    "Pakem, Purwobinangun",
-    "Turi, Donokerto",
-    "Turi, Girikerto"
-  ],
-  "SMP Negeri 3 Pakem": [
-    "Cangkringan, Wukirsari",
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sukoharjo",
-    "Ngemplak, Umbulmartani",
-    "Ngemplak, Widodomartani",
-    "Pakem, Candibinangun",
-    "Pakem, Hargobinangun",
-    "Pakem, Harjobinangun",
-    "Pakem, Pakembinangun",
-    "Pakem, Purwobinangun",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 4 Pakem": [
-    "Cangkringan, Wukirsari",
-    "Cangkringan, Umbulharjo",
-    "Cangkringan, Argomulyo",
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sinduharjo",
-    "Ngaglik, Sukoharjo",
-    "Ngaglik, Minomartani",
-    "Ngemplak, Umbulmartani",
-    "Ngemplak, Wedomartani",
-    "Ngemplak, Widodomartani",
-    "Pakem, Candibinangun",
-    "Pakem, Hargobinangun",
-    "Pakem, Harjobinangun",
-    "Pakem, Pakembinangun",
-    "Pakem, Purwobinangun",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 1 Prambanan": [
-    "Berbah, Jogotirto",
-    "Berbah, Kalitirto",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Prambanan, Bokoharjo",
-    "Prambanan, Gayamharjo",
-    "Prambanan, Madurejo",
-    "Prambanan, Sambirejo",
-    "Prambanan, Sumberharjo",
-    "Prambanan, Wukirharjo"
-  ],
-  "SMP Negeri 2 Prambanan": [
-    "Berbah, Jogotirto",
-    "Prambanan, Bokoharjo",
-    "Prambanan, Gayamharjo",
-    "Prambanan, Madurejo",
-    "Prambanan, Sambirejo",
-    "Prambanan, Sumberharjo",
-    "Prambanan, Wukirharjo"
-  ],
-  "SMP Negeri 3 Prambanan": [
-    "Berbah, Jogotirto",
-    "Kalasan, Tamanmartani",
-    "Prambanan, Bokoharjo",
-    "Prambanan, Gayamharjo",
-    "Prambanan, Madurejo",
-    "Prambanan, Sambirejo",
-    "Prambanan, Sumberharjo",
-    "Prambanan, Wukirharjo"
-  ],
-  "SMP Negeri 4 Prambanan": [
-    "Berbah, Jogotirto",
-    "Berbah, Kalitirto",
-    "Berbah, Sendangtirto",
-    "Kalasan, Tamanmartani",
-    "Kalasan, Tirtomartani",
-    "Prambanan, Bokoharjo",
-    "Prambanan, Gayamharjo",
-    "Prambanan, Madurejo",
-    "Prambanan, Sambirejo",
-    "Prambanan, Sumberharjo",
-    "Prambanan, Wukirharjo"
-  ],
-  "SMP Negeri 1 Seyegan": [
-    "Godean, Sidoagung",
-    "Godean, Sidorejo",
-    "Minggir, Sendangmulyo",
-    "Minggir, Sendangrejo",
-    "Minggir, Sendangsari",
-    "Minggir, Sendangagung",
-    "Mlati, Sumberadi",
-    "Mlati, Tirtoadi",
-    "Seyegan, Margoagung",
-    "Seyegan, Margodadi",
-    "Seyegan, Margokaton",
-    "Seyegan, Margoluwih",
-    "Seyegan, Margomulyo",
-    "Sleman, Caturharjo",
-    "Tempel, Tambakrejo"
-  ],
-  "SMP Negeri 1 Sleman": [
-    "Mlati, Sendangadi",
-    "Mlati, Sumberadi",
-    "Ngaglik, Sariharjo",
-    "Sleman, Caturharjo",
-    "Sleman, Pandowoharjo",
-    "Sleman, Tridadi",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Tempel, Margorejo",
-    "Tempel, Mororejo",
-    "Tempel, Sumberrejo",
-    "Turi, Bangunkerto",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 2 Sleman": [
-    "Mlati, Sendangadi",
-    "Mlati, Sumberadi",
-    "Mlati, Tirtoadi",
-    "Mlati, Tlogoadi",
-    "Seyegan, Margoagung",
-    "Seyegan, Margomulyo",
-    "Sleman, Caturharjo",
-    "Sleman, Pandowoharjo",
-    "Sleman, Tridadi",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Tempel, Margorejo",
-    "Tempel, Mororejo",
-    "Turi, Bangunkerto",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 3 Sleman": [
-    "Mlati, Sendangadi",
-    "Mlati, Sinduadi",
-    "Mlati, Sumberadi",
-    "Mlati, Tlogoadi",
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Sardonoharjo",
-    "Ngaglik, Sariharjo",
-    "Sleman, Caturharjo",
-    "Sleman, Pandowoharjo",
-    "Sleman, Tridadi",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Gamping, Trihanggo"
-  ],
-  "SMP Negeri 4 Sleman": [
-    "Mlati, Sumberadi",
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Sariharjo",
-    "Sleman, Caturharjo",
-    "Sleman, Pandowoharjo",
-    "Sleman, Tridadi",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Tempel, Margorejo",
-    "Turi, Bangunkerto",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 5 Sleman": [
-    "Mlati, Sendangadi",
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Sariharjo",
-    "Sleman, Caturharjo",
-    "Sleman, Pandowoharjo",
-    "Sleman, Tridadi",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Turi, Donokerto"
-  ],
-  "SMP Negeri 1 Tempel": [
-    "Seyegan, Margoagung",
-    "Sleman, Caturharjo",
-    "Sleman, Pandowoharjo",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Tempel, Banyurejo",
-    "Tempel, Lumbungrejo",
-    "Tempel, Margorejo",
-    "Tempel, Merdikorejo",
-    "Tempel, Mororejo",
-    "Tempel, Pondokrejo",
-    "Tempel, Sumberrejo",
-    "Tempel, Tambakrejo",
-    "Turi, Bangunkerto"
-  ],
-  "SMP Negeri 2 Tempel": [
-    "Minggir, Sendangrejo",
-    "Minggir, Sendangsari",
-    "Minggir, Sendangagung",
-    "Seyegan, Margoagung",
-    "Seyegan, Margokaton",
-    "Seyegan, Margomulyo",
-    "Seyegan, Margodadi",
-    "Sleman, Caturharjo",
-    "Tempel, Banyurejo",
-    "Tempel, Pondokrejo",
-    "Tempel, Sumberrejo",
-    "Tempel, Tambakrejo"
-  ],
-  "SMP Negeri 3 Tempel": [
-    "Seyegan, Margoagung",
-    "Sleman, Caturharjo",
-    "Sleman, Triharjo",
-    "Tempel, Banyurejo",
-    "Tempel, Lumbungrejo",
-    "Tempel, Margorejo",
-    "Tempel, Mororejo",
-    "Tempel, Pondokrejo",
-    "Tempel, Sumberrejo",
-    "Tempel, Tambakrejo"
-  ],
-  "SMP Negeri 4 Tempel": [
-    "Sleman, Caturharjo",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Sleman, Lumbungrejo",
-    "Tempel, Margorejo",
-    "Tempel, Merdikorejo",
-    "Tempel, Mororejo",
-    "Tempel, Pondokrejo",
-    "Turi, Bangunkerto",
-    "Turi, Donokerto",
-    "Turi, Wonokerto"
-  ],
-  "SMP Negeri 1 Turi": [
-    "Ngaglik, Donoharjo",
-    "Pakem, Candibinangun",
-    "Pakem, Harjobinangun",
-    "Pakem, Purwobinangun",
-    "Sleman, Trimulyo",
-    "Tempel, Margorejo",
-    "Tempel, Merdikorejo",
-    "Turi, Bangunkerto",
-    "Turi, Donokerto",
-    "Turi, Girikerto",
-    "Turi, Wonokerto"
-  ],
-  "SMP Negeri 2 Turi": [
-    "Pakem, Purwobinangun",
-    "Sleman, Caturharjo",
-    "Sleman, Triharjo",
-    "Sleman, Trimulyo",
-    "Tempel, Lumbungrejo",
-    "Tempel, Margorejo",
-    "Tempel, Merdikorejo",
-    "Turi, Bangunkerto",
-    "Turi, Donokerto",
-    "Turi, Girikerto",
-    "Turi, Wonokerto"
-  ],
-  "SMP Negeri 3 Turi": [
-    "Ngaglik, Donoharjo",
-    "Ngaglik, Sardonoharjo",
-    "Ngemplak, Umbulmartani",
-    "Pakem, Candibinangun",
-    "Pakem, Hargobinangun",
-    "Pakem, Harjobinangun",
-    "Pakem, Pakembinangun",
-    "Pakem, Purwobinangun",
-    "Turi, Bangunkerto",
-    "Turi, Donokerto",
-    "Turi, Girikerto",
-    "Turi, Wonokerto",
-    "Tempel, Merdikorejo",
-    "Sleman, Trimulyo"
-  ]
-};
-
-/////////////////
-
-function buildReverseMap(data){
-
-  const result = {};
-
-  for(const smpn in data){
-
-    data[smpn].forEach(area => {
-
-      const normalized = area
-        .replace(/\s+/g, ' ')
-        .trim()
-        .toLowerCase();
-
-      if(!result[normalized]){
-        result[normalized] = [];
-      }
-
-      result[normalized].push(smpn);
-
-    });
-  }
-
-  return result;
-}
-
-const KELURAHAN_TO_SMPN =
-  buildReverseMap(SMPN_DOMISILI);
-
     let schoolOptions = [];
 
     if(kk !== 'sleman'){
@@ -1447,38 +847,28 @@ const KELURAHAN_TO_SMPN =
       reasons.push('KK belum berusia minimal 1 tahun.');
     }
 
-    const kapanewonInput = prompt(
-      'Masukkan nama kapanewon sesuai KK. Contoh: Depok'
-    );
-
-    const kalurahanInput = prompt(
-      'Masukkan nama kalurahan sesuai KK. Contoh: Caturtunggal'
-    );
-
-    if(kapanewonInput && kalurahanInput){
-
-      const key =
-        `${kapanewonInput}, ${kalurahanInput}`
-          .replace(/\s+/g, ' ')
-          .trim()
-          .toLowerCase();
-
-      schoolOptions =
-        KELURAHAN_TO_SMPN[key] || [];
-    }
-
-    if(kk === 'sleman' && kkDuration === 'yes' && schoolOptions.length > 0){
-      reasons.push('Kalurahan ditemukan dalam tabel Domisili Wilayah SMPN Sleman.');
-    }
-
-    if(schoolOptions.length === 0){
+    // ✅ Gunakan dropdown jika KK Sleman
+    if(kk === 'sleman' && selectedKepanewonan && selectedKalurahan) {
+      const key = `${selectedKepanewonan}, ${selectedKalurahan}`
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+      
+      schoolOptions = KELURAHAN_TO_SMPN[key] || [];
+      
+      if(schoolOptions.length > 0) {
+        reasons.push(`Domisili: <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong>`);
+        reasons.push('Kalurahan ditemukan dalam tabel Domisili Wilayah SMPN Sleman.');
+      } else {
+        allowed = false;
+        reasons.push(`Kombinasi <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong> tidak ditemukan dalam database.`);
+      }
+    } else if(kk === 'sleman') {
       allowed = false;
-      reasons.push('Kalurahan tidak terdeteksi masuk tabel Domisili Wilayah SMPN tujuan.');
-    } else {
-      reasons.push('Kalurahan sesuai tabel Domisili Wilayah SMPN.');
+      reasons.push('Silakan pilih Kecamatan dan Kelurahan sesuai KK Anda.');
     }
 
-    if(allowed){
+    if(allowed && schoolOptions.length > 0){
       reasons.push('Siswa bisa mencoba jalur Domisili Wilayah.');
     }
 
@@ -1488,7 +878,7 @@ const KELURAHAN_TO_SMPN =
       reasons,
       schoolOptions.length > 0
         ? 'Sekolah yang sesuai zonasi kalurahan: <b>' + schoolOptions.join(', ') + '</b>'
-        : 'Tidak ditemukan SMPN yang sesuai zonasi kalurahan.',
+        : (kk === 'sleman' ? 'Pilih domisili Anda di form atas.' : 'Tidak tersedia untuk domisili luar Sleman.'),
       [
         'Sekolah hanya boleh dipilih jika kalurahan masuk tabel Domisili Wilayah.',
         'Urutkan sekolah dari peluang paling aman.',
