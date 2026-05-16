@@ -1,19 +1,18 @@
 /**
- *  AdmissionEngine v1.1
+ *  AdmissionEngine v1.2
  * Pure logic: JSON Config + NG Values → Ranked Schools with Probabilities
  * Zero DOM interaction. Zero side effects.
  * 
- * Changelog v1.1:
- * - Added fallback label() function if config.thresholds missing
- * - Added NaN/undefined protection for probD/probP
- * - Added safe property access for config values
+ * Compatible with juknis-sleman-2026.json structure:
+ * - schools: [{ id, prestasi, domisili }, ...]
+ * - probabilityThresholds: { "0.90": "💚 ...", ... }
  */
 const AdmissionEngine = (function() {
   'use strict';
   
   let config = null;
 
-  // ✅ Fallback label function (standalone, no config dependency)
+  // ✅ Standalone label function (fallback, no config dependency)
   function label(prob) {
     const p = typeof prob === 'number' && !isNaN(prob) ? prob : 0;
     if (p > 0.90) return "💚 Sangat Aman";
@@ -25,9 +24,8 @@ const AdmissionEngine = (function() {
   }
 
   function loadConfig(jsonData) {
-    if (!jsonData || !jsonData.schools) {
-      console.warn('⚠️ Invalid config structure, using defaults');
-      // Fallback minimal config agar tidak crash
+    if (!jsonData || !jsonData.schools || !Array.isArray(jsonData.schools)) {
+      console.warn('⚠️ Invalid config, using minimal defaults');
       config = {
         schools: [],
         rules: { minPrestasiNG: 245, perfectMarginDefault: 10, maxMarginCap: 25 },
@@ -56,10 +54,9 @@ const AdmissionEngine = (function() {
   }
 
   function getLabel(prob) {
-    // ✅ Safe prob handling
     const p = typeof prob === 'number' && !isNaN(prob) ? prob : 0;
     
-    // ✅ Fallback jika config tidak ada atau thresholds tidak lengkap
+    // Fallback jika config tidak lengkap
     if (!config || !config.probabilityThresholds) {
       return label(p);
     }
@@ -72,26 +69,23 @@ const AdmissionEngine = (function() {
     for (const t of thresholds) {
       if (p > t) {
         const lbl = config.probabilityThresholds[t.toString()];
-        return lbl || label(p); // Fallback jika label undefined
+        return lbl && lbl.trim() ? lbl : label(p);
       }
     }
     
     const defaultLbl = config.probabilityThresholds['default'];
-    return defaultLbl || label(p);
+    return defaultLbl && defaultLbl.trim() ? defaultLbl : label(p);
   }
 
   function predict(ngDomisili, ngPrestasi, optimismThreshold) {
-    if (!config) {
-      console.warn('⚠️ Config not loaded, using defaults');
-      loadConfig(null);
-    }
+    if (!config) loadConfig(null);
     
     const { schools, predictionModel, rules } = config;
-    if (!schools || !Array.isArray(schools)) {
+    if (!schools || !Array.isArray(schools) || schools.length === 0) {
       return { domisili: [], prestasi: [], metadata: { error: 'No schools data' } };
     }
     
-    // ✅ Safe defaults untuk rules & model
+    // Safe defaults
     const safeRules = {
       minPrestasiNG: rules?.minPrestasiNG ?? 245,
       perfectMarginDefault: rules?.perfectMarginDefault ?? 10,
@@ -111,6 +105,7 @@ const AdmissionEngine = (function() {
       }
     };
 
+    // Sort by domisili descending (higher passing grade = more competitive)
     const sorted = [...schools].sort((a, b) => (b.domisili ?? 0) - (a.domisili ?? 0));
     const total = sorted.length;
     const perfect = typeof optimismThreshold === 'number' ? optimismThreshold : safeRules.perfectMarginDefault;
@@ -120,6 +115,7 @@ const AdmissionEngine = (function() {
       const rankRatio = total > 1 ? i / (total - 1) : 0;
       const { adjustment, sigmaBase, sigmaRankMultiplier } = safeModel;
 
+      // Transformasi passing grade sesuai model prediksi
       const factor = adjustment.factorBase - (adjustment.factorRankCoeff * Math.pow(rankRatio, adjustment.factorRankPower));
       const competitionBoost = 1 + (adjustment.competitionBoostBase * (1 - rankRatio));
       const offset = adjustment.offsetBase + (adjustment.offsetRankMultiplier * rankRatio);
@@ -133,13 +129,19 @@ const AdmissionEngine = (function() {
       
       const sigma = sigmaBase + (sigmaRankMultiplier * rankRatio);
 
+      // Convert passing grades
       const adjD = convertVal(school.domisili);
       const adjP = convertVal(school.prestasi);
 
-      const marginD = adjD !== null ? (typeof ngDomisili === 'number' ? ngDomisili : 0) - adjD : null;
-      const eligibleP = (typeof ngPrestasi === 'number' ? ngPrestasi : 0) >= safeRules.minPrestasiNG;
-      const marginP = (adjP !== null && eligibleP) ? (typeof ngPrestasi === 'number' ? ngPrestasi : 0) - adjP : null;
+      // Calculate margins
+      const ngD = typeof ngDomisili === 'number' ? ngDomisili : 0;
+      const ngP = typeof ngPrestasi === 'number' ? ngPrestasi : 0;
+      
+      const marginD = adjD !== null ? ngD - adjD : null;
+      const eligibleP = ngP >= safeRules.minPrestasiNG;
+      const marginP = (adjP !== null && eligibleP) ? ngP - adjP : null;
 
+      // Calculate probabilities
       let probD = 0, probP = 0;
       
       if (marginD !== null && typeof marginD === 'number') {
@@ -152,12 +154,13 @@ const AdmissionEngine = (function() {
         probP = marginP >= perfect ? 1 : probability(cappedMargin, sigma);
       }
       
-      // ✅ Ensure prob are valid numbers 0-1
+      // Ensure valid 0-1 range
       probD = typeof probD === 'number' && !isNaN(probD) ? Math.max(0, Math.min(1, probD)) : 0;
       probP = typeof probP === 'number' && !isNaN(probP) ? Math.max(0, Math.min(1, probP)) : 0;
 
       return {
-        school: school.id || school.nama || school.s || 'Unknown',
+        // ✅ Property name MUST be 'school' for filtering to work
+        school: (school.id || school.nama || school.s || 'Unknown').trim(),
         adjDomisili: adjD,
         adjPrestasi: adjP,
         marginD, marginP,
@@ -171,8 +174,12 @@ const AdmissionEngine = (function() {
     });
 
     return {
-      domisili: results.filter(r => r.marginD !== null && r.marginD !== undefined).sort((a, b) => (b.probD ?? 0) - (a.probD ?? 0)),
-      prestasi: results.filter(r => r.marginP !== null && r.marginP !== undefined && r.eligiblePrestasi).sort((a, b) => ((b.probP ?? 0) - (a.probP ?? 0)) || ((b.adjDomisili ?? 0) - (a.adjDomisili ?? 0))),
+      domisili: results
+        .filter(r => r.marginD !== null && r.marginD !== undefined)
+        .sort((a, b) => (b.probD ?? 0) - (a.probD ?? 0)),
+      prestasi: results
+        .filter(r => r.marginP !== null && r.marginP !== undefined && r.eligiblePrestasi)
+        .sort((a, b) => ((b.probP ?? 0) - (a.probP ?? 0)) || ((b.adjDomisili ?? 0) - (a.adjDomisili ?? 0))),
       metadata: { 
         region: config?.region || 'Kab. Sleman', 
         regulation: config?.regulationDesc || 'TKA dan TKAD 80%, Rapor 20%', 
@@ -181,5 +188,11 @@ const AdmissionEngine = (function() {
     };
   }
 
-  return { loadConfig, predict, label, getLabel };
+  // Export functions
+  return { 
+    loadConfig, 
+    predict, 
+    label,      // Export for fallback use in UI
+    getLabel    // Export for testing
+  };
 })();
