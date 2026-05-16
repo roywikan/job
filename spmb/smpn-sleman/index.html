@@ -89,7 +89,43 @@ function populateDomisiliDropdowns(){const kk=document.getElementById('kk').valu
 // ================= PREDICTION ENGINE BRIDGE =================
 const OPTIMISME_LABEL = {14:"😭 Sangat Tidak Yakin",13:"😪 Tidak Yakin",12:"😥 Kurang Yakin",11:"😐 Lumayan Yakin",10:"🙂 Agak Yakin",9:"😊 Yakin",8:"😆 Sangat Yakin"};
 function updateOptimismeLabel(){let val=parseInt(document.getElementById('optimisme-range').value)||10;if(val<8)val=8;if(val>14)val=14;const lbl=document.getElementById('optimisme-label');if(lbl)lbl.textContent=OPTIMISME_LABEL[val]||"🙂 Agak Yakin"}
-function renderSchoolPredictions(ngDomisili,ngPrestasi,optimism){if(!AdmissionEngine||!AdmissionEngine.predict){return'<p style="color:red">⚠️ Engine prediksi belum siap.</p>'}try{const result=AdmissionEngine.predict(ngDomisili,ngPrestasi,optimism);let html='<div class="prediction-section"><h4>🎯 Prediksi Peluang Masuk (Model 2026)</h4>';html+='<h5 style="margin:8px 0 4px">🏠 Jalur Domisili</h5>';result.domisili.slice(0,10).forEach(s=>{const pct=Math.round(s.probD*100);html+=`<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${s.labelD} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div></div>`});if(result.prestasi.length>0){html+='<h5 style="margin:16px 0 4px">🏆 Jalur Prestasi</h5>';result.prestasi.slice(0,10).forEach(s=>{const pct=Math.round(s.probP*100);html+=`<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${s.labelP} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997)"></div></div></div></div>`})}}html+='</div>';return html}catch(e){console.error(e);return'<p style="color:red">⚠️ Gagal memuat prediksi. Refresh halaman.</p>'}}
+ 
+
+  function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism) {
+  if (!AdmissionEngine || !AdmissionEngine.predict) {
+    return '<p style="color:red">⚠️ Engine prediksi belum siap.</p>';
+  }
+  
+  try {
+    const result = AdmissionEngine.predict(ngDomisili, ngPrestasi, optimism);
+    let html = '<div class="prediction-section"><h4>🎯 Prediksi Peluang Masuk (Model 2026)</h4>';
+    
+    html += '<h5 style="margin:8px 0 4px">🏠 Jalur Domisili</h5>';
+    result.domisili.slice(0, 10).forEach(s => {
+      const pct = Math.round(s.probD * 100);
+      html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${s.labelD} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div></div>`;
+    });
+    
+    if (result.prestasi.length > 0) {
+      html += '<h5 style="margin:16px 0 4px">🏆 Jalur Prestasi</h5>';
+      result.prestasi.slice(0, 10).forEach(s => {
+        const pct = Math.round(s.probP * 100);
+        html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${s.labelP} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997)"></div></div></div></div>`;
+      });
+    }
+    
+    // ✅ PENUTUP HTML & RETURN HARUS DI DALAM try BLOCK
+    html += '</div>';
+    return html;
+    
+  } catch (e) {
+    console.error(e);
+    return '<p style="color:red">⚠️ Gagal memuat prediksi. Refresh halaman.</p>';
+  }
+}
+
+
+  
 
 // ================= SMART POPUP INIT (TERPISAH TOTAL) =================
 document.addEventListener('DOMContentLoaded',function(){
