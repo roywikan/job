@@ -166,7 +166,32 @@ function analyzeStudent(){
   {let allowed=true,reasons=[];if(kk!=='sleman'){allowed=false;reasons.push('Afirmasi umumnya mensyaratkan KK Sleman.')}if(!(kkm||(disability&&assessment))){allowed=false;reasons.push('Harus memiliki KKM resmi atau asesmen RSUD Sleman.')}if(allowed){reasons.push('Siswa memenuhi syarat afirmasi.')}output+=routeCard('Jalur Afirmasi',allowed,reasons,'Maksimal 3 sekolah untuk afirmasi KKM.',['Utamakan sekolah yang historis passing grade afirmasinya realistis.','Jalur disabilitas biasanya hanya 1 sekolah dalam wilayah tertentu.'],['KKM resmi Dinsos Sleman','Asesmen RSUD Sleman (jika disabilitas)','KK','Akta lahir','Surat lulus'],schedules.domisili)}
   
   // PRESTASI UMUM + PREDIKSI SEKOLAH
-  {let allowed=true,reasons=[];if(ng<245){allowed=false;reasons.push('Nilai Gabungan kurang dari 245.')}else{reasons.push('Nilai Gabungan memenuhi syarat minimal 245.')}if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib mengikuti TKAD.')}if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Umum.')}let schoolPredictionHTML='';if(ng>=200){const optimism=parseInt(document.getElementById('optimisme-range').value)||10;schoolPredictionHTML=renderSchoolPredictions(ng,ng+10,optimism)}output+=routeCard('Jalur Prestasi Umum',allowed,reasons,'Maksimal 3 SMP Negeri.',['Urutkan sekolah berdasarkan kekuatan NG.','Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.','Perhatikan data passing grade tahun sebelumnya.']+ (schoolPredictionHTML?['Gunakan prediksi di bawah untuk referensi tambahan.']:[]),['KK','Akta lahir','Surat lulus','Hasil TKA/TKAD','Sertifikat prestasi (jika ada)'],schedules.prestasi)+schoolPredictionHTML}
+  {let allowed=true,reasons=[];if(ng<245){allowed=false;reasons.push('Nilai Gabungan kurang dari 245.')}else{reasons.push('Nilai Gabungan memenuhi syarat minimal 245.')}if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib mengikuti TKAD.')}if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Umum.')}let schoolPredictionHTML='';if(ng>=200){const optimism=parseInt(document.getElementById('optimisme-range').value)||10;schoolPredictionHTML=renderSchoolPredictions(ng,ng+10,optimism)}
+   
+   
+
+
+// ✅ Gunakan spread operator untuk array concatenation
+const strategyList = [
+  'Urutkan sekolah berdasarkan kekuatan NG.',
+  'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
+  'Perhatikan data passing grade tahun sebelumnya.',
+  ...(schoolPredictionHTML ? ['Gunakan prediksi di bawah untuk referensi tambahan.'] : [])
+];
+
+output += routeCard(
+  'Jalur Prestasi Umum',
+  allowed,
+  reasons,
+  'Maksimal 3 SMP Negeri.',
+  strategyList,  // ✅ Array, bukan string
+  ['KK','Akta lahir','Surat lulus','Hasil TKA/TKAD','Sertifikat prestasi (jika ada)'],
+  schedules.prestasi
+) + schoolPredictionHTML;
+
+
+
+  
   
   // PRESTASI KHUSUS
   {let allowed=true,reasons=[];if(!nationalAchievement){allowed=false;reasons.push('Tidak memiliki prestasi nasional resmi.')}if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib TKAD.')}if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Khusus.')}output+=routeCard('Jalur Prestasi Khusus',allowed,reasons,'Hanya boleh memilih 1 SMP Negeri.',['Pilih sekolah yang paling sesuai target utama.','Karena hanya 1 pilihan, jangan terlalu spekulatif.'],['Piagam prestasi nasional resmi','KK','Akta lahir','Hasil TKA/TKAD'],schedules.khusus)}
