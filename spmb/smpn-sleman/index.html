@@ -81,31 +81,81 @@ function populateDomisiliDropdowns(){const kk=document.getElementById('kk').valu
 const OPTIMISME_LABEL = {14:"😭 Sangat Tidak Yakin",13:"😪 Tidak Yakin",12:"😥 Kurang Yakin",11:"😐 Lumayan Yakin",10:"🙂 Agak Yakin",9:"😊 Yakin",8:"😆 Sangat Yakin"};
 function updateOptimismeLabel(){let val=parseInt(document.getElementById('optimisme-range').value)||10;if(val<8)val=8;if(val>14)val=14;const lbl=document.getElementById('optimisme-label');if(lbl)lbl.textContent=OPTIMISME_LABEL[val]||"🙂 Agak Yakin"}
 
-function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism) {
+function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchools = null) {
   if (!AdmissionEngine || !AdmissionEngine.predict) {
     return '<p style="color:red">⚠️ Engine prediksi belum siap.</p>';
   }
+  
   try {
     const result = AdmissionEngine.predict(ngDomisili, ngPrestasi, optimism);
+    
+    // ✅ FILTER: Hanya tampilkan sekolah yang diizinkan (sesuai domisili)
+    const filterByAllowed = (list) => {
+      if (!allowedSchools || allowedSchools.length === 0) return list;
+      return list.filter(s => 
+        allowedSchools.some(as => 
+          as.toLowerCase().trim().includes(s.school.toLowerCase().trim()) ||
+          s.school.toLowerCase().trim().includes(as.toLowerCase().trim())
+        )
+      );
+    };
+    
+    const filteredDomisili = filterByAllowed(result.domisili);
+    const filteredPrestasi = filterByAllowed(result.prestasi);
+    
     let html = '<div class="prediction-section"><h4>🎯 Prediksi Peluang Masuk (Model 2026)</h4>';
+    
+    // 🏠 Jalur Domisili
     html += '<h5 style="margin:8px 0 4px">🏠 Jalur Domisili</h5>';
-    result.domisili.slice(0, 10).forEach(s => {
-      const pct = Math.round(s.probD * 100);
-      html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${s.labelD} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div></div>`;
-    });
-    if (result.prestasi.length > 0) {
+    if (filteredDomisili.length > 0) {
+      filteredDomisili.slice(0, 10).forEach(s => {
+        const pct = Math.round((s.probD || 0) * 100);
+        // ✅ Fallback label jika undefined
+        const lbl = s.labelD || (typeof label === 'function' ? label(s.probD || 0) : '❓');
+        html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${lbl} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div></div>`;
+      });
+    } else {
+      html += '<p style="color:#888;font-size:14px">ℹ️ Tidak ada sekolah domisili yang sesuai zonasi.</p>';
+    }
+    
+    // 🏆 Jalur Prestasi
+    if (filteredPrestasi.length > 0) {
       html += '<h5 style="margin:16px 0 4px">🏆 Jalur Prestasi</h5>';
-      result.prestasi.slice(0, 10).forEach(s => {
-        const pct = Math.round(s.probP * 100);
-        html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${s.labelP} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997)"></div></div></div></div>`;
+      filteredPrestasi.slice(0, 10).forEach(s => {
+        const pct = Math.round((s.probP || 0) * 100);
+        // ✅ Fallback label jika undefined
+        const lbl = s.labelP || (typeof label === 'function' ? label(s.probP || 0) : '❓');
+        html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${lbl} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997)"></div></div></div></div>`;
       });
     }
+    
     html += '</div>';
     return html;
+    
   } catch (e) {
     console.error(e);
     return '<p style="color:red">⚠️ Gagal memuat prediksi. Refresh halaman.</p>';
   }
+}
+
+// ✅ Helper function untuk generate label (fallback jika engine tidak return label)
+function label(prob) {
+  if (prob > 0.90) return "💚 Sangat Aman";
+  if (prob > 0.80) return "🔵 Aman";
+  if (prob > 0.70) return "🟡 Agak Aman";
+  if (prob > 0.60) return "🟠 Rawan";
+  if (prob > 0.50) return "🔴 Sulit";
+  return "🔥 Sangat Sulit";
+}
+
+// ✅ Helper function untuk generate label (fallback jika engine tidak return label)
+function label(prob) {
+  if (prob > 0.90) return "💚 Sangat Aman";
+  if (prob > 0.80) return "🔵 Aman";
+  if (prob > 0.70) return "🟡 Agak Aman";
+  if (prob > 0.60) return "🟠 Rawan";
+  if (prob > 0.50) return "🔴 Sulit";
+  return "🔥 Sangat Sulit";
 }
 
 // ================= SMART POPUP INIT (TERPISAH TOTAL) =================
@@ -233,11 +283,20 @@ function analyzeStudent(){
     if(ng<245){allowed=false;reasons.push('Nilai Gabungan kurang dari 245.')}else{reasons.push('Nilai Gabungan memenuhi syarat minimal 245.')}
     if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib mengikuti TKAD.')}
     if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Umum.')}
-    let schoolPredictionHTML='';
-    if(ng>=200){
-      const optimism=parseInt(document.getElementById('optimisme-range').value)||10;
-      schoolPredictionHTML=renderSchoolPredictions(ng,ng+10,optimism)
-    }
+
+
+   
+let schoolPredictionHTML = '';
+if (ng >= 200 && allowed && schoolOptions.length > 0) {
+  const optimism = parseInt(document.getElementById('optimisme-range').value) || 10;
+  // ✅ Kirim daftar sekolah yang sesuai domisili ke fungsi prediksi
+  schoolPredictionHTML = renderSchoolPredictions(ng, ng + 10, optimism, schoolOptions);
+} else if (ng >= 200 && allowed) {
+  // Fallback: jika tidak ada schoolOptions, tampilkan pesan
+  schoolPredictionHTML = '<div class="prediction-section"><p style="color:#888;font-size:14px">ℹ️ Pilih Kecamatan & Kelurahan terlebih dahulu untuk melihat prediksi sekolah.</p></div>';
+}
+
+   
     const strategyList = [
       'Urutkan sekolah berdasarkan kekuatan NG.',
       'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
