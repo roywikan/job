@@ -55,7 +55,7 @@ const SCHEDULES = {
   
   // TKAD untuk siswa luar DIY (wajib untuk jalur Prestasi & Mutasi)
   tkad: [
-    ["Pendaftaran TKAD Luar Daerah", "4 Mei – 29 Mei 2026", "Online: https://share.google/rWHcjJMREj2u6cBgl"],
+    ["Pendaftaran TKAD Luar Daerah", "4 Mei – 29 Mei 2026", "Online: https://bit.ly/Daftar-TKAD26"],
     ["Pelaksanaan TKAD Luar Daerah", "3 Juni 2026 pukul 07.00", "SMP Negeri 1 Sleman"],
     ["Pengumuman TKAD Luar Daerah", "5 Juni 2026", "Grup WhatsApp peserta"]
   ]
@@ -179,7 +179,7 @@ const PRESTASI_RULES = {
   // Aturan kurasi untuk lomba non-pemerintah
   kurasi_requirement: {
     min_bintang: 3,  // Minimal bintang 3 dari Pusat Prestasi Nasional
-    kurasi_url: "https://kurasi-prestasi.kemdikbud.go.id/"
+    kurasi_url: "https://kurasi-prestasi.kemendikdasmen.go.id/ dan https://simt.kemendikdasmen.go.id/"
   }
 };
 
