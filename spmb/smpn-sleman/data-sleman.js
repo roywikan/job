@@ -718,4 +718,8 @@ function buildReverseMap(data) {
   return result;
 }
 
-const KELURAHAN_TO_SMPN = buildReverseMap(SMPN_DOMISILI_DATA);
+
+const KELURAHAN_TO_SMPN = buildReverseMap(SMPN_DOMISILI);
+
+
+console.log('✅ Data Sleman loaded:', Object.keys(SMPN_DOMISILI).length, 'sekolah');
