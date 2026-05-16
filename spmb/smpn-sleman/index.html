@@ -607,17 +607,35 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnAnalyze = document.getElementById('btn-analyze');
   if (btnAnalyze) {
     btnAnalyze.addEventListener('click', function(e) {
-      // ✅ Hanya trigger popup jika belum pernah dibuka di sesi ini
+      
+      // ✅ Cek sessionStorage DINAMIS setiap kali diklik
+      const popupAlreadyOpened = sessionStorage.getItem('spmb_popup_shown') === 'true';
+      
       if (!popupAlreadyOpened) {
+        // ✅ Set flag SEGERA saat popup dicoba (bukan setelah sukses)
+        sessionStorage.setItem('spmb_popup_shown', 'true');
+        
+        // ✅ Opsional: disable button sebentar agar tidak double-click
+        this.disabled = true;
+        this.textContent = 'Memproses...';
+        
         SmartPopupOpener.openWithThreshold();
+        
+        // ✅ Re-enable button setelah 2 detik
+        setTimeout(() => {
+          this.disabled = false;
+          this.textContent = 'Analisis Jalur';
+        }, 2000);
+        
       } else {
-        console.log('ℹ️ Popup sudah dibuka sebelumnya, skip trigger');
+        console.log('ℹ️ Affiliate sudah dibuka sebelumnya, skip popup');
       }
       
-      // Jalankan fungsi analisis normal
+      // Jalankan analisis normal (tetap jalan walau popup skip)
       analyzeStudent();
     });
   }
+
   
   // ✅ Event listener untuk KK dropdown
   document.getElementById('kk').addEventListener('change', function() {
