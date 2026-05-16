@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="SPMB Sleman Logic System 2026">
+<meta property="og:description" content="Analisis logika jalur SPMB SMP Negeri Sleman: cek syarat, strategi sekolah, jadwal TKAD, dan dokumen yang diperlukan. Gratis & berbasis juknis resmi.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://job.web.id/spmb/smpn-sleman/">
+<meta property="og:site_name" content="Jalur SPMB Sleman Rekomendasi">
+<meta property="og:locale" content="id_ID">
+<meta name="description" content="Alat bantu analisis jalur SPMB SMP Negeri Sleman 2026. Cek kelayakan domisili, afirmasi, prestasi, dan strategi pemilihan sekolah berdasarkan juknis resmi.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SPMB Sleman Logic System 2026">
+<meta name="twitter:description" content="Analisis jalur SPMB SMP Sleman: domisili, afirmasi, prestasi. Gratis, akurat, berbasis juknis.">
+<link rel="stylesheet" href="https://job.web.id/smart.css">
+<link rel="stylesheet" href="smpn-sleman.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Jalur SPMB Sleman Logic System","description":"Sistem logika untuk membantu menganalisis dan merekomendasikan jalur pendaftaran SMP Negeri Kabupaten Sleman 2026 berdasarkan juknis resmi.","applicationCategory":"EducationalApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"featureList":"Analisis jalur domisili, afirmasi, prestasi; Rekomendasi sekolah; Jadwal TKAD; Checklist dokumen","url":"https://job.web.id/spmb/smpn-sleman/"}
+</script>
+<title>Jalur SPMB Sleman Logic System</title>
+</head>
+<body>
+<div class="container">
+<div class="hero"><h1>Jalur SPMB SMP Sleman Per Kasus</h1><p>Sistem logika untuk membantu menyarankan jalur SPMB SMP Negeri Sleman 2026, per kasus orang tua dan siswa, syarat dokumen, strategi pemilihan sekolah, dan jadwal kegiatan.</p></div>
+<div class="card">
+  <h2>Data Calon Siswa :</h2>
+  <div class="grid">
+    <div><label>Usia pada tanggal 1 Juli 2026</label><input type="number" id="age" placeholder="Contoh: 12"></div>
+    <div><label>Tahun Lulus SD</label><select id="graduateYear"><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option><option value="older">2023 atau sebelumnya</option></select></div>
+    <div><label>Domisili KK siswa</label><select id="kk"><option value="sleman">Kabupaten Sleman</option><option value="diy">Kabupaten/Kota lain di DIY</option><option value="outsideDIY">Luar DIY</option></select></div>
+    <div><label>Asal SD siswa</label><select id="sdOrigin"><option value="sleman">SD Sleman</option><option value="diy">SD luar Sleman tetapi masih DIY</option><option value="outsideDIY">SD luar DIY</option></select></div>
+    <div><label>Masa tercatat di KK</label><select id="kkDuration"><option value="yes">≥ 1 Tahun pada tanggal 1 Juli 2026</option><option value="no">< 1 Tahun</option></select></div>
+    <div><label>Nilai Gabungan (NG) Sleman</label><input type="number" id="ng" placeholder="Contoh: 287.55"><div class="small">Jika belum tahu NG, Hitung NG Sleman dahulu menggunakan: <a href="https://tkatkad.github.io/smp-sleman/" target="_blank">Kalkulator NG Sleman</a></div></div>
+  </div>
+  <div class="section-title" id="domisili-section-title" style="display:none;">Pilih Domisili Anda :</div>
+  <div class="grid" id="domisili-dropdowns" style="display:none;">
+    <div><label>Kapanewon (Kecamatan)</label><select id="kepanewonan-select"><option value="">-- Pilih Kecamatan --</option></select></div>
+    <div><label>Kalurahan (Kelurahan)</label><select id="kalurahan-select" disabled><option value="">-- Pilih Kecamatan dulu --</option></select></div>
+  </div>
+  <div class="small" id="domisili-hint" style="display:none;">Pilih sesuai data di KK Anda</div>
+  <div class="prediction-section" id="prediction-controls" style="display:none;">
+    <h4>🎯 Tingkat Optimisme Prediksi</h4>
+    <div class="optimism-control">
+      <span style="font-size:14px">😭</span>
+      <input type="range" id="optimisme-range" min="8" max="14" step="1" value="10">
+      <span style="font-size:14px">😆</span>
+    </div>
+    <div class="small" id="optimisme-label" style="text-align:center;font-weight:500">🙂 Agak Yakin</div>
+  </div>
+  <div class="section-title">Data Tambahan :</div>
+  <div class="checks">
+    <div class="check-item"><label><input type="checkbox" id="radius"> Rumah dalam radius sekolah</label></div>
+    <div class="check-item"><label><input type="checkbox" id="kkm"> Memiliki KKM resmi Dinsos Sleman</label></div>
+    <div class="check-item"><label><input type="checkbox" id="disability"> Penyandang disabilitas</label></div>
+    <div class="check-item"><label><input type="checkbox" id="assessment"> Memiliki asesmen RSUD Sleman</label></div>
+    <div class="check-item"><label><input type="checkbox" id="nationalAchievement"> Prestasi nasional resmi</label></div>
+    <div class="check-item"><label><input type="checkbox" id="regionalAchievement"> Prestasi mewakili Sleman</label></div>
+    <div class="check-item"><label><input type="checkbox" id="mutation"> Orang tua mutasi kerja</label></div>
+    <div class="check-item"><label><input type="checkbox" id="teacherChild"> Anak guru</label></div>
+    <div class="check-item"><label><input type="checkbox" id="tkad"> Sudah mengikuti TKAD</label></div>
+  </div>
+  <br>
+  <button id="btn-analyze" type="button">Analisis Jalur</button>
+</div>
+<div id="result"></div>
+<div class="footer">Rekomendasi Jalur SPMB Sleman Logic System • Eagle Fly Free Engine • 2026</div>
+</div>
+
+<!-- 📦 Load Dependencies -->
+<script src="data-sleman.js"></script>
+<script src="engine.js"></script>
+<script src="https://job.web.id/smart.js"></script>
+
+<script>
+// ================= DROPDOWN DOMISILI =================
+function extractDomisiliData(){const kepanewonanSet=new Set();const kalurahanByKepanewonan={};for(const sekolah in SMPN_DOMISILI){SMPN_DOMISILI[sekolah].forEach(entry=>{const parts=entry.split(',').map(s=>s.trim());if(parts.length===2){const[kepanewonan,kalurahan]=parts;kepanewonanSet.add(kepanewonan);if(!kalurahanByKepanewonan[kepanewonan]){kalurahanByKepanewonan[kepanewonan]=new Set()}kalurahanByKepanewonan[kepanewonan].add(kalurahan)}})}return{kepanewonan:Array.from(kepanewonanSet).sort(),kalurahanByKepanewonan:Object.fromEntries(Object.entries(kalurahanByKepanewonan).map(([kep,kals])=>[kep,Array.from(kals).sort()]))}}
+function populateDomisiliDropdowns(){const kk=document.getElementById('kk').value;const sectionTitle=document.getElementById('domisili-section-title');const dropdowns=document.getElementById('domisili-dropdowns');const hint=document.getElementById('domisili-hint');if(kk!=='sleman'){sectionTitle.style.display='none';dropdowns.style.display='none';hint.style.display='none';return}sectionTitle.style.display='block';dropdowns.style.display='grid';hint.style.display='block';const domisiliData=extractDomisiliData();const kepanewonanSelect=document.getElementById('kepanewonan-select');const kalurahanSelect=document.getElementById('kalurahan-select');kepanewonanSelect.innerHTML='<option value="">-- Pilih Kecamatan --</option>';kalurahanSelect.innerHTML='<option value="">-- Pilih Kecamatan dulu --</option>';domisiliData.kepanewonan.forEach(kep=>{const option=document.createElement('option');option.value=kep;option.textContent=kep;kepanewonanSelect.appendChild(option)});kepanewonanSelect.addEventListener('change',function(){const selectedKep=this.value;if(!selectedKep){kalurahanSelect.disabled=true;kalurahanSelect.innerHTML='<option value="">-- Pilih Kecamatan dulu --</option>';return}kalurahanSelect.innerHTML='<option value="">-- Pilih Kelurahan --</option>';const kalurahans=domisiliData.kalurahanByKepanewonan[selectedKep]||[];kalurahans.forEach(kal=>{const option=document.createElement('option');option.value=kal;option.textContent=kal;kalurahanSelect.appendChild(option)});kalurahanSelect.disabled=false})}
+
+// ================= PREDICTION ENGINE BRIDGE =================
+const OPTIMISME_LABEL = {14:"😭 Sangat Tidak Yakin",13:"😪 Tidak Yakin",12:"😥 Kurang Yakin",11:"😐 Lumayan Yakin",10:"🙂 Agak Yakin",9:"😊 Yakin",8:"😆 Sangat Yakin"};
+function updateOptimismeLabel(){let val=parseInt(document.getElementById('optimisme-range').value)||10;if(val<8)val=8;if(val>14)val=14;const lbl=document.getElementById('optimisme-label');if(lbl)lbl.textContent=OPTIMISME_LABEL[val]||"🙂 Agak Yakin"}
+
+function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchools = null) {
+  if (!AdmissionEngine || !AdmissionEngine.predict) {
+    return '<p style="color:red">⚠️ Engine prediksi belum siap.</p>';
+  }
+  
+  try {
+    const result = AdmissionEngine.predict(ngDomisili, ngPrestasi, optimism);
+    
+    // ✅ FILTER: Hanya tampilkan sekolah yang diizinkan (sesuai domisili)
+    const filterByAllowed = (list) => {
+      if (!allowedSchools || !Array.isArray(allowedSchools) || allowedSchools.length === 0) return list;
+      return list.filter(s => {
+        const schoolName = (s.school || '').toLowerCase().trim();
+        return allowedSchools.some(as => {
+          const allowedName = (as || '').toLowerCase().trim();
+          return schoolName.includes(allowedName) || allowedName.includes(schoolName);
+        });
+      });
+    };
+    
+    const filteredDomisili = filterByAllowed(result.domisili);
+    const filteredPrestasi = filterByAllowed(result.prestasi);
+    
+    let html = '<div class="prediction-section"><h4>🎯 Prediksi Peluang Masuk (Model 2026)</h4>';
+    
+    // 🏠 Jalur Domisili
+    html += '<h5 style="margin:8px 0 4px">🏠 Jalur Domisili</h5>';
+    if (filteredDomisili.length > 0) {
+      filteredDomisili.slice(0, 10).forEach(s => {
+        const pct = Math.round((s.probD || 0) * 100);
+        const lbl = s.labelD || (typeof AdmissionEngine.label === 'function' ? AdmissionEngine.label(s.probD || 0) : '❓');
+        html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${lbl} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div></div>`;
+      });
+    } else {
+      html += '<p style="color:#888;font-size:14px">ℹ️ Tidak ada sekolah domisili yang sesuai zonasi.</p>';
+    }
+    
+    // 🏆 Jalur Prestasi
+    if (filteredPrestasi.length > 0) {
+      html += '<h5 style="margin:16px 0 4px">🏆 Jalur Prestasi</h5>';
+      filteredPrestasi.slice(0, 10).forEach(s => {
+        const pct = Math.round((s.probP || 0) * 100);
+        const lbl = s.labelP || (typeof AdmissionEngine.label === 'function' ? AdmissionEngine.label(s.probP || 0) : '❓');
+        html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${lbl} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997)"></div></div></div></div>`;
+      });
+    }
+    
+    html += '</div>';
+    return html;
+    
+  } catch (e) {
+    console.error('Predict error:', e);
+    return '<p style="color:red">⚠️ Gagal memuat prediksi. Refresh halaman.</p>';
+  }
+}
+
+// ✅ Helper function untuk generate label (fallback jika engine tidak return label)
+function label(prob) {
+  if (prob > 0.90) return "💚 Sangat Aman";
+  if (prob > 0.80) return "🔵 Aman";
+  if (prob > 0.70) return "🟡 Agak Aman";
+  if (prob > 0.60) return "🟠 Rawan";
+  if (prob > 0.50) return "🔴 Sulit";
+  return "🔥 Sangat Sulit";
+}
+
+// ✅ Helper function untuk generate label (fallback jika engine tidak return label)
+function label(prob) {
+  if (prob > 0.90) return "💚 Sangat Aman";
+  if (prob > 0.80) return "🔵 Aman";
+  if (prob > 0.70) return "🟡 Agak Aman";
+  if (prob > 0.60) return "🟠 Rawan";
+  if (prob > 0.50) return "🔴 Sulit";
+  return "🔥 Sangat Sulit";
+}
+
+// ================= SMART POPUP INIT (TERPISAH TOTAL) =================
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof AdmissionEngine!=='undefined'&&typeof AdmissionEngine.loadConfig==='function'){
+    fetch('juknis-sleman-2026.json').then(res=>res.json()).then(json=>AdmissionEngine.loadConfig(json)).catch(err=>console.warn('⚠️ Config prediksi belum tersedia:',err))
+  }
+  const optRange=document.getElementById('optimisme-range');
+  if(optRange){
+    optRange.addEventListener('input',function(){
+      document.getElementById('optimisme').value=this.value;
+      updateOptimismeLabel()
+    });
+    updateOptimismeLabel()
+  }
+  const affiliateUrls=['https://s.shopee.co.id/2LV8zySGbQ','https://s.shopee.co.id/AA4ETmAQ4H'];
+  const primaryAffiliate=affiliateUrls[0];
+  SmartPopupOpener.init({
+    intermediatePage:'https://job.web.id/spmb.html',
+    affiliateUrl:primaryAffiliate,
+    clickThreshold:2,
+    enablePopUnder:true,
+    modalTitle:'🎁 Butuh Perlengkapan Sekolah?',
+    modalText:'Browser memblokir tab baru. Klik tombol di bawah untuk cek penawaran hemat perlengkapan SPMB:',
+    modalButtonText:'Cek Penawaran →',
+    onBeforeOpen:function(url){if(SmartPopupOpener._state.clickCount===1){console.log('💡 Klik berikutnya akan membuka penawaran spesial')}},
+    onAfterOpen:function(url){console.log('✅ Popup berhasil, set flag');sessionStorage.setItem('spmb_popup_shown','true')},
+    onBlocked:function(url){console.log('⚠️ Popup diblokir, fallback + set flag');sessionStorage.setItem('spmb_popup_shown','true');setTimeout(()=>{const m=document.getElementById('spo-modal-container');if(m&&m.style.display!=='none'){m.style.display='none';console.log('ℹ️ Modal auto-close setelah 8 detik')}},8000)}
+  });
+  const btnAnalyze=document.getElementById('btn-analyze');
+  if(btnAnalyze){
+    btnAnalyze.addEventListener('click',function(e){
+      const popupAlreadyOpened=sessionStorage.getItem('spmb_popup_shown')==='true';
+      if(!popupAlreadyOpened){
+        const orig=this.textContent;this.textContent='⏳ Memproses...';
+        SmartPopupOpener.openWithThreshold();
+        setTimeout(()=>{this.textContent=orig},1000)
+      }else{console.log('ℹ️ Affiliate sudah dibuka, skip popup')}
+      analyzeStudent()
+    })
+  }
+  document.getElementById('kk').addEventListener('change',populateDomisiliDropdowns);
+  populateDomisiliDropdowns();
+});
+
+// ================= LOGIKA APLIKASI UTAMA =================
+const schedules={
+  prestasi:[["Pengajuan akun","23–24 Juni 2026","Online: https://sleman.spmb.id"],["Verifikasi berkas","23–24 Juni 2026 pukul 08.00–13.00","Sekolah pilihan pertama"],["Pendaftaran","23–24 Juni 2026","Online"],["Pengumuman","25 Juni 2026 pukul 08.00","Sekolah"],["Daftar ulang","25 Juni 2026 pukul 09.00–13.00","Sekolah penerima"]],
+  domisili:[["Pengajuan akun","17–18 Juni 2026","Online"],["Verifikasi","17–18 Juni 2026 pukul 08.00–13.00","Sekolah tujuan"],["Pendaftaran","17–18 Juni 2026","Online"],["Pengumuman","19 Juni 2026 pukul 08.00","Sekolah"],["Daftar ulang","19 Juni 2026 pukul 09.00–11.30","Sekolah penerima"]],
+  khusus:[["Pengajuan akun","9–10 Juni 2026","Online"],["Verifikasi","9–10 Juni 2026 pukul 08.00–13.00","Sekolah tujuan"],["Pendaftaran","9–10 Juni 2026","Online"],["Pengumuman","11 Juni 2026 pukul 08.00","Sekolah"],["Daftar ulang","11 Juni 2026 pukul 09.00–11.30","Sekolah penerima"]],
+  tkad:[["Pendaftaran TKAD Luar Daerah","4 Mei – 29 Mei 2026","Online"],["Pelaksanaan TKAD Luar Daerah","3 Juni 2026 pukul 07.00","SMP Negeri 1 Sleman"],["Pengumuman TKAD Luar Daerah","5 Juni 2026","Grup WhatsApp peserta Luar Daerah"]]
+};
+function buildTimeline(items){return`<div class="timeline">${items.map(i=>`<div class="timeline-item"><b>${i[0]}</b><br>Waktu: ${i[1]}<br>Lokasi: ${i[2]}</div>`).join("")}</div>`}
+function routeCard(title,allowed,reasons,schools,strategy,docs,schedule){
+  return`<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'BELUM MEMENUHI SYARAT'}</div><h2>${title}</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Pilihan Sekolah</h3><div>${schools}</div><h3>Cara Memilih Sekolah</h3><ul>${strategy.map(s=>`<li>${s}</li>`).join('')}</ul><h3>Dokumen yang Harus Disiapkan</h3><ul>${docs.map(d=>`<li>${d}</li>`).join('')}</ul><h3>Jadwal & Kegiatan</h3>${buildTimeline(schedule)}`:''}</div>`
+}
+
+function analyzeStudent(){
+  const age=Number(document.getElementById('age').value)||0,
+        graduateYear=document.getElementById('graduateYear').value,
+        kk=document.getElementById('kk').value,
+        sdOrigin=document.getElementById('sdOrigin').value,
+        kkDuration=document.getElementById('kkDuration').value,
+        ng=Number(document.getElementById('ng').value)||0;
+  const radius=document.getElementById('radius').checked,
+        kkm=document.getElementById('kkm').checked,
+        disability=document.getElementById('disability').checked,
+        assessment=document.getElementById('assessment').checked,
+        nationalAchievement=document.getElementById('nationalAchievement').checked,
+        regionalAchievement=document.getElementById('regionalAchievement').checked,
+        mutation=document.getElementById('mutation').checked,
+        teacherChild=document.getElementById('teacherChild').checked,
+        tkad=document.getElementById('tkad').checked;
+  let selectedKepanewonan='',selectedKalurahan='';
+  if(kk==='sleman'){
+    const kepSelect=document.getElementById('kepanewonan-select'),
+          kalSelect=document.getElementById('kalurahan-select');
+    if(kepSelect&&kalSelect){
+      selectedKepanewonan=kepSelect.value;
+      selectedKalurahan=kalSelect.value
+    }
+  }
+  let output='',globalProblems=[];
+  if(age>15){globalProblems.push('Usia melebihi 15 tahun pada 1 Juli 2026.')}
+  if(graduateYear==='older'){globalProblems.push('Lulusan terlalu lama untuk mengikuti SPMB SMPN Sleman.')}
+  if(globalProblems.length>0){
+    document.getElementById('result').innerHTML=`<div class="route denied"><div class="badge no">TIDAK MEMENUHI SYARAT UMUM</div><h2>Siswa Tidak Bisa Mengikuti SPMB SMPN Sleman</h2><ul>${globalProblems.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
+    return
+  }
+  
+  // DOMISILI RADIUS
+  {let allowed=true,reasons=[];
+    if(kk!=='sleman'){allowed=false;reasons.push('Jalur domisili radius wajib KK Sleman.')}else{reasons.push('KK Sleman memenuhi syarat dasar.')}
+    if(kkDuration!=='yes'){allowed=false;reasons.push('KK belum berusia 1 tahun.')}
+    if(!radius){allowed=false;reasons.push('Rumah tidak berada dalam radius sekolah tujuan.')}
+    if(sdOrigin==='outsideDIY'){allowed=false;reasons.push('Lulusan luar DIY tidak diprioritaskan jalur domisili.')}
+    if(allowed){reasons.push('Siswa memenuhi jalur Domisili Radius.')}
+    output+=routeCard('Jalur Domisili Radius',allowed,reasons,'Hanya 1 SMP Negeri yang berada dalam radius rumah.',['Pilih sekolah yang benar-benar masuk radius.','Karena hanya boleh 1 sekolah, hindari memilih sekolah dengan radius sangat ketat jika posisi rumah mepet.','Pastikan titik koordinat rumah benar.'],['KK minimal 1 tahun','Akta lahir','Surat lulus','Hasil TKA/TKAD','Surat tanggung jawab mutlak'],schedules.domisili)
+  }
+  
+// DOMISILI WILAYAH
+{
+  let allowed = true, reasons = [], schoolOptions = [];
+  
+  if (kk !== 'sleman') {
+    allowed = false;
+    reasons.push('Jalur Domisili Wilayah wajib KK Kabupaten Sleman.');
+  }
+  if (kkDuration !== 'yes') {
+    allowed = false;
+    reasons.push('KK belum berusia minimal 1 tahun.');
+  }
+  
+  if (kk === 'sleman' && selectedKepanewonan && selectedKalurahan) {
+    const key = `${selectedKepanewonan}, ${selectedKalurahan}`.replace(/\s+/g, ' ').trim().toLowerCase();
+    schoolOptions = KELURAHAN_TO_SMPN[key] || [];
+    
+    if (schoolOptions.length > 0) {
+      reasons.push(`Domisili: <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong>`);
+      reasons.push('Kalurahan ditemukan dalam tabel Domisili Wilayah SMPN Sleman.');
+    } else {
+      allowed = false;
+      reasons.push(`Kombinasi <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong> tidak ditemukan dalam database.`);
+    }
+  } else if (kk === 'sleman') {
+    allowed = false;
+    reasons.push('Silakan pilih Kecamatan dan Kelurahan sesuai KK Anda.');
+  }
+  
+  if (allowed && schoolOptions.length > 0) {
+    reasons.push('Siswa bisa mencoba jalur Domisili Wilayah.');
+  }
+  
+  // ✅ TAMBAHKAN ANALISIS PELUANG UNTUK SETIAP SEKOLAH
+  let schoolAnalysisHTML = '';
+  if (allowed && schoolOptions.length > 0 && ng >= 150) {
+    // Panggil engine prediksi dengan filter sekolah sesuai domisili
+    const optimism = parseInt(document.getElementById('optimisme-range').value) || 10;
+    
+    try {
+      const predictionResult = AdmissionEngine.predict(ng, ng + 10, optimism);
+      
+      // Filter hanya sekolah yang ada di schoolOptions
+      const filteredSchools = predictionResult.domisili.filter(s => 
+        schoolOptions.some(opt => opt.toLowerCase().includes(s.school.toLowerCase()) || 
+                                  s.school.toLowerCase().includes(opt.toLowerCase()))
+      );
+      
+      if (filteredSchools.length > 0) {
+        schoolAnalysisHTML = `
+          <div class="prediction-section" style="margin-top:16px;">
+            <h4>📊 Analisis Peluang Masuk per Sekolah</h4>
+            <div style="font-size:13px;color:#666;margin-bottom:12px;">
+              Berdasarkan NG Anda: <strong>${ng.toFixed(2)}</strong>
+            </div>
+        `;
+        
+        filteredSchools.forEach((s, idx) => {
+          const pct = Math.round((s.probD || 0) * 100);
+          const lbl = s.labelD || (typeof AdmissionEngine.label === 'function' ? 
+                                   AdmissionEngine.label(s.probD || 0) : '❓');
+          
+          // Tentukan kategori berdasarkan probabilitas
+          let category = '';
+          let bgColor = '';
+          if (pct >= 80) {
+            category = '🟢 AMAN';
+            bgColor = '#d4edda';
+          } else if (pct >= 60) {
+            category = '🟡 MODERAT';
+            bgColor = '#fff3cd';
+          } else if (pct >= 40) {
+            category = '🟠 RAWAN';
+            bgColor = '#ffe5d0';
+          } else {
+            category = '🔴 SULIT';
+            bgColor = '#f8d7da';
+          }
+          
+          schoolAnalysisHTML += `
+            <div style="background:${bgColor};padding:10px;margin:8px 0;border-radius:8px;border-left:4px solid var(--primary);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-size:15px;">${idx + 1}. ${s.school}</strong>
+                <span style="background:white;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:13px;">
+                  ${category}
+                </span>
+              </div>
+              <div style="font-size:13px;margin-bottom:6px;">
+                ${lbl} <strong>(${pct}%)</strong>
+              </div>
+              <div class="prob-bar" style="height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;">
+                <div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#28a745,#20c997);transition:width 0.5s ease;"></div>
+              </div>
+              ${s.marginD !== null ? `
+                <div style="font-size:12px;color:#666;margin-top:4px;">
+                  Margin: ${s.marginD > 0 ? '+' : ''}${s.marginD.toFixed(2)} 
+                  ${s.marginD > 0 ? '(di atas passing grade)' : '(di bawah passing grade)'}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+        
+        schoolAnalysisHTML += `
+            <div style="margin-top:12px;padding:10px;background:#e7f3ff;border-radius:6px;font-size:13px;">
+              <strong>💡 Rekomendasi Strategi:</strong><br>
+              • Pilih 1 sekolah dengan peluang ≥80% sebagai pilihan utama<br>
+              • Siapkan 1-2 sekolah dengan peluang 60-79% sebagai cadangan<br>
+              • Hindari memilih sekolah dengan peluang <40% kecuali sangat diinginkan
+            </div>
+          </div>
+        `;
+      }
+    } catch (e) {
+      console.error('Error generating school analysis:', e);
+      schoolAnalysisHTML = '<p style="color:#888;font-size:14px;margin-top:12px;">⚠️ Tidak dapat memuat analisis peluang.</p>';
+    }
+  }
+  
+  // Tampilkan sekolah yang sesuai zonasi
+  let schoolListHTML = '';
+  if (schoolOptions.length > 0) {
+    schoolListHTML = schoolOptions.join(', ');
+  }
+  
+  output += routeCard(
+    'Jalur Domisili Wilayah',
+    allowed,
+    reasons,
+    schoolListHTML ? `Sekolah yang sesuai zonasi kalurahan: <strong>${schoolListHTML}</strong>` : 
+                     (kk === 'sleman' ? 'Pilih domisili Anda di form atas.' : 'Tidak tersedia untuk domisili luar Sleman.'),
+    [
+      'Sekolah hanya boleh dipilih jika kalurahan masuk tabel Domisili Wilayah.',
+      'Urutkan sekolah dari peluang paling aman.',
+      'Jangan memilih sekolah yang sangat padat jika NG mepet.',
+      ...(schoolAnalysisHTML ? ['Lihat analisis peluang di bawah untuk referensi.'] : [])
+    ],
+    ['KK minimal 1 tahun', 'Akta lahir', 'Surat lulus', 'Hasil TKA/TKAD'],
+    schedules.prestasi
+  ) + schoolAnalysisHTML;
+}
+  
+  // AFIRMASI
+  {let allowed=true,reasons=[];
+    if(kk!=='sleman'){allowed=false;reasons.push('Afirmasi umumnya mensyaratkan KK Sleman.')}
+    if(!(kkm||(disability&&assessment))){allowed=false;reasons.push('Harus memiliki KKM resmi atau asesmen RSUD Sleman.')}
+    if(allowed){reasons.push('Siswa memenuhi syarat afirmasi.')}
+    output+=routeCard('Jalur Afirmasi',allowed,reasons,'Maksimal 3 sekolah untuk afirmasi KKM.',['Utamakan sekolah yang historis passing grade afirmasinya realistis.','Jalur disabilitas biasanya hanya 1 sekolah dalam wilayah tertentu.'],['KKM resmi Dinsos Sleman','Asesmen RSUD Sleman (jika disabilitas)','KK','Akta lahir','Surat lulus'],schedules.domisili)
+  }
+  
+// PRESTASI UMUM + ANALISIS PELUANG
+{
+  let allowed = true, reasons = [];
+  
+  if (ng < 245) {
+    allowed = false;
+    reasons.push('Nilai Gabungan kurang dari 245.');
+  } else {
+    reasons.push(`Nilai Gabungan: <strong>${ng.toFixed(2)}</strong> (minimal 245).`);
+  }
+  
+  if (sdOrigin === 'outsideDIY' && !tkad) {
+    allowed = false;
+    reasons.push('Lulusan luar DIY wajib mengikuti TKAD.');
+  }
+  
+  if (allowed) {
+    reasons.push('Siswa memenuhi syarat Prestasi Umum.');
+  }
+  
+  // ✅ ANALISIS PELUANG KHUSUS PRESTASI UMUM
+  let prestasiAnalysisHTML = '';
+  if (allowed && ng >= 200 && typeof AdmissionEngine !== 'undefined' && typeof AdmissionEngine.predict === 'function') {
+    const optimism = parseInt(document.getElementById('optimisme-range').value) || 10;
+    
+    // Untuk Prestasi Umum, totalPrestasi = NG + cap prestasi (jika ada)
+    // Jika user tidak input nilai prestasi, asumsikan NG = totalPrestasi
+    const totalPrestasi = ng; // Bisa diganti ng + (nilaiPrestasiInput || 0) jika ada
+    
+    try {
+      const predictionResult = AdmissionEngine.predict(ng, totalPrestasi, optimism);
+      
+      // Filter hanya sekolah yang menerima jalur prestasi (prestasi !== null)
+      const filteredPrestasi = predictionResult.prestasi.filter(s => 
+        s.probP !== null && s.probP > 0
+      ).sort((a, b) => (b.probP ?? 0) - (a.probP ?? 0));
+      
+      if (filteredPrestasi.length > 0) {
+        prestasiAnalysisHTML = `
+          <div class="prediction-section" style="margin-top:16px;border-left:4px solid var(--success);">
+            <h4>📊 Analisis Peluang Masuk — Jalur Prestasi Umum</h4>
+            <div style="font-size:13px;color:#666;margin-bottom:12px;">
+              NG Anda: <strong>${ng.toFixed(2)}</strong> | 
+              Total Prestasi: <strong>${totalPrestasi.toFixed(2)}</strong>
+            </div>
+        `;
+        
+        filteredPrestasi.slice(0, 15).forEach((s, idx) => {
+          const pct = Math.round((s.probP || 0) * 100);
+          const lbl = s.labelP || (typeof AdmissionEngine.label === 'function' ? 
+                                   AdmissionEngine.label(s.probP || 0) : '❓');
+          
+          let category = '', bgColor = '', borderColor = '';
+          if (pct >= 80) {
+            category = '🟢 AMAN';
+            bgColor = '#d4edda';
+            borderColor = '#28a745';
+          } else if (pct >= 60) {
+            category = '🟡 MODERAT';
+            bgColor = '#fff3cd';
+            borderColor = '#ffc107';
+          } else if (pct >= 40) {
+            category = '🟠 RAWAN';
+            bgColor = '#ffe5d0';
+            borderColor = '#fd7e14';
+          } else {
+            category = '🔴 SULIT';
+            bgColor = '#f8d7da';
+            borderColor = '#dc3545';
+          }
+          
+          prestasiAnalysisHTML += `
+            <div style="background:${bgColor};padding:10px;margin:8px 0;border-radius:8px;border-left:4px solid ${borderColor};">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-size:15px;">${idx + 1}. ${s.school}</strong>
+                <span style="background:white;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:13px;border:1px solid ${borderColor};">
+                  ${category}
+                </span>
+              </div>
+              <div style="font-size:13px;margin-bottom:6px;">
+                ${lbl} <strong>(${pct}%)</strong>
+              </div>
+              <div class="prob-bar" style="height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;">
+                <div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997);transition:width 0.5s ease;"></div>
+              </div>
+              ${s.marginP !== null ? `
+                <div style="font-size:12px;color:#666;margin-top:4px;">
+                  Margin: ${s.marginP > 0 ? '+' : ''}${s.marginP.toFixed(2)} 
+                  ${s.marginP > 0 ? '(di atas passing grade)' : '(di bawah passing grade)'}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+        
+        if (filteredPrestasi.length > 15) {
+          prestasiAnalysisHTML += `<p style="text-align:center;font-size:13px;color:#666;">... dan ${filteredPrestasi.length - 15} sekolah lainnya</p>`;
+        }
+        
+        prestasiAnalysisHTML += `
+            <div style="margin-top:12px;padding:10px;background:#e7f3ff;border-radius:6px;font-size:13px;">
+              <strong>💡 Strategi Jalur Prestasi Umum:</strong><br>
+              • Pilih 1 sekolah dengan peluang ≥80% sebagai pilihan utama<br>
+              • Siapkan 1-2 sekolah cadangan dengan peluang 60-79%<br>
+              • Jalur Prestasi Umum: maksimal <strong>3 SMP Negeri</strong> boleh dipilih<br>
+              • NG Prestasi = NG Dasar + Nilai Prestasi (maks 15 poin)
+            </div>
+          </div>
+        `;
+      } else {
+        prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#888;">ℹ️ Tidak ada sekolah yang menerima jalur Prestasi Umum dengan NG Anda saat ini.</p></div>';
+      }
+    } catch (e) {
+      console.error('Error generating prestasi analysis:', e);
+      prestasiAnalysisHTML = '<p style="color:#888;font-size:14px;margin-top:12px;">⚠️ Tidak dapat memuat analisis peluang.</p>';
+    }
+  } else if (!allowed) {
+    prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#dc3545;">⚠️ Anda belum memenuhi syarat minimal NG 245 untuk jalur Prestasi Umum.</p></div>';
+  }
+  
+  output += routeCard(
+    'Jalur Prestasi Umum',
+    allowed,
+    reasons,
+    'Maksimal 3 SMP Negeri.',
+    [
+      'Urutkan sekolah berdasarkan kekuatan NG.',
+      'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
+      'Perhatikan data passing grade tahun sebelumnya.',
+      ...(prestasiAnalysisHTML ? ['Lihat analisis peluang di bawah untuk referensi.'] : [])
+    ],
+    ['KK', 'Akta lahir', 'Surat lulus', 'Hasil TKA/TKAD', 'Sertifikat prestasi (jika ada)'],
+    schedules.prestasi
+  ) + prestasiAnalysisHTML;
+}
+  
+  // PRESTASI KHUSUS
+  {let allowed=true,reasons=[];
+    if(!nationalAchievement){allowed=false;reasons.push('Tidak memiliki prestasi nasional resmi.')}
+    if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib TKAD.')}
+    if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Khusus.')}
+    output+=routeCard('Jalur Prestasi Khusus',allowed,reasons,'Hanya boleh memilih 1 SMP Negeri.',['Pilih sekolah yang paling sesuai target utama.','Karena hanya 1 pilihan, jangan terlalu spekulatif.'],['Piagam prestasi nasional resmi','KK','Akta lahir','Hasil TKA/TKAD'],schedules.khusus)
+  }
+  
+  // PRESTASI DAERAH
+  {let allowed=true,reasons=[];
+    if(!regionalAchievement){allowed=false;reasons.push('Tidak memiliki prestasi mewakili Sleman.')}
+    if(kk!=='sleman'){allowed=false;reasons.push('Prestasi daerah biasanya mensyaratkan keterkaitan dengan Sleman.')}
+    if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Daerah.')}
+    output+=routeCard('Jalur Prestasi Daerah',allowed,reasons,'Maksimal 2 SMP Negeri.',['Gunakan sekolah pertama untuk target utama.','Sekolah kedua sebagai pengaman realistis.'],['Piagam prestasi daerah','KK','Akta lahir','Hasil TKA/TKAD'],schedules.khusus)
+  }
+  
+  // MUTASI
+  {let allowed=true,reasons=[];
+    if(!(mutation||teacherChild)){allowed=false;reasons.push('Tidak memiliki syarat mutasi atau anak guru.')}
+    if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib TKAD.')}
+    if(allowed){reasons.push('Siswa memenuhi syarat jalur Mutasi.')}
+    output+=routeCard('Jalur Mutasi',allowed,reasons,'Hanya 1 sekolah.',['Anak guru hanya boleh memilih sekolah tempat orang tua bertugas.','Pastikan SK mutasi masih berlaku.'],['SK mutasi','SK guru','KK','Akta lahir','Hasil TKA/TKAD'],schedules.domisili)
+  }
+  
+  // TKAD INFO
+  if(sdOrigin==='outsideDIY'){
+    output+=`<div class="card"><h2>Kegiatan Tambahan Wajib: TKAD</h2><p>Karena siswa berasal dari SD luar DIY, maka wajib mengikuti TKAD untuk jalur tertentu.</p>${buildTimeline(schedules.tkad)}</div>`
+  }
+  
+  // RINGKASAN
+  output+=`<div class="card"><h2>Ringkasan Strategi Umum</h2><div class="table-wrap"><table><tr><th>Kondisi</th><th>Jalur Paling Realistis</th></tr><tr><td>KK Sleman + SD DIY</td><td>Semua jalur</td></tr><tr><td>KK Sleman + SD luar DIY</td><td>Prestasi dan Mutasi</td></tr><tr><td>KK luar Sleman tetapi DIY</td><td>Prestasi Umum</td></tr><tr><td>KK luar DIY + SD luar DIY</td><td>Prestasi dan Mutasi</td></tr></table></div></div>`;
+  output+=`<div class="notice"><b>Catatan Penting:</b><br><br>• Sistem ini membantu analisis logika jalur berdasarkan juknis SMPN Sleman 2026.<br>• Hasil akhir resmi tetap mengikuti verifikasi panitia SPMB Sleman.<br>• Prediksi sekolah menggunakan model statistik, bukan jaminan lolos.<br>• Selalu cek update terbaru di situs resmi:<br><a href="https://sleman.spmb.id" target="_blank">https://sleman.spmb.id</a></div>`;
+  output+=`<div class="card"><h2>Bagikan ke Grup WhatsApp</h2><div class="notice">Banyak orang tua dan siswa masih bingung menentukan jalur SMPN Sleman yang benar. Jika aplikasi ini membantu, bagikan ke grup WhatsApp sekolah, wali murid, dan komunitas SD agar mereka tidak salah strategi memilih jalur dan sekolah.<br><br>Semakin banyak yang memahami juknis dengan benar, semakin kecil risiko salah pilih jalur.<br><br><a href="https://wa.me/?text=${encodeURIComponent('Bingung memilih jalur di SPMB SMPN Sleman? Saya pakai alat SPMB Sleman Logic System untuk membantu analisis pemilihan jalur SMPN Sleman sesuai juknis resmi. Coba gunakan di: https://job.web.id/spmb/smpn-sleman/')}" target="_blank" class="wa-share-btn">📤 Bagikan ke WhatsApp</a></div></div>`;
+  document.getElementById('result').innerHTML=output;
+}
+</script>
+</body>
+</html>
