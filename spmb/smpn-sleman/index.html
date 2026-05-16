@@ -255,19 +255,147 @@ function analyzeStudent(){
     output+=routeCard('Jalur Domisili Radius',allowed,reasons,'Hanya 1 SMP Negeri yang berada dalam radius rumah.',['Pilih sekolah yang benar-benar masuk radius.','Karena hanya boleh 1 sekolah, hindari memilih sekolah dengan radius sangat ketat jika posisi rumah mepet.','Pastikan titik koordinat rumah benar.'],['KK minimal 1 tahun','Akta lahir','Surat lulus','Hasil TKA/TKAD','Surat tanggung jawab mutlak'],schedules.domisili)
   }
   
-  // DOMISILI WILAYAH
-  {let allowed=true,reasons=[],schoolOptions=[];
-    if(kk!=='sleman'){allowed=false;reasons.push('Jalur Domisili Wilayah wajib KK Kabupaten Sleman.')}
-    if(kkDuration!=='yes'){allowed=false;reasons.push('KK belum berusia minimal 1 tahun.')}
-    if(kk==='sleman'&&selectedKepanewonan&&selectedKalurahan){
-      const key=`${selectedKepanewonan}, ${selectedKalurahan}`.replace(/\s+/g,' ').trim().toLowerCase();
-      schoolOptions=KELURAHAN_TO_SMPN[key]||[];
-      if(schoolOptions.length>0){reasons.push(`Domisili: <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong>`);reasons.push('Kalurahan ditemukan dalam tabel Domisili Wilayah SMPN Sleman.')}
-      else{allowed=false;reasons.push(`Kombinasi <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong> tidak ditemukan dalam database.`)}
-    }else if(kk==='sleman'){allowed=false;reasons.push('Silakan pilih Kecamatan dan Kelurahan sesuai KK Anda.')}
-    if(allowed&&schoolOptions.length>0){reasons.push('Siswa bisa mencoba jalur Domisili Wilayah.')}
-    output+=routeCard('Jalur Domisili Wilayah',allowed,reasons,schoolOptions.length>0?'Sekolah yang sesuai zonasi kalurahan: <b>'+schoolOptions.join(', ')+'</b>':(kk==='sleman'?'Pilih domisili Anda di form atas.':'Tidak tersedia untuk domisili luar Sleman.'),['Sekolah hanya boleh dipilih jika kalurahan masuk tabel Domisili Wilayah.','Urutkan sekolah dari peluang paling aman.','Jangan memilih sekolah yang sangat padat jika NG mepet.'],['KK minimal 1 tahun','Akta lahir','Surat lulus','Hasil TKA/TKAD'],schedules.prestasi)
+// DOMISILI WILAYAH
+{
+  let allowed = true, reasons = [], schoolOptions = [];
+  
+  if (kk !== 'sleman') {
+    allowed = false;
+    reasons.push('Jalur Domisili Wilayah wajib KK Kabupaten Sleman.');
   }
+  if (kkDuration !== 'yes') {
+    allowed = false;
+    reasons.push('KK belum berusia minimal 1 tahun.');
+  }
+  
+  if (kk === 'sleman' && selectedKepanewonan && selectedKalurahan) {
+    const key = `${selectedKepanewonan}, ${selectedKalurahan}`.replace(/\s+/g, ' ').trim().toLowerCase();
+    schoolOptions = KELURAHAN_TO_SMPN[key] || [];
+    
+    if (schoolOptions.length > 0) {
+      reasons.push(`Domisili: <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong>`);
+      reasons.push('Kalurahan ditemukan dalam tabel Domisili Wilayah SMPN Sleman.');
+    } else {
+      allowed = false;
+      reasons.push(`Kombinasi <strong>${selectedKepanewonan}, ${selectedKalurahan}</strong> tidak ditemukan dalam database.`);
+    }
+  } else if (kk === 'sleman') {
+    allowed = false;
+    reasons.push('Silakan pilih Kecamatan dan Kelurahan sesuai KK Anda.');
+  }
+  
+  if (allowed && schoolOptions.length > 0) {
+    reasons.push('Siswa bisa mencoba jalur Domisili Wilayah.');
+  }
+  
+  // ✅ TAMBAHKAN ANALISIS PELUANG UNTUK SETIAP SEKOLAH
+  let schoolAnalysisHTML = '';
+  if (allowed && schoolOptions.length > 0 && ng >= 150) {
+    // Panggil engine prediksi dengan filter sekolah sesuai domisili
+    const optimism = parseInt(document.getElementById('optimisme-range').value) || 10;
+    
+    try {
+      const predictionResult = AdmissionEngine.predict(ng, ng + 10, optimism);
+      
+      // Filter hanya sekolah yang ada di schoolOptions
+      const filteredSchools = predictionResult.domisili.filter(s => 
+        schoolOptions.some(opt => opt.toLowerCase().includes(s.school.toLowerCase()) || 
+                                  s.school.toLowerCase().includes(opt.toLowerCase()))
+      );
+      
+      if (filteredSchools.length > 0) {
+        schoolAnalysisHTML = `
+          <div class="prediction-section" style="margin-top:16px;">
+            <h4>📊 Analisis Peluang Masuk per Sekolah</h4>
+            <div style="font-size:13px;color:#666;margin-bottom:12px;">
+              Berdasarkan NG Anda: <strong>${ng.toFixed(2)}</strong>
+            </div>
+        `;
+        
+        filteredSchools.forEach((s, idx) => {
+          const pct = Math.round((s.probD || 0) * 100);
+          const lbl = s.labelD || (typeof AdmissionEngine.label === 'function' ? 
+                                   AdmissionEngine.label(s.probD || 0) : '❓');
+          
+          // Tentukan kategori berdasarkan probabilitas
+          let category = '';
+          let bgColor = '';
+          if (pct >= 80) {
+            category = '🟢 AMAN';
+            bgColor = '#d4edda';
+          } else if (pct >= 60) {
+            category = '🟡 MODERAT';
+            bgColor = '#fff3cd';
+          } else if (pct >= 40) {
+            category = '🟠 RAWAN';
+            bgColor = '#ffe5d0';
+          } else {
+            category = '🔴 SULIT';
+            bgColor = '#f8d7da';
+          }
+          
+          schoolAnalysisHTML += `
+            <div style="background:${bgColor};padding:10px;margin:8px 0;border-radius:8px;border-left:4px solid var(--primary);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-size:15px;">${idx + 1}. ${s.school}</strong>
+                <span style="background:white;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:13px;">
+                  ${category}
+                </span>
+              </div>
+              <div style="font-size:13px;margin-bottom:6px;">
+                ${lbl} <strong>(${pct}%)</strong>
+              </div>
+              <div class="prob-bar" style="height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;">
+                <div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#28a745,#20c997);transition:width 0.5s ease;"></div>
+              </div>
+              ${s.marginD !== null ? `
+                <div style="font-size:12px;color:#666;margin-top:4px;">
+                  Margin: ${s.marginD > 0 ? '+' : ''}${s.marginD.toFixed(2)} 
+                  ${s.marginD > 0 ? '(di atas passing grade)' : '(di bawah passing grade)'}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+        
+        schoolAnalysisHTML += `
+            <div style="margin-top:12px;padding:10px;background:#e7f3ff;border-radius:6px;font-size:13px;">
+              <strong>💡 Rekomendasi Strategi:</strong><br>
+              • Pilih 1 sekolah dengan peluang ≥80% sebagai pilihan utama<br>
+              • Siapkan 1-2 sekolah dengan peluang 60-79% sebagai cadangan<br>
+              • Hindari memilih sekolah dengan peluang <40% kecuali sangat diinginkan
+            </div>
+          </div>
+        `;
+      }
+    } catch (e) {
+      console.error('Error generating school analysis:', e);
+      schoolAnalysisHTML = '<p style="color:#888;font-size:14px;margin-top:12px;">⚠️ Tidak dapat memuat analisis peluang.</p>';
+    }
+  }
+  
+  // Tampilkan sekolah yang sesuai zonasi
+  let schoolListHTML = '';
+  if (schoolOptions.length > 0) {
+    schoolListHTML = schoolOptions.join(', ');
+  }
+  
+  output += routeCard(
+    'Jalur Domisili Wilayah',
+    allowed,
+    reasons,
+    schoolListHTML ? `Sekolah yang sesuai zonasi kalurahan: <strong>${schoolListHTML}</strong>` : 
+                     (kk === 'sleman' ? 'Pilih domisili Anda di form atas.' : 'Tidak tersedia untuk domisili luar Sleman.'),
+    [
+      'Sekolah hanya boleh dipilih jika kalurahan masuk tabel Domisili Wilayah.',
+      'Urutkan sekolah dari peluang paling aman.',
+      'Jangan memilih sekolah yang sangat padat jika NG mepet.',
+      ...(schoolAnalysisHTML ? ['Lihat analisis peluang di bawah untuk referensi.'] : [])
+    ],
+    ['KK minimal 1 tahun', 'Akta lahir', 'Surat lulus', 'Hasil TKA/TKAD'],
+    schedules.prestasi
+  ) + schoolAnalysisHTML;
+}
   
   // AFIRMASI
   {let allowed=true,reasons=[];
