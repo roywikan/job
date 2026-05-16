@@ -91,13 +91,14 @@ function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchool
     
     // ✅ FILTER: Hanya tampilkan sekolah yang diizinkan (sesuai domisili)
     const filterByAllowed = (list) => {
-      if (!allowedSchools || allowedSchools.length === 0) return list;
-      return list.filter(s => 
-        allowedSchools.some(as => 
-          as.toLowerCase().trim().includes(s.school.toLowerCase().trim()) ||
-          s.school.toLowerCase().trim().includes(as.toLowerCase().trim())
-        )
-      );
+      if (!allowedSchools || !Array.isArray(allowedSchools) || allowedSchools.length === 0) return list;
+      return list.filter(s => {
+        const schoolName = (s.school || '').toLowerCase().trim();
+        return allowedSchools.some(as => {
+          const allowedName = (as || '').toLowerCase().trim();
+          return schoolName.includes(allowedName) || allowedName.includes(schoolName);
+        });
+      });
     };
     
     const filteredDomisili = filterByAllowed(result.domisili);
@@ -110,8 +111,7 @@ function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchool
     if (filteredDomisili.length > 0) {
       filteredDomisili.slice(0, 10).forEach(s => {
         const pct = Math.round((s.probD || 0) * 100);
-        // ✅ Fallback label jika undefined
-        const lbl = s.labelD || (typeof label === 'function' ? label(s.probD || 0) : '❓');
+        const lbl = s.labelD || (typeof AdmissionEngine.label === 'function' ? AdmissionEngine.label(s.probD || 0) : '❓');
         html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${lbl} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div></div>`;
       });
     } else {
@@ -123,8 +123,7 @@ function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchool
       html += '<h5 style="margin:16px 0 4px">🏆 Jalur Prestasi</h5>';
       filteredPrestasi.slice(0, 10).forEach(s => {
         const pct = Math.round((s.probP || 0) * 100);
-        // ✅ Fallback label jika undefined
-        const lbl = s.labelP || (typeof label === 'function' ? label(s.probP || 0) : '❓');
+        const lbl = s.labelP || (typeof AdmissionEngine.label === 'function' ? AdmissionEngine.label(s.probP || 0) : '❓');
         html += `<div class="school-pred"><div><div class="school-name">${s.school}</div><div class="school-prob">${lbl} <small>(${pct}%)</small></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997)"></div></div></div></div>`;
       });
     }
@@ -133,7 +132,7 @@ function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchool
     return html;
     
   } catch (e) {
-    console.error(e);
+    console.error('Predict error:', e);
     return '<p style="color:red">⚠️ Gagal memuat prediksi. Refresh halaman.</p>';
   }
 }
@@ -278,41 +277,48 @@ function analyzeStudent(){
     output+=routeCard('Jalur Afirmasi',allowed,reasons,'Maksimal 3 sekolah untuk afirmasi KKM.',['Utamakan sekolah yang historis passing grade afirmasinya realistis.','Jalur disabilitas biasanya hanya 1 sekolah dalam wilayah tertentu.'],['KKM resmi Dinsos Sleman','Asesmen RSUD Sleman (jika disabilitas)','KK','Akta lahir','Surat lulus'],schedules.domisili)
   }
   
-  // PRESTASI UMUM + PREDIKSI SEKOLAH
-  {let allowed=true,reasons=[];
-    if(ng<245){allowed=false;reasons.push('Nilai Gabungan kurang dari 245.')}else{reasons.push('Nilai Gabungan memenuhi syarat minimal 245.')}
-    if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib mengikuti TKAD.')}
-    if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Umum.')}
-
-
-   
-let schoolPredictionHTML = '';
-if (ng >= 200 && allowed && schoolOptions.length > 0) {
-  const optimism = parseInt(document.getElementById('optimisme-range').value) || 10;
-  // ✅ Kirim daftar sekolah yang sesuai domisili ke fungsi prediksi
-  schoolPredictionHTML = renderSchoolPredictions(ng, ng + 10, optimism, schoolOptions);
-} else if (ng >= 200 && allowed) {
-  // Fallback: jika tidak ada schoolOptions, tampilkan pesan
-  schoolPredictionHTML = '<div class="prediction-section"><p style="color:#888;font-size:14px">ℹ️ Pilih Kecamatan & Kelurahan terlebih dahulu untuk melihat prediksi sekolah.</p></div>';
-}
-
-   
-    const strategyList = [
-      'Urutkan sekolah berdasarkan kekuatan NG.',
-      'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
-      'Perhatikan data passing grade tahun sebelumnya.',
-      ...(schoolPredictionHTML ? ['Gunakan prediksi di bawah untuk referensi tambahan.'] : [])
-    ];
-    output += routeCard(
-      'Jalur Prestasi Umum',
-      allowed,
-      reasons,
-      'Maksimal 3 SMP Negeri.',
-      strategyList,
-      ['KK','Akta lahir','Surat lulus','Hasil TKA/TKAD','Sertifikat prestasi (jika ada)'],
-      schedules.prestasi
-    ) + schoolPredictionHTML;
+// PRESTASI UMUM + PREDIKSI SEKOLAH
+{
+  let allowed=true, reasons=[], schoolOptions=[];
+  
+  if(ng<245){allowed=false;reasons.push('Nilai Gabungan kurang dari 245.')}
+  else{reasons.push('Nilai Gabungan memenuhi syarat minimal 245.')}
+  
+  if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib mengikuti TKAD.')}
+  if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Umum.')}
+  
+  // ✅ Ambil sekolah yang sesuai domisili (dari bagian DOMISILI WILAYAH)
+  if(kk==='sleman'&&selectedKepanewonan&&selectedKalurahan){
+    const key = `${selectedKepanewonan}, ${selectedKalurahan}`.replace(/\s+/g,' ').trim().toLowerCase();
+    schoolOptions = KELURAHAN_TO_SMPN[key] || [];
   }
+  
+  let schoolPredictionHTML = '';
+  if(ng>=200 && allowed){
+    const optimism = parseInt(document.getElementById('optimisme-range').value)||10;
+    // ✅ Kirim schoolOptions ke fungsi prediksi
+    schoolPredictionHTML = renderSchoolPredictions(ng, ng+10, optimism, schoolOptions);
+  } else if(ng>=200 && allowed && kk!=='sleman'){
+    schoolPredictionHTML = '<div class="prediction-section"><p style="color:#888;font-size:14px">ℹ️ Prediksi tersedia untuk domisili Kab. Sleman.</p></div>';
+  }
+  
+  const strategyList = [
+    'Urutkan sekolah berdasarkan kekuatan NG.',
+    'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
+    'Perhatikan data passing grade tahun sebelumnya.',
+    ...(schoolPredictionHTML ? ['Gunakan prediksi di bawah untuk referensi tambahan.'] : [])
+  ];
+  
+  output += routeCard(
+    'Jalur Prestasi Umum',
+    allowed,
+    reasons,
+    'Maksimal 3 SMP Negeri.',
+    strategyList,
+    ['KK','Akta lahir','Surat lulus','Hasil TKA/TKAD','Sertifikat prestasi (jika ada)'],
+    schedules.prestasi
+  ) + schoolPredictionHTML;
+}
   
   // PRESTASI KHUSUS
   {let allowed=true,reasons=[];
