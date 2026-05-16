@@ -405,47 +405,140 @@ function analyzeStudent(){
     output+=routeCard('Jalur Afirmasi',allowed,reasons,'Maksimal 3 sekolah untuk afirmasi KKM.',['Utamakan sekolah yang historis passing grade afirmasinya realistis.','Jalur disabilitas biasanya hanya 1 sekolah dalam wilayah tertentu.'],['KKM resmi Dinsos Sleman','Asesmen RSUD Sleman (jika disabilitas)','KK','Akta lahir','Surat lulus'],schedules.domisili)
   }
   
-// PRESTASI UMUM + PREDIKSI SEKOLAH
+// PRESTASI UMUM + ANALISIS PELUANG
 {
-  let allowed=true, reasons=[], schoolOptions=[];
+  let allowed = true, reasons = [];
   
-  if(ng<245){allowed=false;reasons.push('Nilai Gabungan kurang dari 245.')}
-  else{reasons.push('Nilai Gabungan memenuhi syarat minimal 245.')}
-  
-  if(sdOrigin==='outsideDIY'&&!tkad){allowed=false;reasons.push('Lulusan luar DIY wajib mengikuti TKAD.')}
-  if(allowed){reasons.push('Siswa memenuhi syarat Prestasi Umum.')}
-  
-  // ✅ Ambil sekolah yang sesuai domisili (dari bagian DOMISILI WILAYAH)
-  if(kk==='sleman'&&selectedKepanewonan&&selectedKalurahan){
-    const key = `${selectedKepanewonan}, ${selectedKalurahan}`.replace(/\s+/g,' ').trim().toLowerCase();
-    schoolOptions = KELURAHAN_TO_SMPN[key] || [];
+  if (ng < 245) {
+    allowed = false;
+    reasons.push('Nilai Gabungan kurang dari 245.');
+  } else {
+    reasons.push(`Nilai Gabungan: <strong>${ng.toFixed(2)}</strong> (minimal 245).`);
   }
   
-  let schoolPredictionHTML = '';
-  if(ng>=200 && allowed){
-    const optimism = parseInt(document.getElementById('optimisme-range').value)||10;
-    // ✅ Kirim schoolOptions ke fungsi prediksi
-    schoolPredictionHTML = renderSchoolPredictions(ng, ng+10, optimism, schoolOptions);
-  } else if(ng>=200 && allowed && kk!=='sleman'){
-    schoolPredictionHTML = '<div class="prediction-section"><p style="color:#888;font-size:14px">ℹ️ Prediksi tersedia untuk domisili Kab. Sleman.</p></div>';
+  if (sdOrigin === 'outsideDIY' && !tkad) {
+    allowed = false;
+    reasons.push('Lulusan luar DIY wajib mengikuti TKAD.');
   }
   
-  const strategyList = [
-    'Urutkan sekolah berdasarkan kekuatan NG.',
-    'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
-    'Perhatikan data passing grade tahun sebelumnya.',
-    ...(schoolPredictionHTML ? ['Gunakan prediksi di bawah untuk referensi tambahan.'] : [])
-  ];
+  if (allowed) {
+    reasons.push('Siswa memenuhi syarat Prestasi Umum.');
+  }
+  
+  // ✅ ANALISIS PELUANG KHUSUS PRESTASI UMUM
+  let prestasiAnalysisHTML = '';
+  if (allowed && ng >= 200 && typeof AdmissionEngine !== 'undefined' && typeof AdmissionEngine.predict === 'function') {
+    const optimism = parseInt(document.getElementById('optimisme-range').value) || 10;
+    
+    // Untuk Prestasi Umum, totalPrestasi = NG + cap prestasi (jika ada)
+    // Jika user tidak input nilai prestasi, asumsikan NG = totalPrestasi
+    const totalPrestasi = ng; // Bisa diganti ng + (nilaiPrestasiInput || 0) jika ada
+    
+    try {
+      const predictionResult = AdmissionEngine.predict(ng, totalPrestasi, optimism);
+      
+      // Filter hanya sekolah yang menerima jalur prestasi (prestasi !== null)
+      const filteredPrestasi = predictionResult.prestasi.filter(s => 
+        s.probP !== null && s.probP > 0
+      ).sort((a, b) => (b.probP ?? 0) - (a.probP ?? 0));
+      
+      if (filteredPrestasi.length > 0) {
+        prestasiAnalysisHTML = `
+          <div class="prediction-section" style="margin-top:16px;border-left:4px solid var(--success);">
+            <h4>📊 Analisis Peluang Masuk — Jalur Prestasi Umum</h4>
+            <div style="font-size:13px;color:#666;margin-bottom:12px;">
+              NG Anda: <strong>${ng.toFixed(2)}</strong> | 
+              Total Prestasi: <strong>${totalPrestasi.toFixed(2)}</strong>
+            </div>
+        `;
+        
+        filteredPrestasi.slice(0, 15).forEach((s, idx) => {
+          const pct = Math.round((s.probP || 0) * 100);
+          const lbl = s.labelP || (typeof AdmissionEngine.label === 'function' ? 
+                                   AdmissionEngine.label(s.probP || 0) : '❓');
+          
+          let category = '', bgColor = '', borderColor = '';
+          if (pct >= 80) {
+            category = '🟢 AMAN';
+            bgColor = '#d4edda';
+            borderColor = '#28a745';
+          } else if (pct >= 60) {
+            category = '🟡 MODERAT';
+            bgColor = '#fff3cd';
+            borderColor = '#ffc107';
+          } else if (pct >= 40) {
+            category = '🟠 RAWAN';
+            bgColor = '#ffe5d0';
+            borderColor = '#fd7e14';
+          } else {
+            category = '🔴 SULIT';
+            bgColor = '#f8d7da';
+            borderColor = '#dc3545';
+          }
+          
+          prestasiAnalysisHTML += `
+            <div style="background:${bgColor};padding:10px;margin:8px 0;border-radius:8px;border-left:4px solid ${borderColor};">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-size:15px;">${idx + 1}. ${s.school}</strong>
+                <span style="background:white;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:13px;border:1px solid ${borderColor};">
+                  ${category}
+                </span>
+              </div>
+              <div style="font-size:13px;margin-bottom:6px;">
+                ${lbl} <strong>(${pct}%)</strong>
+              </div>
+              <div class="prob-bar" style="height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;">
+                <div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997);transition:width 0.5s ease;"></div>
+              </div>
+              ${s.marginP !== null ? `
+                <div style="font-size:12px;color:#666;margin-top:4px;">
+                  Margin: ${s.marginP > 0 ? '+' : ''}${s.marginP.toFixed(2)} 
+                  ${s.marginP > 0 ? '(di atas passing grade)' : '(di bawah passing grade)'}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+        
+        if (filteredPrestasi.length > 15) {
+          prestasiAnalysisHTML += `<p style="text-align:center;font-size:13px;color:#666;">... dan ${filteredPrestasi.length - 15} sekolah lainnya</p>`;
+        }
+        
+        prestasiAnalysisHTML += `
+            <div style="margin-top:12px;padding:10px;background:#e7f3ff;border-radius:6px;font-size:13px;">
+              <strong>💡 Strategi Jalur Prestasi Umum:</strong><br>
+              • Pilih 1 sekolah dengan peluang ≥80% sebagai pilihan utama<br>
+              • Siapkan 1-2 sekolah cadangan dengan peluang 60-79%<br>
+              • Jalur Prestasi Umum: maksimal <strong>3 SMP Negeri</strong> boleh dipilih<br>
+              • NG Prestasi = NG Dasar + Nilai Prestasi (maks 15 poin)
+            </div>
+          </div>
+        `;
+      } else {
+        prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#888;">ℹ️ Tidak ada sekolah yang menerima jalur Prestasi Umum dengan NG Anda saat ini.</p></div>';
+      }
+    } catch (e) {
+      console.error('Error generating prestasi analysis:', e);
+      prestasiAnalysisHTML = '<p style="color:#888;font-size:14px;margin-top:12px;">⚠️ Tidak dapat memuat analisis peluang.</p>';
+    }
+  } else if (!allowed) {
+    prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#dc3545;">⚠️ Anda belum memenuhi syarat minimal NG 245 untuk jalur Prestasi Umum.</p></div>';
+  }
   
   output += routeCard(
     'Jalur Prestasi Umum',
     allowed,
     reasons,
     'Maksimal 3 SMP Negeri.',
-    strategyList,
-    ['KK','Akta lahir','Surat lulus','Hasil TKA/TKAD','Sertifikat prestasi (jika ada)'],
+    [
+      'Urutkan sekolah berdasarkan kekuatan NG.',
+      'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
+      'Perhatikan data passing grade tahun sebelumnya.',
+      ...(prestasiAnalysisHTML ? ['Lihat analisis peluang di bawah untuk referensi.'] : [])
+    ],
+    ['KK', 'Akta lahir', 'Surat lulus', 'Hasil TKA/TKAD', 'Sertifikat prestasi (jika ada)'],
     schedules.prestasi
-  ) + schoolPredictionHTML;
+  ) + prestasiAnalysisHTML;
 }
   
   // PRESTASI KHUSUS
