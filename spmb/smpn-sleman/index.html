@@ -3,7 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPMB Sleman Logic System</title>
+
+
+<meta property="og:title" content="SPMB Sleman Logic System 2026">
+<meta property="og:description" content="Analisis logika jalur SPMB SMP Negeri Sleman: cek syarat, strategi sekolah, jadwal TKAD, dan dokumen yang diperlukan. Gratis & berbasis juknis resmi.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://job.web.id/spmb/spmb-sleman/">
+<meta property="og:site_name" content="SPMB Sleman Helper">
+<meta property="og:locale" content="id_ID">
+<meta name="description" content="Alat bantu analisis jalur SPMB SMP Negeri Sleman 2026. Cek kelayakan domisili, afirmasi, prestasi, dan strategi pemilihan sekolah berdasarkan juknis resmi.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SPMB Sleman Logic System 2026">
+<meta name="twitter:description" content="Analisis jalur SPMB SMP Sleman: domisili, afirmasi, prestasi. Gratis, akurat, berbasis juknis.">
+
+
+<link rel="stylesheet" href="https://job.web.id/smart.css" />
+
+<!-- 🧠 Structured Data (Schema.org) untuk legitimasi di WhatsApp/Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SPMB Sleman Logic System",
+  "description": "Sistem logika untuk membantu menganalisis jalur pendaftaran SMP Negeri Kabupaten Sleman 2026 berdasarkan juknis resmi.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "IDR"
+  },
+  "featureList": "Analisis jalur domisili, afirmasi, prestasi; Rekomendasi sekolah; Jadwal TKAD; Checklist dokumen",
+  "url": "https://job.web.id/spmb/spmb-sleman/"
+}
+</script>
+
+<title>SPMB Sleman Jalur Logic System</title>
 
 <style>
 :root{
@@ -228,6 +263,23 @@ th{
   background:#eff6ff;
 }
 
+/* 🎯 WhatsApp Share Button Styling */
+.wa-share-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#25D366;
+  color:white;
+  padding:12px 20px;
+  border-radius:12px;
+  font-weight:bold;
+  text-decoration:none;
+  margin-top:10px;
+  transition:background 0.2s;
+}
+.wa-share-btn:hover{
+  background:#128C7E;
+}
 </style>
 </head>
 <body>
@@ -235,7 +287,7 @@ th{
 <div class="container">
 
 <div class="hero">
-  <h1>SPMB SMP Sleman Logic System</h1>
+  <h1>Jalur Apa di SPMB SMP Sleman?</h1>
   <p>
     Sistem logika untuk membantu menyarankan jalur SPMB SMP Negeri Sleman 2026,
     syarat dokumen, strategi pemilihan sekolah, dan jadwal kegiatan.
@@ -292,7 +344,7 @@ th{
       <label>Nilai Gabungan (NG) Sleman</label>
       <input type="number" id="ng" placeholder="Contoh: 287.55">
       <div class="small">
-        Jika belum tahu NG, Hitung NG Slemandahulu menggunakan:
+        Jika belum tahu NG, Hitung NG Sleman dahulu menggunakan:
         <a href="https://tkatkad.github.io/smp-sleman/" target="_blank">
           Kalkulator NG Sleman
         </a>
@@ -345,7 +397,8 @@ th{
 
   <br>
 
-  <button onclick="analyzeStudent()">Analisis Jalur</button>
+  <!-- 🔗 Tombol utama: trigger popup + analisis -->
+  <button id="btn-analyze" type="button">Analisis Jalur</button>
 
 </div>
 
@@ -357,7 +410,57 @@ th{
 
 </div>
 
+<!-- 🧠 Smart Popup Module -->
+<script src="https://job.web.id/smart.js"></script>
+
 <script>
+
+// ================= INISIALISASI SMART POPUP =================
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // Daftar affiliate URLs (URL pertama = prioritas utama)
+  const affiliateUrls = [
+    'https://s.shopee.co.id/2LV8zySGbQ',  // ✅ Prioritas #1 (sesuai request)
+    'https://s.shopee.co.id/AA4ETmAQ4H',
+    // Tambahkan URL lain di sini jika perlu
+  ];
+  
+  // Pilih URL pertama sebagai default
+  const primaryAffiliate = affiliateUrls[0];
+  
+  // Inisialisasi SmartPopupOpener
+  SmartPopupOpener.init({
+    intermediatePage: 'https://job.web.id/spmb.html',  // Halaman perantara Anda
+    affiliateUrl: primaryAffiliate,                     // URL affiliate prioritas
+    clickThreshold: 2,                                  // ✅ Muncul di klik ke-2 (karena jarang dipakai)
+    enablePopUnder: true,                               // Aktifkan trik blur/focus
+    modalTitle: '🎁 Butuh Perlengkapan Sekolah?',
+    modalText: 'Browser memblokir tab baru. Klik tombol di bawah untuk cek penawaran hemat perlengkapan SPMB:',
+    modalButtonText: 'Cek Penawaran →',
+    
+    // Notifikasi halus sebelum trigger (Strategi #4: transparansi)
+    onBeforeOpen: function(url) {
+      if (SmartPopupOpener._state.clickCount === 1) {
+        // Tampilkan hint kecil di console/toast (opsional, tidak mengganggu)
+        console.log('💡 Klik berikutnya akan membuka penawaran spesial di tab baru');
+      }
+    }
+  });
+  
+  // Bind ke tombol "Analisis Jalur"
+  const btnAnalyze = document.getElementById('btn-analyze');
+  if (btnAnalyze) {
+    btnAnalyze.addEventListener('click', function(e) {
+      // ✅ Trigger popup dengan threshold (klik ke-2)
+      SmartPopupOpener.openWithThreshold();
+      
+      // ✅ Jalankan fungsi analisis normal
+      analyzeStudent();
+    });
+  }
+});
+
+// ================= LOGIKA APLIKASI (TIDAK DIUBAH) =================
 
 const schedules = {
 
@@ -1313,7 +1416,7 @@ function buildReverseMap(data){
     data[smpn].forEach(area => {
 
       const normalized = area
-        .replace(/\\s\+/g, ' ')
+        .replace(/\s+/g, ' ')
         .trim()
         .toLowerCase();
 
@@ -1356,7 +1459,7 @@ const KELURAHAN_TO_SMPN =
 
       const key =
         `${kapanewonInput}, ${kalurahanInput}`
-          .replace(/\\s\+/g, ' ')
+          .replace(/\s+/g, ' ')
           .trim()
           .toLowerCase();
 
@@ -1680,12 +1783,12 @@ const KELURAHAN_TO_SMPN =
 
         <a 
           href="https://wa.me/?text=${encodeURIComponent(
-            'Bingung memilih jalur di SPMB SMPN Sleman? Saya pakai alat SPMB Sleman Logic System untuk membantu analisis pemilihan jalur SMPN Sleman sesuai juknis resmi. Coba gunakan di: https://job.web.id/spmb/smpn-sleman/'
+            'Bingung memilih jalur di SPMB SMPN Sleman? Saya pakai alat SPMB Sleman Logic System untuk membantu analisis pemilihan jalur SMPN Sleman sesuai juknis resmi. Coba gunakan di: https://job.web.id/spmb/spmb-sleman/'
           )}"
           target="_blank"
           class="wa-share-btn"
         >
-          Bagikan ke WhatsApp
+          📤 Bagikan ke WhatsApp
         </a>
 
         
@@ -1696,7 +1799,6 @@ const KELURAHAN_TO_SMPN =
   document.getElementById('result').innerHTML = output;
 
 }
-
 </script>
 
 </body>
