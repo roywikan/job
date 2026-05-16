@@ -61,3 +61,30 @@ th{background:#eff6ff}
 .prob-fill{height:100%;background:linear-gradient(90deg,#28a745,#20c997);transition:width 0.3s}
 .optimism-control{display:flex;align-items:center;gap:12px;margin:12px 0}
 .optimism-control input[type="range"]{flex:1}
+.prediction-section {
+  background: #f8fbff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.prediction-section h4 {
+  margin: 0 0 12px;
+  color: var(--primary-dark);
+  font-size: 16px;
+}
+
+.prob-bar {
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.prob-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997);
+  transition: width 0.5s ease;
+}
