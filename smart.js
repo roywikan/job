@@ -132,6 +132,13 @@
     },
 
     _handleBlocked(finalUrl) {
+  // ✅ Cek apakah sudah pernah ditangani
+  if (sessionStorage.getItem('spmb_popup_handled') === 'true') {
+    return;
+  }
+  sessionStorage.setItem('spmb_popup_handled', 'true');
+  
+/////////////////
       // Strategi #3: Fallback ke <a> tag + modal
       console.warn('⚠️ Popup diblokir, aktifkan fallback');
       
