@@ -81,12 +81,18 @@
   </div>
 
   <!-- 🏆 INPUT POIN PRESTASI - DIPINDAH KE SINI (tepat setelah NG) -->
-  <div id="prestasi-input-group" style="margin:16px 0;padding:16px;background:#f0fff5;border-radius:8px;border:2px solid #28a745;">
-    <label style="color:#155724;margin:0 0 8px 0;font-weight:bold;">🏆 Poin Tambahan Prestasi (0-15):</label>
-    <input type="number" id="nilai-prestasi" min="0" max="15" step="0.01" placeholder="Kosongkan jika tidak ada prestasi" value="0" style="border:2px solid #28a745;">
-    <div class="small" style="color:#155724;margin-top:6px;">Maksimal 15 poin dari sertifikat yang diverifikasi Dinas Pendidikan Sleman. Kosongkan jika tidak punya.</div>
+<div style="margin:16px 0;">
+  <div style="max-width:100%;margin:0 auto;">
+    <div id="prestasi-input-group" style="padding:16px;background:#f0fff5;border-radius:8px;border:2px solid #28a745;">
+      <label style="color:#155724;margin:0 0 8px 0;font-weight:bold;display:block;">🏆 Poin Tambahan Prestasi (0-15):</label>
+      <input type="number" id="nilai-prestasi" min="0" max="15" step="0.01" placeholder="Kosongkan jika tidak ada prestasi" value="0" style="border:2px solid #28a745;width:100%;max-width:100%;">
+      <div class="small" style="color:#155724;margin-top:6px;">Maksimal 15 poin dari sertifikat yang diverifikasi Dinas Pendidikan Sleman. Kosongkan jika tidak punya.</div>
+    </div>
   </div>
+</div>
 
+
+  
   <!-- 🏠 DROPDOWN DOMISILI (Hanya untuk KK Sleman) -->
   <div class="section-title" id="domisili-section-title" style="display:none;">Pilih Domisili Anda :</div>
   <div class="grid" id="domisili-dropdowns" style="display:none;">
@@ -211,7 +217,8 @@ function calculateAutoOptimisme(ng) {
 }
 
 // ================= PREDICTION ENGINE BRIDGE =================
-function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchools = null, jalur = 'domisili') {
+<!-- Ganti fungsi renderSchoolPredictions dengan versi ini -->
+function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchools = null, jalur = 'domisili', selectedKepanewonan = '', selectedKalurahan = '') {
   if (!AdmissionEngine || !AdmissionEngine.predict) {
     return '<p style="color:red">⚠️ Engine prediksi belum siap.</p>';
   }
@@ -219,19 +226,71 @@ function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchool
   try {
     const result = AdmissionEngine.predict(ngDomisili, ngPrestasi, optimism);
     
-    const filterByAllowed = (list) => {
-      if (!allowedSchools || !Array.isArray(allowedSchools) || allowedSchools.length === 0) return list;
-      return list.filter(s => {
+    // ✅ LOGIKA BARU: Prioritaskan sekolah berdasarkan kedekatan domisili
+    const prioritizeByProximity = (list, schoolOptions, kepanewonan, kalurahan) => {
+      if (!schoolOptions || schoolOptions.length === 0) return list;
+      
+      // Extract semua sekolah dari schoolOptions
+      const domisiliSchools = new Set(schoolOptions.map(s => s.toLowerCase().trim()));
+      
+      // Extract sekolah satu kepanewonan (tapi beda kalurahan)
+      const sameKepanewonanSchools = new Set();
+      if (kepanewonan) {
+        // Cari semua sekolah yang ada di kepanewonan yang sama
+        for (const sekolah in SMPN_DOMISILI) {
+          SMPN_DOMISILI[sekolah].forEach(entry => {
+            const parts = entry.split(',').map(s => s.trim());
+            if (parts.length === 2) {
+              const [kep, kal] = parts;
+              if (kep.toLowerCase() === kepanewonan.toLowerCase()) {
+                sameKepanewonanSchools.add(sekolah.toLowerCase().trim());
+              }
+            }
+          });
+        }
+      }
+      
+      return list.sort((a, b) => {
+        const aName = (a.school || '').toLowerCase().trim();
+        const bName = (b.school || '').toLowerCase().trim();
+        
+        const aInDomisili = domisiliSchools.has(aName);
+        const bInDomisili = domisiliSchools.has(bName);
+        const aInSameKep = sameKepanewonanSchools.has(aName);
+        const bInSameKep = sameKepanewonanSchools.has(bName);
+        
+        // Prioritas 1: Sekolah di domisili wilayah
+        if (aInDomisili && !bInDomisili) return -1;
+        if (!aInDomisili && bInDomisili) return 1;
+        
+        // Prioritas 2: Sekolah satu kepanewonan
+        if (aInSameKep && !bInSameKep) return -1;
+        if (!aInSameKep && bInSameKep) return 1;
+        
+        // Prioritas 3: Berdasarkan probabilitas
+        const probKey = jalur === 'domisili' ? 'probD' : 'probP';
+        return (b[probKey] ?? 0) - (a[probKey] ?? 0);
+      });
+    };
+    
+    const list = jalur === 'domisili' ? result.domisili : result.prestasi;
+    
+    // Filter dan prioritisasi
+    let filtered = list;
+    if (allowedSchools && allowedSchools.length > 0) {
+      filtered = list.filter(s => {
         const schoolName = (s.school || '').toLowerCase().trim();
         return allowedSchools.some(as => {
           const allowedName = (as || '').toLowerCase().trim();
           return schoolName.includes(allowedName) || allowedName.includes(schoolName);
         });
       });
-    };
+    }
     
-    const list = jalur === 'domisili' ? result.domisili : result.prestasi;
-    const filtered = filterByAllowed(list);
+    // Untuk jalur prestasi, terapkan logika prioritas
+    if (jalur === 'prestasi') {
+      filtered = prioritizeByProximity(filtered, allowedSchools, selectedKepanewonan, selectedKalurahan);
+    }
     
     let html = '<div class="prediction-section"><h4>🎯 Prediksi Peluang Masuk (Model 2026)</h4>';
     
@@ -251,10 +310,20 @@ function renderSchoolPredictions(ngDomisili, ngPrestasi, optimism, allowedSchool
         else if (pct >= 40) { category = '🟠 RAWAN'; bgColor = '#ffe5d0'; borderColor = '#fd7e14'; }
         else { category = '🔴 SULIT'; bgColor = '#f8d7da'; borderColor = '#dc3545'; }
         
+        // Tentukan badge prioritas
+        let priorityBadge = '';
+        if (jalur === 'prestasi' && allowedSchools && allowedSchools.length > 0) {
+          const schoolName = (s.school || '').toLowerCase().trim();
+          const isInDomisili = allowedSchools.some(as => as.toLowerCase().trim().includes(schoolName) || schoolName.includes(as.toLowerCase().trim()));
+          if (isInDomisili) {
+            priorityBadge = '<span style="background:#28a745;color:white;padding:2px 6px;border-radius:4px;font-size:11px;margin-left:8px;">🏠 Domisili</span>';
+          }
+        }
+        
         html += `
           <div style="background:${bgColor};padding:10px;margin:8px 0;border-radius:8px;border-left:4px solid ${borderColor};">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-              <strong style="font-size:15px;">${idx + 1}. ${s.school}</strong>
+              <strong style="font-size:15px;">${idx + 1}. ${s.school}${priorityBadge}</strong>
               <span style="background:white;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:13px;border:1px solid ${borderColor};">
                 ${category}
               </span>
@@ -565,109 +634,170 @@ function analyzeStudent(){
     );
   }
   
-  // ================= PRESTASI UMUM =================
-  {
-    let allowed = true, reasons = [];
-    
-    if(ng < 245){ allowed = false; reasons.push('Nilai Gabungan Dasar kurang dari 245.'); }
-    else { reasons.push(`NG Dasar: <strong>${ng.toFixed(2)}</strong> (minimal 245).`); }
-    
-    if(sdOrigin === 'outsideDIY' && !tkad){ allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
-    if(allowed){ reasons.push('Siswa memenuhi syarat Prestasi Umum.'); }
-    
-    // ✅ ANALISIS PELUANG PRESTASI (PAKAI NG + POIN PRESTASI)
-    let prestasiAnalysisHTML = '';
-    if(allowed && ng >= 200 && typeof AdmissionEngine !== 'undefined' && typeof AdmissionEngine.predict === 'function'){
-      try {
-        // ✅ PENTING: Untuk prestasi, pakai ngPrestasi (NG Dasar + Poin) untuk parameter kedua
-        const predictionResult = AdmissionEngine.predict(ng, ngPrestasi, optimism);
+
+// ================= PRESTASI UMUM =================
+{
+  let allowed = true, reasons = [];
+  
+  if(ng < 245){ allowed = false; reasons.push('Nilai Gabungan Dasar kurang dari 245.'); }
+  else { reasons.push(`NG Dasar: <strong>${ng.toFixed(2)}</strong> (minimal 245).`); }
+  
+  if(sdOrigin === 'outsideDIY' && !tkad){ allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
+  if(allowed){ reasons.push('Siswa memenuhi syarat Prestasi Umum.'); }
+  
+  // ✅ ANALISIS PELUANG PRESTASI (PAKAI NG + POIN PRESTASI)
+  let prestasiAnalysisHTML = '';
+  if(allowed && ng >= 200 && typeof AdmissionEngine !== 'undefined' && typeof AdmissionEngine.predict === 'function'){
+    try {
+      // ✅ PENTING: Untuk prestasi, pakai ngPrestasi (NG Dasar + Poin) untuk parameter kedua
+      const predictionResult = AdmissionEngine.predict(ng, ngPrestasi, optimism);
+      
+      // Filter sekolah yang menerima jalur prestasi
+      const filteredPrestasi = predictionResult.prestasi.filter(s => s.probP !== null && s.probP > 0);
+      
+      // ✅ PRIORITASI: Sekolah domisili dulu, baru sekolah satu kepanewonan
+      let prioritizedList = filteredPrestasi;
+      if(selectedKepanewonan && schoolOptions && schoolOptions.length > 0) {
+        // Extract nama sekolah dari schoolOptions
+        const domisiliSchools = new Set(schoolOptions.map(s => s.toLowerCase().trim()));
         
-        const filteredPrestasi = predictionResult.prestasi.filter(s => s.probP !== null && s.probP > 0).sort((a, b) => (b.probP ?? 0) - (a.probP ?? 0));
-        
-        if(filteredPrestasi.length > 0){
-          prestasiAnalysisHTML = `
-            <div class="prediction-section" style="margin-top:16px;border-left:4px solid var(--success);">
-              <h4>📊 Analisis Peluang Masuk — Jalur Prestasi Umum</h4>
-              <div style="font-size:13px;color:#666;margin-bottom:12px;">
-                NG Dasar: <strong>${ng.toFixed(2)}</strong> | 
-                Poin Prestasi: <strong>+${prestasiCap.toFixed(2)}</strong> | 
-                Total Prestasi: <strong>${ngPrestasi.toFixed(2)}</strong>
-              </div>
-          `;
-          
-          filteredPrestasi.slice(0, 15).forEach((s, idx) => {
-            const pct = Math.round((s.probP || 0) * 100);
-            const lbl = s.labelP || (typeof AdmissionEngine.label === 'function' ? AdmissionEngine.label(s.probP || 0) : '❓');
-            let category = '', bgColor = '', borderColor = '';
-            if(pct >= 80){ category = '🟢 AMAN'; bgColor = '#d4edda'; borderColor = '#28a745'; }
-            else if(pct >= 60){ category = '🟡 MODERAT'; bgColor = '#fff3cd'; borderColor = '#ffc107'; }
-            else if(pct >= 40){ category = '🟠 RAWAN'; bgColor = '#ffe5d0'; borderColor = '#fd7e14'; }
-            else { category = '🔴 SULIT'; bgColor = '#f8d7da'; borderColor = '#dc3545'; }
-            
-            prestasiAnalysisHTML += `
-              <div style="background:${bgColor};padding:10px;margin:8px 0;border-radius:8px;border-left:4px solid ${borderColor};">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                  <strong style="font-size:15px;">${idx + 1}. ${s.school}</strong>
-                  <span style="background:white;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:13px;border:1px solid ${borderColor};">
-                    ${category}
-                  </span>
-                </div>
-                <div style="font-size:13px;margin-bottom:6px;">
-                  ${lbl} <strong>(${pct}%)</strong>
-                </div>
-                <div class="prob-bar" style="height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;">
-                  <div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997);transition:width 0.5s ease;"></div>
-                </div>
-                ${s.marginP !== null ? `
-                  <div style="font-size:12px;color:#666;margin-top:4px;">
-                    Margin: ${s.marginP > 0 ? '+' : ''}${s.marginP.toFixed(2)} 
-                    ${s.marginP > 0 ? '(di atas passing grade)' : '(di bawah passing grade)'}
-                  </div>
-                ` : ''}
-              </div>
-            `;
+        // Extract sekolah satu kepanewonan
+        const sameKepanewonanSchools = new Set();
+        for (const sekolah in SMPN_DOMISILI) {
+          SMPN_DOMISILI[sekolah].forEach(entry => {
+            const parts = entry.split(',').map(s => s.trim());
+            if (parts.length === 2) {
+              const [kep, kal] = parts;
+              if (kep.toLowerCase() === selectedKepanewonan.toLowerCase()) {
+                sameKepanewonanSchools.add(sekolah.toLowerCase().trim());
+              }
+            }
           });
+        }
+        
+        // Sort dengan prioritas
+        prioritizedList = filteredPrestasi.sort((a, b) => {
+          const aName = (a.school || '').toLowerCase().trim();
+          const bName = (b.school || '').toLowerCase().trim();
           
-          if(filteredPrestasi.length > 15){
-            prestasiAnalysisHTML += `<p style="text-align:center;font-size:13px;color:#666;">... dan ${filteredPrestasi.length - 15} sekolah lainnya</p>`;
+          const aInDomisili = domisiliSchools.has(aName);
+          const bInDomisili = domisiliSchools.has(bName);
+          const aInSameKep = sameKepanewonanSchools.has(aName);
+          const bInSameKep = sameKepanewonanSchools.has(bName);
+          
+          // Prioritas 1: Sekolah di domisili wilayah
+          if (aInDomisili && !bInDomisili) return -1;
+          if (!aInDomisili && bInDomisili) return 1;
+          
+          // Prioritas 2: Sekolah satu kepanewonan
+          if (aInSameKep && !bInSameKep) return -1;
+          if (!aInSameKep && bInSameKep) return 1;
+          
+          // Prioritas 3: Berdasarkan probabilitas
+          return (b.probP ?? 0) - (a.probP ?? 0);
+        });
+      } else {
+        // Jika tidak ada domisili, sort by probabilitas saja
+        prioritizedList = filteredPrestasi.sort((a, b) => (b.probP ?? 0) - (a.probP ?? 0));
+      }
+      
+      if(prioritizedList.length > 0){
+        prestasiAnalysisHTML = `
+          <div class="prediction-section" style="margin-top:16px;border-left:4px solid var(--success);">
+            <h4>📊 Analisis Peluang Masuk — Jalur Prestasi Umum</h4>
+            <div style="font-size:13px;color:#666;margin-bottom:12px;">
+              NG Dasar: <strong>${ng.toFixed(2)}</strong> | 
+              Poin Prestasi: <strong>+${prestasiCap.toFixed(2)}</strong> | 
+              Total Prestasi: <strong>${ngPrestasi.toFixed(2)}</strong>
+            </div>
+            ${selectedKepanewonan ? `<div style="font-size:12px;color:#28a745;margin-bottom:8px;background:#d4edda;padding:6px;border-radius:4px;">💡 <strong>Strategi:</strong> Sekolah di prioritaskan berdasarkan: (1) Sekolah domisili wilayah Anda, (2) Sekolah satu Kapanewon, (3) Peluang tertinggi</div>` : ''}
+        `;
+        
+        prioritizedList.slice(0, 15).forEach((s, idx) => {
+          const pct = Math.round((s.probP || 0) * 100);
+          const lbl = s.labelP || (typeof AdmissionEngine.label === 'function' ? AdmissionEngine.label(s.probP || 0) : '❓');
+          let category = '', bgColor = '', borderColor = '';
+          if(pct >= 80){ category = '🟢 AMAN'; bgColor = '#d4edda'; borderColor = '#28a745'; }
+          else if(pct >= 60){ category = '🟡 MODERAT'; bgColor = '#fff3cd'; borderColor = '#ffc107'; }
+          else if(pct >= 40){ category = '🟠 RAWAN'; bgColor = '#ffe5d0'; borderColor = '#fd7e14'; }
+          else { category = '🔴 SULIT'; bgColor = '#f8d7da'; borderColor = '#dc3545'; }
+          
+          // Tentukan badge prioritas
+          let priorityBadge = '';
+          if(schoolOptions && schoolOptions.length > 0) {
+            const schoolName = (s.school || '').toLowerCase().trim();
+            const isInDomisili = schoolOptions.some(as => as.toLowerCase().trim().includes(schoolName) || schoolName.includes(as.toLowerCase().trim()));
+            if(isInDomisili) {
+              priorityBadge = '<span style="background:#28a745;color:white;padding:2px 6px;border-radius:4px;font-size:11px;margin-left:8px;">🏠 Domisili</span>';
+            }
           }
           
           prestasiAnalysisHTML += `
-            <div style="margin-top:12px;padding:10px;background:#e7f3ff;border-radius:6px;font-size:13px;">
-              <strong>💡 Strategi Jalur Prestasi Umum:</strong><br>
-              • Pilih 1 sekolah dengan peluang ≥80% sebagai pilihan utama<br>
-              • Siapkan 1-2 sekolah cadangan dengan peluang 60-79%<br>
-              • Jalur Prestasi Umum: maksimal <strong>3 SMP Negeri</strong> boleh dipilih<br>
-              • NG Prestasi = NG Dasar + Nilai Prestasi (maks 15 poin)
+            <div style="background:${bgColor};padding:10px;margin:8px 0;border-radius:8px;border-left:4px solid ${borderColor};">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-size:15px;">${idx + 1}. ${s.school}${priorityBadge}</strong>
+                <span style="background:white;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:13px;border:1px solid ${borderColor};">
+                  ${category}
+                </span>
+              </div>
+              <div style="font-size:13px;margin-bottom:6px;">
+                ${lbl} <strong>(${pct}%)</strong>
+              </div>
+              <div class="prob-bar" style="height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;">
+                <div class="prob-fill" style="width:${pct}%;background:linear-gradient(90deg,#17a2b8,#20c997);transition:width 0.5s ease;"></div>
+              </div>
+              ${s.marginP !== null ? `
+                <div style="font-size:12px;color:#666;margin-top:4px;">
+                  Margin: ${s.marginP > 0 ? '+' : ''}${s.marginP.toFixed(2)} 
+                  ${s.marginP > 0 ? '(di atas passing grade)' : '(di bawah passing grade)'}
+                </div>
+              ` : ''}
             </div>
-          </div>
           `;
-        } else {
-          prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#888;">ℹ️ Tidak ada sekolah yang menerima jalur Prestasi Umum dengan NG Anda saat ini.</p></div>';
+        });
+        
+        if(prioritizedList.length > 15){
+          prestasiAnalysisHTML += `<p style="text-align:center;font-size:13px;color:#666;">... dan ${prioritizedList.length - 15} sekolah lainnya</p>`;
         }
-      } catch(e) {
-        console.error('Error generating prestasi analysis:', e);
-        prestasiAnalysisHTML = '<p style="color:#888;font-size:14px;margin-top:12px;">⚠️ Tidak dapat memuat analisis peluang.</p>';
+        
+        prestasiAnalysisHTML += `
+          <div style="margin-top:12px;padding:10px;background:#e7f3ff;border-radius:6px;font-size:13px;">
+            <strong>💡 Strategi Jalur Prestasi Umum:</strong><br>
+            • Sekolah dengan badge 🏠 <strong>Domisili</strong> adalah sekolah di zonasi Anda — prioritas utama!<br>
+            • Pilih 1 sekolah domisili dengan peluang ≥80% sebagai pilihan utama<br>
+            • Siapkan 1-2 sekolah cadangan (bisa domisili atau satu kepanewonan)<br>
+            • Jalur Prestasi Umum: maksimal <strong>3 SMP Negeri</strong> boleh dipilih<br>
+            • NG Prestasi = NG Dasar + Nilai Prestasi (maks 15 poin)
+          </div>
+        </div>
+        `;
+      } else {
+        prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#888;">ℹ️ Tidak ada sekolah yang menerima jalur Prestasi Umum dengan NG Anda saat ini.</p></div>';
       }
-    } else if(!allowed){
-      prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#dc3545;">⚠️ Anda belum memenuhi syarat minimal NG 245 untuk jalur Prestasi Umum.</p></div>';
+    } catch(e) {
+      console.error('Error generating prestasi analysis:', e);
+      prestasiAnalysisHTML = '<p style="color:#888;font-size:14px;margin-top:12px;">⚠️ Tidak dapat memuat analisis peluang.</p>';
     }
-    
-    output += routeCard(
-      'Jalur Prestasi Umum',
-      allowed,
-      reasons,
-      'Maksimal 3 SMP Negeri.',
-      [
-        'Urutkan sekolah berdasarkan kekuatan NG.',
-        'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
-        'Perhatikan data passing grade tahun sebelumnya.',
-        ...(prestasiAnalysisHTML ? ['Lihat analisis peluang di bawah untuk referensi.'] : [])
-      ],
-      ['KK', 'Akta lahir', 'Surat lulus', 'Hasil TKA/TKAD', 'Sertifikat prestasi (jika ada)'],
-      schedules.prestasi
-    ) + prestasiAnalysisHTML;
+  } else if(!allowed){
+    prestasiAnalysisHTML = '<div class="prediction-section" style="margin-top:16px;"><p style="color:#dc3545;">⚠️ Anda belum memenuhi syarat minimal NG 245 untuk jalur Prestasi Umum.</p></div>';
   }
+  
+  output += routeCard(
+    'Jalur Prestasi Umum',
+    allowed,
+    reasons,
+    'Maksimal 3 SMP Negeri.',
+    [
+      'Urutkan sekolah berdasarkan kekuatan NG.',
+      'Sekolah pertama bisa ambisius, kedua realistis, ketiga pengaman.',
+      'Perhatikan data passing grade tahun sebelumnya.',
+      'Prioritaskan sekolah domisili wilayah Anda untuk peluang lebih baik.',
+      ...(prestasiAnalysisHTML ? ['Lihat analisis peluang di bawah untuk referensi.'] : [])
+    ],
+    ['KK', 'Akta lahir', 'Surat lulus', 'Hasil TKA/TKAD', 'Sertifikat prestasi (jika ada)'],
+    schedules.prestasi
+  ) + prestasiAnalysisHTML;
+}
   
   // ================= PRESTASI KHUSUS =================
   {
