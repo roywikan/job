@@ -1,9 +1,13 @@
 /**
- * 🎯 SmartPopupOpener v1.0
+ * 🎯 SmartPopupOpener v1.1
  * Membuka link dengan teknik pop-under + fallback anti-blocker
  * Strategi: User Gesture + Deteksi Block + <a> Fallback + Intermediate Page
  * 
  * Cocok untuk: Shared Hosting, GitHub Pages, Static Site
+ * 
+ * Changelog v1.1:
+ * - Added sessionStorage protection di _handleBlocked untuk cegah double-trigger
+ * - Added early return pattern untuk efisiensi
  */
 
 (function(global) {
@@ -12,17 +16,17 @@
   const SmartPopupOpener = {
     // ⚙️ KONFIGURASI (sesuaikan sekali di awal)
     config: {
-      intermediatePage: 'https://job.web.id/spmb.html', // ✅ Halaman perantara Anda
-      affiliateUrl: '',          // URL tujuan akhir (affiliate, dll)
-      clickThreshold: 4,         // Aktif setelah klik ke-N
-      enablePopUnder: true,      // Aktifkan trik blur/focus
+      intermediatePage: 'https://job.web.id/spmb.html',
+      affiliateUrl: '',
+      clickThreshold: 4,
+      enablePopUnder: true,
       modalTitle: '🎁 Penawaran Spesial!',
       modalText: 'Browser memblokir tab baru. Klik tombol di bawah untuk membuka:',
       modalButtonText: 'Buka Penawaran →',
       modalCloseText: 'Tutup',
-      onBeforeOpen: null,        // Callback sebelum buka
-      onAfterOpen: null,         // Callback setelah sukses buka
-      onBlocked: null            // Callback jika diblokir
+      onBeforeOpen: null,
+      onAfterOpen: null,
+      onBlocked: null
     },
 
     // 🔐 Internal state
@@ -32,19 +36,12 @@
       initialized: false
     },
 
-    // 🚀 Inisialisasi (panggil sekali saat DOM ready)
+    // 🚀 Inisialisasi
     init(customConfig = {}) {
       if (this._state.initialized) return;
-      
-      // Merge config
       Object.assign(this.config, customConfig);
-      
-      // Buat elemen fallback (hidden anchor + modal container)
       this._createFallbackElements();
-      
-      // Tandai initialized
       this._state.initialized = true;
-      
       console.log('✅ SmartPopupOpener ready');
       return this;
     },
@@ -57,25 +54,21 @@
         return false;
       }
 
-      // Callback before open
       if (typeof this.config.onBeforeOpen === 'function') {
         this.config.onBeforeOpen(url);
       }
 
-      // Strategi #1: Pastikan dalam user gesture (sinkron)
       const popup = window.open(
         this._buildIntermediateUrl(url), 
         '_blank', 
         'noopener,noreferrer'
       );
 
-      // Strategi #2: Deteksi blocker + fallback
       if (this._isPopupBlocked(popup)) {
         this._handleBlocked(url);
         return false;
       }
 
-      // Strategi #4: Pop-under trick (jika diaktifkan)
       if (this.config.enablePopUnder) {
         setTimeout(() => {
           try { 
@@ -85,7 +78,6 @@
         }, 100);
       }
 
-      // Callback after open
       if (typeof this.config.onAfterOpen === 'function') {
         this.config.onAfterOpen(url);
       }
@@ -94,7 +86,7 @@
       return true;
     },
 
-    // 🔄 Fungsi untuk trigger berbasis threshold klik
+    // 🔄 Trigger berbasis threshold klik
     openWithThreshold(callback = null) {
       this._state.clickCount++;
       
@@ -106,7 +98,7 @@
       return false;
     },
 
-    // 🧹 Reset counter (opsional, misal saat reset form)
+    // 🧹 Reset counter
     resetCounter() {
       this._state.clickCount = 0;
       return this;
@@ -115,14 +107,12 @@
     // ================= PRIVATE METHODS =================
 
     _buildIntermediateUrl(destUrl) {
-      // Strategi #4: Gunakan intermediate page + parameter dest
       const base = this.config.intermediatePage.replace(/\/$/, '');
       const encoded = encodeURIComponent(destUrl);
       return `${base}?dest=${encoded}`;
     },
 
     _isPopupBlocked(popup) {
-      // Strategi #2: Deteksi berbagai tanda blocker
       return (
         !popup || 
         popup.closed || 
@@ -131,35 +121,38 @@
       );
     },
 
+    // ✅ FIX: Tambah sessionStorage protection di awal fungsi
     _handleBlocked(finalUrl) {
-  // ✅ Cek apakah sudah pernah ditangani
-  if (sessionStorage.getItem('spmb_popup_handled') === 'true') {
-    return;
-  }
-  sessionStorage.setItem('spmb_popup_handled', 'true');
-  
-/////////////////
-      // Strategi #3: Fallback ke <a> tag + modal
+      // 🛡️ Cek apakah fallback sudah pernah dijalankan di sesi ini
+      if (sessionStorage.getItem('spmb_popup_handled') === 'true') {
+        console.log('ℹ️ Fallback sudah dijalankan, skip duplicate');
+        return;
+      }
+      
+      // ✅ Set flag SEGERA agar tidak ter-trigger lagi
+      sessionStorage.setItem('spmb_popup_handled', 'true');
+      
+      // ================= FALLBACK LOGIC (ASLI) =================
       console.warn('⚠️ Popup diblokir, aktifkan fallback');
       
-      // Update hidden anchor
+      // Strategi #3a: Fallback ke hidden <a> tag
       const fallbackLink = document.getElementById('spo-fallback-link');
       if (fallbackLink) {
         fallbackLink.href = this._buildIntermediateUrl(finalUrl);
-        fallbackLink.click(); // Strategi #3: trigger anchor
+        fallbackLink.click();
       }
       
-      // Tampilkan modal sebagai fallback visual
+      // Strategi #3b: Tampilkan modal visual
       this._showModal(this._buildIntermediateUrl(finalUrl));
       
-      // Callback blocked
+      // Callback blocked (untuk auto-close, analytics, dll)
       if (typeof this.config.onBlocked === 'function') {
         this.config.onBlocked(finalUrl);
       }
     },
 
     _createFallbackElements() {
-      // Buat hidden anchor (Strategi #3)
+      // Hidden anchor untuk fallback
       if (!document.getElementById('spo-fallback-link')) {
         const anchor = document.createElement('a');
         anchor.id = 'spo-fallback-link';
@@ -170,7 +163,7 @@
         document.body.appendChild(anchor);
       }
 
-      // Buat modal container (akan diisi saat dibutuhkan)
+      // Modal container
       if (!document.getElementById('spo-modal-container')) {
         const modal = document.createElement('div');
         modal.id = 'spo-modal-container';
@@ -185,7 +178,6 @@
 
       const cfg = this.config;
       
-      // HTML modal (inline style agar portable)
       container.innerHTML = `
         <div style="
           position:fixed;inset:0;background:rgba(0,0,0,0.5);
@@ -227,7 +219,7 @@
       
       container.style.display = 'flex';
       
-      // Tutup modal jika klik di luar box
+      // Close modal when clicking outside
       container.onclick = (e) => {
         if (e.target === container) {
           container.style.display = 'none';
