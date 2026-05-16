@@ -21,7 +21,7 @@
   },
   "probabilityThresholds": {
     "0.90": "💚 Sangat Aman",
-    "0.80": " Aman",
+    "0.80": "🔵 Aman",
     "0.70": "🟡 Agak Aman",
     "0.60": "🟠 Rawan",
     "0.50": "🔴 Sulit",
