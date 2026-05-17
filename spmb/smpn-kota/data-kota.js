@@ -81,10 +81,10 @@ window.DATA_WILAYAH_KOTA = {
 // ✅ Sudah disesuaikan dengan data lokasi sekolah + 4 Kemantren tanpa SMPN
 // ✅ Urutan: Sekolah dalam Kemantren yang sama → Kemantren tetangga → Favorit (jika dekat)
 window.KELURAHAN_SMPN_HINT = {
-  // ===== GONDOKUSUMAN (Ada SMPN 1, 5, 8 - Favorit Cluster) =====
+
   "Tegalpanggung": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
   "Suryatmajan": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
-  "Bausasran": ["SMPN4", "SMPN15", "SMPN8", "SMPN1", "SMPN2", "SMPN5"], // Bausasran dekat Danurejan
+
   "Baciro": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
   "Demangan": ["SMPN1", "SMPN5", "SMPN8"],
   "Kotabaru": ["SMPN5", "SMPN1", "SMPN8", "SMPN2"],
