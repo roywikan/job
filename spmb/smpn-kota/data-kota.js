@@ -138,9 +138,9 @@ window.KELURAHAN_SMPN_HINT = {
   "Tahunan": ["SMPN10", "SMPN9", "SMPN4", "SMPN5"],
   
   // ===== MERGANGSAN (TIDAK ADA SMPN) → Arahkan ke Umbulharjo/Mantrijeron =====
-  "Wirogunan": ["SMPN10", "SMPN13", "SMPN9", "SMPN6"],
-  "Keparakan": ["SMPN10", "SMPN13", "SMPN9", "SMPN6"],
-  "Brontokusuman": ["SMPN10", "SMPN13", "SMPN9", "SMPN6"],
+  "Wirogunan": ["SMPN10", "SMPN13", "SMPN9", "SMPN4"],
+  "Keparakan": ["SMPN10", "SMPN13", "SMPN9", "SMPN4"],
+  "Brontokusuman": ["SMPN10", "SMPN13", "SMPN9", "SMPN4"],
   
   // ===== PAKUALAMAN (TIDAK ADA SMPN) → Arahkan ke Danurejan =====
   "Gunungketur": ["SMPN4", "SMPN15", "SMPN16", "SMPN2"],
