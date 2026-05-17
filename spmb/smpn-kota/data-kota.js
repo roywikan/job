@@ -77,52 +77,83 @@ window.DATA_WILAYAH_KOTA = {
 };
 
 // ===== MAPPING KELURAHAN → SMPN TERDEKAT (SEMUA SEKOLAH, TERMASUK FAVORIT) =====
+// ===== MAPPING KELURAHAN → SMPN TERDEKAT (BERDASARKAN LOKASI FISIK SEKOLAH) =====
+// ✅ Sudah disesuaikan dengan data lokasi sekolah + 4 Kemantren tanpa SMPN
+// ✅ Urutan: Sekolah dalam Kemantren yang sama → Kemantren tetangga → Favorit (jika dekat)
 window.KELURAHAN_SMPN_HINT = {
-  "Tegalpanggung": ["SMPN1", "SMPN2", "SMPN11", "SMPN16"],
-  "Suryatmajan": ["SMPN1", "SMPN2", "SMPN14", "SMPN16"],
-  "Bausasran": ["SMPN1", "SMPN2", "SMPN11", "SMPN14"],
-  "Pringgokusuman": ["SMPN3", "SMPN7", "SMPN12", "SMPN1"],
-  "Sosromenduran": ["SMPN3", "SMPN7", "SMPN12", "SMPN1"],
-  "Baciro": ["SMPN2", "SMPN14", "SMPN16", "SMPN1"],
-  "Demangan": ["SMPN1", "SMPN2", "SMPN14", "SMPN16"],
-  "Kotabaru": ["SMPN1", "SMPN2", "SMPN14", "SMPN16"],
-  "Klitren": ["SMPN1", "SMPN2", "SMPN14", "SMPN16"],
-  "Terban": ["SMPN1", "SMPN2", "SMPN7", "SMPN16"],
-  "Prawirodirjan": ["SMPN3", "SMPN7", "SMPN12", "SMPN1"],
-  "Ngupasan": ["SMPN3", "SMPN6", "SMPN13", "SMPN1"],
-  "Bumijo": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"],
-  "Gowongan": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"],
-  "Cokrodiningratan": ["SMPN3", "SMPN7", "SMPN12", "SMPN1"],
-  "Rejowinangun": ["SMPN4", "SMPN9", "SMPN10", "SMPN5"],
-  "Prenggan": ["SMPN4", "SMPN5", "SMPN9", "SMPN10"],
-  "Purbayan": ["SMPN4", "SMPN5", "SMPN9", "SMPN10"],
-  "Kadipaten": ["SMPN3", "SMPN6", "SMPN13", "SMPN1"],
-  "Patehan": ["SMPN3", "SMPN6", "SMPN15", "SMPN1"],
-  "Panembahan": ["SMPN6", "SMPN13", "SMPN15", "SMPN3"],
-  "Mantrijeron": ["SMPN6", "SMPN13", "SMPN15", "SMPN3"],
-  "Suryodiningratan": ["SMPN6", "SMPN13", "SMPN15", "SMPN3"],
-  "Gedongkiwo": ["SMPN6", "SMPN13", "SMPN15", "SMPN3"],
-  "Wirogunan": ["SMPN6", "SMPN9", "SMPN13", "SMPN4"],
-  "Keparakan": ["SMPN6", "SMPN9", "SMPN13", "SMPN4"],
-  "Brontokusuman": ["SMPN6", "SMPN9", "SMPN13", "SMPN4"],
-  "Ngampilan": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"],
-  "Notoprajan": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"],
-  "Gunungketur": ["SMPN2", "SMPN4", "SMPN9", "SMPN1"],
-  "Purwokinanti": ["SMPN2", "SMPN4", "SMPN9", "SMPN1"],
+  // ===== GONDOKUSUMAN (Ada SMPN 1, 5, 8 - Favorit Cluster) =====
+  "Tegalpanggung": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
+  "Suryatmajan": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
+  "Bausasran": ["SMPN4", "SMPN15", "SMPN8", "SMPN1", "SMPN2", "SMPN5"], // Bausasran dekat Danurejan
+  "Baciro": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
+  "Demangan": ["SMPN1", "SMPN5", "SMPN8"],
+  "Kotabaru": ["SMPN5", "SMPN1", "SMPN8", "SMPN2"],
+  "Klitren": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
+  "Terban": ["SMPN1", "SMPN8", "SMPN5"], // SMPN1 & SMPN8 di Terban
+  
+  // ===== GEDONGTENGEN (Ada SMPN 3) =====
+  "Pringgokusuman": ["SMPN3", "SMPN2", "SMPN12", "SMPN5"],
+  "Sosromenduran": ["SMPN3", "SMPN2", "SMPN12", "SMPN5"], // SMPN3 di Sosromenduran
+  
+  // ===== GONDOMANAN (Ada SMPN 2) =====
+  "Prawirodirjan": ["SMPN2", "SMPN3", "SMPN5", "SMPN12"], // SMPN2 di Prawirodirjan
+  "Ngupasan": ["SMPN2", "SMPN3", "SMPN13", "SMPN5"],
+  
+  // ===== JETIS (Ada SMPN 6, 12, 14) =====
+  "Bumijo": ["SMPN12", "SMPN14", "SMPN6", "SMPN7", "SMPN5"], // SMPN12 & SMPN14 di Bumijo
+  "Gowongan": ["SMPN12", "SMPN14", "SMPN6", "SMPN7", "SMPN5"],
+  "Cokrodiningratan": ["SMPN6", "SMPN12", "SMPN14", "SMPN7"], // SMPN6 di Cokrodiningratan
+  
+  // ===== TEGALREJO (Ada SMPN 7, 11) =====
+  "Tegalrejo": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"], // SMPN7 di Tegalrejo
   "Kricak": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"],
-  "Karangwaru": ["SMPN7", "SMPN11", "SMPN14", "SMPN3"],
-  "Tegalrejo": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"],
-  "Bener": ["SMPN7", "SMPN11", "SMPN14", "SMPN3"],
-  "Semaki": ["SMPN4", "SMPN5", "SMPN9", "SMPN10"],
-  "Warungboto": ["SMPN4", "SMPN5", "SMPN9", "SMPN10"],
-  "Pandeyan": ["SMPN4", "SMPN5", "SMPN9", "SMPN10"],
-  "Sorosutan": ["SMPN5", "SMPN8", "SMPN10", "SMPN4"],
-  "Giwangan": ["SMPN4", "SMPN5", "SMPN10", "SMPN9"],
-  "Muja-Muju": ["SMPN4", "SMPN5", "SMPN9", "SMPN10"],
-  "Tahunan": ["SMPN4", "SMPN5", "SMPN9", "SMPN10"],
-  "Wirobrajan": ["SMPN3", "SMPN6", "SMPN7", "SMPN1"],
-  "Patangpuluhan": ["SMPN3", "SMPN7", "SMPN12", "SMPN1"],
-  "Pakuncen": ["SMPN3", "SMPN6", "SMPN7", "SMPN1"]
+  "Karangwaru": ["SMPN11", "SMPN7", "SMPN12", "SMPN3"], // SMPN11 di Karangwaru
+  "Bener": ["SMPN7", "SMPN11", "SMPN12", "SMPN3"],
+  
+  // ===== DANUREJAN (Ada SMPN 4, 15) =====
+  "Bausasran": ["SMPN4", "SMPN15", "SMPN1", "SMPN5", "SMPN2"], // SMPN4 & SMPN15 di Bausasran
+  
+  // ===== KRATON (Ada SMPN 16) =====
+  "Kadipaten": ["SMPN16", "SMPN3", "SMPN13", "SMPN2"], // SMPN16 di Kadipaten
+  "Patehan": ["SMPN16", "SMPN13", "SMPN3", "SMPN6", "SMPN2"],
+  "Panembahan": ["SMPN13", "SMPN16", "SMPN3", "SMPN6", "SMPN2"],
+  
+  // ===== MANTRIJERON (Ada SMPN 13) =====
+  "Mantrijeron": ["SMPN13", "SMPN6", "SMPN15", "SMPN9", "SMPN2"], // SMPN13 di Suryodiningratan (Mantrijeron)
+  "Suryodiningratan": ["SMPN13", "SMPN6", "SMPN15", "SMPN9", "SMPN2"],
+  "Gedongkiwo": ["SMPN13", "SMPN6", "SMPN15", "SMPN9", "SMPN2"],
+  
+  // ===== KOTAGEDE (Ada SMPN 9) =====
+  "Rejowinangun": ["SMPN9", "SMPN10", "SMPN4", "SMPN5"],
+  "Prenggan": ["SMPN9", "SMPN10", "SMPN4", "SMPN5"], // SMPN9 di Prenggan
+  "Purbayan": ["SMPN9", "SMPN10", "SMPN4", "SMPN5"],
+  
+  // ===== UMBULHARJO (Ada SMPN 10) =====
+  "Sorosutan": ["SMPN10", "SMPN9", "SMPN4", "SMPN5"], // SMPN10 di Sorosutan
+  "Giwangan": ["SMPN10", "SMPN9", "SMPN4", "SMPN5"],
+  "Semaki": ["SMPN10", "SMPN9", "SMPN13", "SMPN4"],
+  "Warungboto": ["SMPN10", "SMPN9", "SMPN4", "SMPN5"],
+  "Pandeyan": ["SMPN10", "SMPN9", "SMPN13", "SMPN4"],
+  "Muja-Muju": ["SMPN10", "SMPN9", "SMPN13", "SMPN4"],
+  "Tahunan": ["SMPN10", "SMPN9", "SMPN4", "SMPN5"],
+  
+  // ===== MERGANGSAN (TIDAK ADA SMPN) → Arahkan ke Umbulharjo/Mantrijeron =====
+  "Wirogunan": ["SMPN10", "SMPN13", "SMPN9", "SMPN6"],
+  "Keparakan": ["SMPN10", "SMPN13", "SMPN9", "SMPN6"],
+  "Brontokusuman": ["SMPN10", "SMPN13", "SMPN9", "SMPN6"],
+  
+  // ===== PAKUALAMAN (TIDAK ADA SMPN) → Arahkan ke Danurejan =====
+  "Gunungketur": ["SMPN4", "SMPN15", "SMPN16", "SMPN2"],
+  "Purwokinanti": ["SMPN4", "SMPN15", "SMPN16", "SMPN2"],
+  
+  // ===== NGAMPILAN (TIDAK ADA SMPN) → Arahkan ke Tegalrejo/Gedongtengen =====
+  "Ngampilan": ["SMPN7", "SMPN11", "SMPN3", "SMPN12", "SMPN2", "SMPN5"],
+  "Notoprajan": ["SMPN7", "SMPN11", "SMPN3", "SMPN12", "SMPN2", "SMPN5"],
+  
+  // ===== WIROBRAJAN (TIDAK ADA SMPN) → Arahkan ke Gedongtengen/Tegalrejo =====
+  "Wirobrajan": ["SMPN3", "SMPN7", "SMPN11", "SMPN6"],
+  "Patangpuluhan": ["SMPN3", "SMPN7", "SMPN11", "SMPN6"],
+  "Pakuncen": ["SMPN3", "SMPN7", "SMPN11", "SMPN6"]
 };
 
 // ===== HELPER: TAMPILKAN REKOMENDASI BERDASARKAN KELURAHAN =====
