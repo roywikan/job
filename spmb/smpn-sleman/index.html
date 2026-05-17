@@ -143,7 +143,15 @@
 </div>
 
 <!-- 📦 Load Dependencies (URUTAN PENTING!) -->
-<script src="js/config.js"></script>
+<!-- script src="js/config.js"></script -->
+
+<script>
+  const configScript = document.createElement('script');
+  configScript.src = 'js/config.js?v=' + Date.now();
+  document.head.appendChild(configScript);
+</script>
+
+  
 <script src="data-sleman.js"></script>
 <script src="engine.js"></script>
 <script src="https://job.web.id/smart.js"></script>
