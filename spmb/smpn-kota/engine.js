@@ -36,6 +36,24 @@ const KotaEngine = (function() {
   
   // ===== FUNGSI PREDIKSI UTAMA =====
   function predict(ngDomisili, ngPrestasi, optimism, options = {}) {
+
+      // ✅ Validasi koordinat untuk jalur radius
+  if (options.jalur === 'domisiliRadius' && options.userLat && options.userLng) {
+    const YOGYA_CENTER_LAT = -7.7956;
+    const YOGYA_CENTER_LNG = 110.3695;
+    const MAX_DISTANCE = 15000; // 15 km
+    
+    const distFromCity = window.hitungJarak?.(options.userLat, options.userLng, YOGYA_CENTER_LAT, YOGYA_CENTER_LNG) || 0;
+    
+    if (distFromCity > MAX_DISTANCE) {
+      console.warn('⚠️ Koordinat di luar area Yogyakarta:', distFromCity, 'm');
+      // Return empty results atau tambahkan flag error
+    }
+  }
+
+
+
+    
     const cfg = window.APP_CONFIG;
     if (!cfg?.schools) return { domisili: [], prestasi: [], metadata: { error: 'No config' } };
     
