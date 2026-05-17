@@ -204,7 +204,10 @@ const CONFIG = {
   // Kontak layanan
   hotline_whatsapp: "628112500028",
   hotline_email: "disdik.pendidikan.sleman@gmail.com",
-  call_center: "0274-868512"
+  call_center: "0274-868512",
+    // ✅ BARU: Batas waktu dokumen mutasi
+  sk_mutasi_cutoff: "2025-07-01"  // SK mutasi maksimal 1 Juli 2025
+
 };
 
 // ✅ EKSPOR KE GLOBAL SCOPE (untuk static site tanpa bundler)
