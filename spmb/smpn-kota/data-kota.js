@@ -162,3 +162,64 @@ window.showKelurahanRecommendation = function(kelurahanName) {
   hintEl.innerHTML = html;
   hintEl.style.display = 'block';
 };
+
+
+// ===== MAPPING KELURAHAN → SMPN TERDEKAT (FALLBACK) =====
+window.DATA_WILAYAH_KOTA = {
+  "Danurejan": ["Tegalpanggung", "Suryatmajan", "Bausasran"],
+  "Gedongtengen": ["Pringgokusuman", "Sosromenduran"],
+  "Gondokusuman": ["Baciro", "Demangan", "Kotabaru", "Klitren", "Terban"],
+  "Gondomanan": ["Prawirodirjan", "Ngupasan"],
+  "Jetis": ["Bumijo", "Gowongan", "Cokrodiningratan"],
+  "Kotagede": ["Rejowinangun", "Prenggan", "Purbayan"],
+  "Kraton": ["Kadipaten", "Patehan", "Panembahan"],
+  "Mantrijeron": ["Mantrijeron", "Suryodiningratan", "Gedongkiwo"],
+  "Mergangsan": ["Wirogunan", "Keparakan", "Brontokusuman"],
+  "Ngampilan": ["Ngampilan", "Notoprajan"],
+  "Pakualaman": ["Gunungketur", "Purwokinanti"],
+  "Tegalrejo": ["Kricak", "Karangwaru", "Tegalrejo", "Bener"],
+  "Umbulharjo": ["Semaki", "Warungboto", "Pandeyan", "Sorosutan", "Giwangan", "Muja-Muju", "Tahunan"],
+  "Wirobrajan": ["Wirobrajan", "Patangpuluhan", "Pakuncen"]
+};
+
+window.KELURAHAN_SMPN_HINT = {
+  "Tegalpanggung": ["SMPN2", "SMPN11", "SMPN16"], "Suryatmajan": ["SMPN2", "SMPN14", "SMPN16"],
+  "Bausasran": ["SMPN11", "SMPN2", "SMPN14"], "Pringgokusuman": ["SMPN3", "SMPN7", "SMPN12"],
+  "Sosromenduran": ["SMPN7", "SMPN3", "SMPN12"], "Baciro": ["SMPN2", "SMPN14", "SMPN16"],
+  "Demangan": ["SMPN16", "SMPN2", "SMPN14"], "Kotabaru": ["SMPN16", "SMPN2", "SMPN14"],
+  "Klitren": ["SMPN14", "SMPN2", "SMPN16"], "Terban": ["SMPN16", "SMPN2", "SMPN7"],
+  "Prawirodirjan": ["SMPN3", "SMPN7", "SMPN12"], "Ngupasan": ["SMPN3", "SMPN6", "SMPN13"],
+  "Bumijo": ["SMPN7", "SMPN11", "SMPN12"], "Gowongan": ["SMPN7", "SMPN12", "SMPN11"],
+  "Cokrodiningratan": ["SMPN7", "SMPN3", "SMPN12"], "Rejowinangun": ["SMPN4", "SMPN9", "SMPN10"],
+  "Prenggan": ["SMPN4", "SMPN10", "SMPN9"], "Purbayan": ["SMPN4", "SMPN9", "SMPN10"],
+  "Kadipaten": ["SMPN3", "SMPN6", "SMPN13"], "Patehan": ["SMPN3", "SMPN6", "SMPN15"],
+  "Panembahan": ["SMPN13", "SMPN6", "SMPN15"], "Mantrijeron": ["SMPN6", "SMPN15", "SMPN13"],
+  "Suryodiningratan": ["SMPN6", "SMPN15", "SMPN13"], "Gedongkiwo": ["SMPN15", "SMPN6", "SMPN13"],
+  "Wirogunan": ["SMPN6", "SMPN9", "SMPN13"], "Keparakan": ["SMPN6", "SMPN13", "SMPN9"],
+  "Brontokusuman": ["SMPN6", "SMPN9", "SMPN13"], "Ngampilan": ["SMPN7", "SMPN12", "SMPN11"],
+  "Notoprajan": ["SMPN12", "SMPN7", "SMPN11"], "Gunungketur": ["SMPN4", "SMPN2", "SMPN9"],
+  "Purwokinanti": ["SMPN4", "SMPN9", "SMPN2"], "Kricak": ["SMPN11", "SMPN7", "SMPN12"],
+  "Karangwaru": ["SMPN11", "SMPN14", "SMPN7"], "Tegalrejo": ["SMPN11", "SMPN7", "SMPN12"],
+  "Bener": ["SMPN11", "SMPN14", "SMPN7"], "Semaki": ["SMPN9", "SMPN4", "SMPN10"],
+  "Warungboto": ["SMPN4", "SMPN9", "SMPN10"], "Pandeyan": ["SMPN9", "SMPN10", "SMPN4"],
+  "Sorosutan": ["SMPN10", "SMPN4", "SMPN8"], "Giwangan": ["SMPN10", "SMPN4", "SMPN9"],
+  "Muja-Muju": ["SMPN10", "SMPN9", "SMPN4"], "Tahunan": ["SMPN4", "SMPN10", "SMPN9"],
+  "Wirobrajan": ["SMPN3", "SMPN7", "SMPN6"], "Patangpuluhan": ["SMPN3", "SMPN12", "SMPN7"],
+  "Pakuncen": ["SMPN3", "SMPN7", "SMPN6"]
+};
+
+window.showKelurahanRecommendation = function(kelurahanName) {
+  const hintEl = document.getElementById('kelurahan-hint');
+  const schools = window.KELURAHAN_SMPN_HINT?.[kelurahanName] || [];
+  if (schools.length === 0 || !hintEl) { hintEl.style.display = 'none'; return; }
+  const pg = window.APP_CONFIG?.passingGrade2025?.domisiliDaerah || {};
+  let html = `<strong>💡 Estimasi Berdasarkan Kelurahan ${kelurahanName}:</strong><br>Sekolah terdekat (selain favorit 1, 5, 8):<br><br>`;
+  schools.forEach((code, idx) => {
+    const schoolData = window.APP_CONFIG?.schools?.find(s => s.code === code);
+    const name = schoolData?.name || code;
+    const pgVal = pg[code] ? pg[code].toFixed(2) : 'N/A';
+    html += `<span style="background:#f0f4ff; padding:4px 8px; border-radius:6px; display:inline-block; margin:4px 0;">${idx+1}. <b>${name}</b> (PG Domisili '25: ${pgVal})</span><br>`;
+  });
+  html += `<br><small style="color:#d97706;">⚠️ Ini hanya panduan awal. Seleksi resmi Jalur Radius tetap menggunakan koordinat RW.</small>`;
+  hintEl.innerHTML = html; hintEl.style.display = 'block';
+};
