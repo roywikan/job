@@ -125,21 +125,64 @@
 
   <div class="section-title">Data Tambahan :</div>
   <div class="checks">
-    <div class="check-item"><label><input type="checkbox" id="nationalAchievement"> Prestasi nasional resmi</label></div>
-    <div class="check-item"><label><input type="checkbox" id="top10Academic"> 10% terbaik di SD asal (Kota)</label></div>
-    <div class="check-item"><label><input type="checkbox" id="ksjps"> Terdaftar di data KSJPS</label></div>
-    <div class="check-item"><label><input type="checkbox" id="disability"> Penyandang disabilitas</label></div>
-    <div class="check-item"><label><input type="checkbox" id="assessment"> Memiliki asesmen UPT Disabilitas</label></div>
-    <div class="check-item"><label><input type="checkbox" id="mutation"> Orang tua mutasi kerja</label></div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="nationalAchievement">
+        <span>Prestasi nasional resmi</span>
+      </label>
+    </div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="top10Academic">
+        <span>10% terbaik di SD asal (Kota)</span>
+      </label>
+    </div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="ksjps">
+        <span>Terdaftar di data KSJPS</span>
+      </label>
+    </div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="disability">
+        <span>Penyandang disabilitas</span>
+      </label>
+    </div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="assessment">
+        <span>Memiliki asesmen UPT Disabilitas</span>
+      </label>
+    </div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="mutation">
+        <span>Orang tua mutasi kerja</span>
+      </label>
+    </div>
     <div class="check-item" id="mutasi-date-group">
-      <label><input type="checkbox" id="mutationCheck"> Tanggal SK Mutasi</label>
+      <label>
+        <input type="checkbox" id="mutationCheck">
+        <span>Tanggal SK Mutasi</span>
+      </label>
       <div id="sk-mutasi-input" style="margin-top:8px;display:none;">
         <input type="date" id="sk-mutasi-date" max="2025-01-01" style="width:100%;padding:8px;border:1px solid #28a745;border-radius:6px;">
         <div class="small" style="color:#856404;margin-top:4px;">⚠️ SK mutasi maksimal 1 Januari 2025</div>
       </div>
     </div>
-    <div class="check-item"><label><input type="checkbox" id="teacherChild"> Anak guru SMPN Kota Yogya</label></div>
-    <div class="check-item"><label><input type="checkbox" id="tkad"> Sudah mengikuti TKAD (wajib untuk luar DIY)</label></div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="teacherChild">
+        <span>Anak guru SMPN Kota Yogya</span>
+      </label>
+    </div>
+    <div class="check-item">
+      <label>
+        <input type="checkbox" id="tkad">
+        <span>Sudah mengikuti TKAD (wajib untuk luar DIY)</span>
+      </label>
+    </div>
   </div>
   
   <button id="btn-analyze" type="button">🔍 Analisis Jalur</button>
@@ -302,13 +345,31 @@ function analyzeStudent() {
   {
     let allowed = true, reasons = [];
     
-    // ✅ VALIDASI KETAT: Hanya KK Kota Yogyakarta yang bisa akses Jalur Radius
+    // ✅ VALIDASI KETAT: Hanya KK Kota Yogyakarta
     if (kk !== 'kota') {
       allowed = false;
       reasons.push('Jalur Domisili Radius <strong>hanya untuk penduduk Kota Yogyakarta</strong> (KK terdaftar di Kota Yogya).');
     }
     
     const isCoordMode = document.querySelector('input[name="locMode"][value="coord"]')?.checked;
+    
+    // ✅ VALIDASI KOORDINAT: Cek apakah koordinat masih dalam area Yogyakarta
+    if (allowed && isCoordMode && userLat && userLng) {
+      // Pusat Kota Yogyakarta (approximate center)
+      const YOGYA_CENTER_LAT = -7.7956;
+      const YOGYA_CENTER_LNG = 110.3695;
+      const MAX_DISTANCE_FROM_CITY = 15000; // 15 km dari pusat kota
+      
+      const distanceFromCity = window.hitungJarak?.(userLat, userLng, YOGYA_CENTER_LAT, YOGYA_CENTER_LNG) || 0;
+      
+      if (distanceFromCity > MAX_DISTANCE_FROM_CITY) {
+        allowed = false;
+        reasons.push(`⚠️ Koordinat Anda berjarak <strong>${(distanceFromCity/1000).toFixed(1)} km</strong> dari pusat Kota Yogyakarta.`);
+        reasons.push('Jalur Domisili Radius hanya untuk penduduk yang berdomisili di wilayah Kota Yogyakarta.');
+        reasons.push(`Silakan gunakan jalur <strong>Prestasi Umum</strong> jika KK Anda di luar Kota Yogyakarta.`);
+      }
+    }
+    
     if (allowed && isCoordMode && (!userLat || !userLng)) {
       allowed = false;
       reasons.push('Koordinat lokasi RW harus diisi untuk jalur radius.');
