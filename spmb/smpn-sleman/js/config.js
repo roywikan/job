@@ -34,6 +34,19 @@ const SCHEDULES = {
     ["Pengumuman", "19 Juni 2026 pukul 08.00", "Sekolah"],
     ["Daftar ulang", "19 Juni 2026 pukul 09.00–11.30", "Sekolah penerima"]
   ],
+
+
+
+
+// Jalur Mutasi (jadwal sama dengan domisili_radius, tapi dipisah agar jelas)
+mutasi: [
+  ["Pengajuan akun", "17–18 Juni 2026", "Online: https://sleman.spmb.id"],
+  ["Verifikasi berkas", "17–18 Juni 2026 pukul 08.00–13.00", "Sekolah tujuan"],
+  ["Pendaftaran", "17–18 Juni 2026 pukul 08.00–14.00", "Online"],
+  ["Pengumuman", "19 Juni 2026 pukul 08.00", "Sekolah"],
+  ["Daftar ulang", "19 Juni 2026 pukul 09.00–11.30", "Sekolah penerima"]
+],
+
   
   // Jalur Prestasi Umum
   prestasi: [
@@ -204,8 +217,7 @@ const CONFIG = {
   // Kontak layanan
   hotline_whatsapp: "628112500028",
   hotline_email: "disdik.pendidikan.sleman@gmail.com",
-  call_center: "0274-868512",
-    // ✅ BARU: Batas waktu dokumen mutasi
+  call_center: "0274-868512",  // ← Koma ditambahkan di sini
   sk_mutasi_cutoff: "2025-07-01"  // SK mutasi maksimal 1 Juli 2025
 
 };
