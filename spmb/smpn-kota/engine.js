@@ -1,13 +1,14 @@
 /**
- * engine.js — AdmissionEngine untuk SPMB SMPN Kota Yogyakarta
+ * engine.js — KotaEngine untuk SPMB SMPN Kota Yogyakarta
  * Pure logic: config + NG → Ranked Schools with Probabilities
  * Zero DOM interaction. Compatible with APP_CONFIG structure.
+ * ✅ FINAL: validateRadiusAccess terintegrasi dalam IIFE
  */
 
 const KotaEngine = (function() {
   'use strict';
   
-  // Label fallback
+  // ===== HELPER: LABEL PROBABILITY =====
   function label(prob) {
     const p = typeof prob === 'number' && !isNaN(prob) ? prob : 0;
     if (p > 0.90) return "💚 Sangat Aman";
@@ -18,19 +19,26 @@ const KotaEngine = (function() {
     return "🔥 Sangat Sulit";
   }
   
-  // Logistic probability
+  // ===== HELPER: LOGISTIC PROBABILITY =====
   function probability(margin, sigma) {
     if (typeof sigma !== 'number' || sigma <= 0) sigma = 10;
     if (typeof margin !== 'number' || isNaN(margin)) return 0;
     return 1 / (1 + Math.exp(-margin / sigma));
   }
   
-  // Predict function
+  // ===== VALIDASI AKSES JALUR RADIUS =====
+  // ✅ Hanya KK Kota Yogyakarta + koordinat valid yang boleh akses prediksi radius
+  function validateRadiusAccess(kk, userLat, userLng) {
+    if (kk !== 'kota') return false;
+    if (!userLat || !userLng || isNaN(userLat) || isNaN(userLng)) return false;
+    return true;
+  }
+  
+  // ===== FUNGSI PREDIKSI UTAMA =====
   function predict(ngDomisili, ngPrestasi, optimism, options = {}) {
     const cfg = window.APP_CONFIG;
     if (!cfg?.schools) return { domisili: [], prestasi: [], metadata: { error: 'No config' } };
     
-    const rules = cfg.rules || {};
     const minPrestasi = cfg.CONFIG?.MIN_NG_PRESTASI ?? 200;
     const perfectMargin = typeof optimism === 'number' ? optimism : 10;
     const cap = 25;
@@ -44,7 +52,7 @@ const KotaEngine = (function() {
       const rankRatio = total > 1 ? i / (total - 1) : 0;
       const sigma = 10 + (15 * rankRatio);
       
-      // Adjust passing grade based on rank
+      // Adjust passing grade based on rank (model statistik)
       const factor = 1.014 - (0.14 * Math.pow(rankRatio, 1.5));
       const boost = 1 + (0.03 * (1 - rankRatio));
       const offset = 20 + (10 * rankRatio);
@@ -74,7 +82,7 @@ const KotaEngine = (function() {
         probP = marginP >= perfectMargin ? 1 : probability(capped, sigma);
       }
       
-      // Filter by radius if options provided
+      // ✅ Filter by radius if options provided (untuk Jalur Domisili Radius)
       if (options.jalur === 'domisiliRadius' && options.userLat && options.userLng && options.radiusMeter) {
         const coords = window.SMPN_KOTA_COORDS?.[school.code];
         if (coords) {
@@ -112,7 +120,7 @@ const KotaEngine = (function() {
     };
   }
   
-  // Filter schools by radius (standalone)
+  // ===== HELPER: FILTER SEKOLAH BY RADIUS (STANDALONE) =====
   function filterByRadius(predictions, userLat, userLng, maxMeter) {
     if (!userLat || !userLng || !maxMeter) return predictions;
     return predictions.filter(pred => {
@@ -123,9 +131,14 @@ const KotaEngine = (function() {
     });
   }
   
+  // ===== EXPORT PUBLIC API =====
   return {
     predict,
     filterByRadius,
+    validateRadiusAccess,  // ✅ Sekarang bisa dipanggil: KotaEngine.validateRadiusAccess(kk, lat, lng)
     label
   };
 })();
+
+// ✅ Logging untuk debug
+console.log('✅ KotaEngine loaded:', typeof KotaEngine.predict === 'function' ? 'OK' : 'ERROR');
