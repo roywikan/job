@@ -116,6 +116,21 @@
     <div class="check-item"><label><input type="checkbox" id="nationalAchievement"> Prestasi nasional resmi</label></div>
     <div class="check-item"><label><input type="checkbox" id="regionalAchievement"> Prestasi mewakili Sleman</label></div>
     <div class="check-item"><label><input type="checkbox" id="mutation"> Orang tua mutasi kerja</label></div>
+
+    <!-- Setelah checkbox "Orang tua mutasi kerja" -->
+<div class="check-item" id="mutasi-date-group">
+  <label><input type="checkbox" id="mutation"> Orang tua mutasi kerja</label>
+  <div id="sk-mutasi-input" style="margin-top:10px;display:none;">
+    <label style="font-size:14px;color:#155724;">📄 Tanggal SK Mutasi:</label>
+    <input type="date" id="sk-mutasi-date" max="2025-07-01" style="width:100%;padding:8px;border:2px solid #28a745;border-radius:6px;">
+    <div class="small" style="color:#856404;margin-top:4px;">
+      ⚠️ SK mutasi maksimal diterbitkan 1 Juli 2025 sesuai juknis
+    </div>
+  </div>
+</div>
+
+
+    
     <div class="check-item"><label><input type="checkbox" id="teacherChild"> Anak guru</label></div>
     <div class="check-item"><label><input type="checkbox" id="tkad"> Sudah mengikuti TKAD</label></div>
   </div>
@@ -134,7 +149,15 @@
 <script src="https://job.web.id/smart.js"></script>
 
 <script>
-// ================= DROPDOWN DOMISILI =================
+// Show/hide input tanggal SK mutasi
+document.getElementById('mutation')?.addEventListener('change', function() {
+  const skMutasiInput = document.getElementById('sk-mutasi-input');
+  if (skMutasiInput) {
+    skMutasiInput.style.display = this.checked ? 'block' : 'none';
+  }
+});
+  
+  // ================= DROPDOWN DOMISILI =================
 function extractDomisiliData(){
   const kepanewonanSet=new Set();
   const kalurahanByKepanewonan={};
@@ -585,14 +608,68 @@ function analyzeStudent(){
   }
 
   
-  // MUTASI
-  {
-    let allowed = true, reasons = [];
-    if(!(mutation || teacherChild)){ allowed = false; reasons.push('Tidak memiliki syarat mutasi atau anak guru.'); }
-    if(sdOrigin === 'outsideDIY' && !tkad){ allowed = false; reasons.push('Lulusan luar DIY wajib TKAD.'); }
-    if(allowed){ reasons.push('Siswa memenuhi syarat jalur Mutasi.'); }
-    output += routeCard('Jalur Mutasi',allowed,reasons,'Hanya 1 sekolah.',['Anak guru hanya boleh memilih sekolah tempat orang tua bertugas.','Pastikan SK mutasi masih berlaku.'],['SK mutasi','SK guru','KK','Akta lahir','Hasil TKA/TKAD'],APP_CONFIG.SCHEDULES.domisili);
+  // ================= MUTASI =================
+{
+  let allowed = true, reasons = [];
+  
+  // Validasi syarat mutasi
+  if(!(mutation || teacherChild)){ 
+    allowed = false; 
+    reasons.push('Tidak memiliki syarat mutasi atau anak guru.'); 
+  } else {
+    if(mutation) {
+      // ✅ VALIDASI TANGGAL SK MUTASI (PAKAI CONFIG!)
+      const skMutasiDate = document.getElementById('sk-mutasi-date')?.value;
+      const cutoffDate = APP_CONFIG?.CONFIG?.sk_mutasi_cutoff || '2025-07-01';
+      
+      if(!skMutasiDate) {
+        allowed = false;
+        reasons.push('Tanggal SK mutasi harus diisi.');
+      } else if(skMutasiDate > cutoffDate) {
+        allowed = false;
+        reasons.push(`SK mutasi diterbitkan ${new Date(skMutasiDate).toLocaleDateString('id-ID')}, melebihi batas maksimal ${new Date(cutoffDate).toLocaleDateString('id-ID')} (1 Juli 2025).`);
+      } else {
+        reasons.push('Orang tua memiliki surat keputusan mutasi yang valid.');
+        reasons.push(`<small style="color:#28a745">✓ SK mutasi diterbitkan ${new Date(skMutasiDate).toLocaleDateString('id-ID')} (masih berlaku)</small>`);
+      }
+    }
+    if(teacherChild) {
+      reasons.push('Anak guru (dibuktikan dengan SK pengangkatan guru).');
+    }
   }
+  
+  // Untuk siswa luar DIY, wajib TKAD
+  if(sdOrigin === 'outsideDIY' && !tkad){ 
+    allowed = false; 
+    reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); 
+  }
+  
+  if(allowed){ 
+    reasons.push('Siswa memenuhi syarat jalur Mutasi.'); 
+  }
+  
+  // ✅ GUNAKAN APP_CONFIG.SCHEDULES.mutasi (bukan domisili_radius)
+  output += routeCard('Jalur Mutasi',allowed,reasons,'Hanya 1 sekolah.',
+    ['Anak guru hanya boleh memilih sekolah tempat orang tua bertugas.',
+     'Pastikan SK mutasi masih berlaku (maksimal 1 Juli 2025).'],
+    ['SK mutasi','SK guru','KK','Akta lahir','Hasil TKA/TKAD'],
+    APP_CONFIG.SCHEDULES.mutasi);  // ✅ Sekarang pakai schedule mutasi yang benar
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   
   // TKAD LUAR DAERAH INFO
   if(sdOrigin === 'outsideDIY'){ output += `<div class="card"><h2>Kegiatan Tambahan Wajib: TKAD</h2><p>Karena siswa berasal dari SD luar DIY, maka wajib mengikuti TKAD untuk jalur tertentu.</p>${buildTimeline(APP_CONFIG.SCHEDULES.tkad)}</div>`; }
