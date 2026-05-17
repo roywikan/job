@@ -147,7 +147,6 @@ window.showKelurahanRecommendation = function(kelurahanName) {
     const name = schoolData?.name || code;
     const pgVal = pg[code] ? pg[code].toFixed(2) : 'N/A';
     
-    // Tambahkan badge ⭐ untuk sekolah favorit
     const favBadge = FAVORITES.includes(code) 
       ? ' <span style="background:#fbbf24;color:#78350f;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:bold;">⭐</span>' 
       : '';
@@ -157,7 +156,10 @@ window.showKelurahanRecommendation = function(kelurahanName) {
     </span><br>`;
   });
   
-  html += `<br><small style="color:#d97706;">⚠️ Ini hanya panduan awal. Seleksi resmi Jalur Radius tetap menggunakan koordinat RW.</small>`;
+  // ✅ DISCLAIMER DITAMBAHKAN DI SINI (Sebagai penutup html string)
+  html += `<br><small style="color:#d97706; margin-top:10px; display:block; border-top:1px solid #fed7aa; padding-top:8px;">
+    ⚠️ Ini hanya panduan awal. Seleksi resmi Jalur Radius tetap menggunakan koordinat RW.
+  </small>`;
   
   hintEl.innerHTML = html; 
   hintEl.style.display = 'block';
