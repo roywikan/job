@@ -2,8 +2,11 @@
  * SPMB SMPN Kota Yogyakarta - Configuration
  * Tahun Ajaran 2026/2027
  * Source: Kepka POS No. 100.3/776 Tahun 2026
- * Arsitektur: Modular (config/engine/UI) — kompatibel GitHub Pages & cPanel
+ * FIX: Helper _jadwal didefinisikan di LUAR APP_CONFIG untuk menghindari error inisialisasi
  */
+
+// ✅ HELPER DI LUAR OBJEK (Aman dari undefined reference)
+const _jadwal = (kegiatan, waktu, lokasi, url) => ({ kegiatan, waktu, lokasi, url });
 
 window.APP_CONFIG = {
   // ===== META =====
@@ -70,74 +73,71 @@ window.APP_CONFIG = {
     }
   },
 
-  // ===== HELPER _jadwal() =====
-  _jadwal: (kegiatan, waktu, lokasi, url) => ({ kegiatan, waktu, lokasi, url }),
-
   // ===== SCHEDULE PER JALUR =====
   SCHEDULES: {
     prestasiKhusus: [
-      window.APP_CONFIG._jadwal("Pengajuan Berkas", "9-10 Juni 2026, 08:00-10:00 WIB", "Disdikpora Kota", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Verifikasi & Token", "9-10 Juni 2026, 08:00-10:00 WIB", "Disdikpora Kota", null),
-      window.APP_CONFIG._jadwal("Pilih Sekolah", "9 Juni 08:00 - 10 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "11 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "11-12 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Pengajuan Berkas", "9-10 Juni 2026, 08:00-10:00 WIB", "Disdikpora Kota", "https://yogya.spmb.id"),
+      _jadwal("Verifikasi & Token", "9-10 Juni 2026, 08:00-10:00 WIB", "Disdikpora Kota", null),
+      _jadwal("Pilih Sekolah", "9 Juni 08:00 - 10 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "11 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "11-12 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     prestasiAkademik: [
-      window.APP_CONFIG._jadwal("Aktivasi Token", "9 Juni 08:00 - 10 Juni 10:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pilih Sekolah", "9 Juni 08:00 - 10 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "11 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "11-12 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Aktivasi Token", "9 Juni 08:00 - 10 Juni 10:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pilih Sekolah", "9 Juni 08:00 - 10 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "11 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "11-12 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     domisiliRadius: [
-      window.APP_CONFIG._jadwal("Pengajuan Akun", "15-17 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Verifikasi Berkas", "15-17 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
-      window.APP_CONFIG._jadwal("Aktivasi & Pilih Sekolah", "17 Juni 08:00 - 18 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "19 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "19 atau 22 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Pengajuan Akun", "15-17 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Verifikasi Berkas", "15-17 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
+      _jadwal("Aktivasi & Pilih Sekolah", "17 Juni 08:00 - 18 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "19 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "19 atau 22 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     domisiliDaerah: [
-      window.APP_CONFIG._jadwal("Pengajuan Akun", "29-30 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Verifikasi Berkas", "29-30 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
-      window.APP_CONFIG._jadwal("Aktivasi & Pilih Sekolah", "29 Juni 08:00 - 1 Juli 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "2 Juli 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "2-3 Juli 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Pengajuan Akun", "29-30 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Verifikasi Berkas", "29-30 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
+      _jadwal("Aktivasi & Pilih Sekolah", "29 Juni 08:00 - 1 Juli 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "2 Juli 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "2-3 Juli 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     afirmasiKSJPS: [
-      window.APP_CONFIG._jadwal("Pengajuan Akun", "29-30 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Verifikasi Berkas", "29-30 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
-      window.APP_CONFIG._jadwal("Aktivasi & Pilih Sekolah", "29 Juni 08:00 - 1 Juli 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "2 Juli 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "2-3 Juli 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Pengajuan Akun", "29-30 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Verifikasi Berkas", "29-30 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
+      _jadwal("Aktivasi & Pilih Sekolah", "29 Juni 08:00 - 1 Juli 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "2 Juli 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "2-3 Juli 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     afirmasiDisabilitas: [
-      window.APP_CONFIG._jadwal("Pengajuan Akun", "15-17 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Verifikasi Berkas", "15-17 Juni 2026, 08:00-14:00 WIB", "UPT Disabilitas Jl. Kol. Sugiyono 9B", null),
-      window.APP_CONFIG._jadwal("Aktivasi & Pilih Sekolah", "17 Juni 08:00 - 18 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "19 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "19 atau 22 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Pengajuan Akun", "15-17 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Verifikasi Berkas", "15-17 Juni 2026, 08:00-14:00 WIB", "UPT Disabilitas Jl. Kol. Sugiyono 9B", null),
+      _jadwal("Aktivasi & Pilih Sekolah", "17 Juni 08:00 - 18 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "19 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "19 atau 22 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     mutasi: [
-      window.APP_CONFIG._jadwal("Pengajuan Berkas", "15-17 Juni 2026, 08:00-10:00 WIB", "Disdikpora Kota", null),
-      window.APP_CONFIG._jadwal("Verifikasi & Token", "15-17 Juni 2026, 08:00-14:00 WIB", "Disdikpora Kota", null),
-      window.APP_CONFIG._jadwal("Aktivasi & Pilih Sekolah", "17 Juni 08:00 - 18 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "19 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "19 atau 22 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Pengajuan Berkas", "15-17 Juni 2026, 08:00-10:00 WIB", "Disdikpora Kota", null),
+      _jadwal("Verifikasi & Token", "15-17 Juni 2026, 08:00-14:00 WIB", "Disdikpora Kota", null),
+      _jadwal("Aktivasi & Pilih Sekolah", "17 Juni 08:00 - 18 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "19 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "19 atau 22 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     prestasiUmum: [
-      window.APP_CONFIG._jadwal("Pengajuan Akun", "22-23 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Verifikasi Berkas", "22-23 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
-      window.APP_CONFIG._jadwal("Aktivasi & Pilih Sekolah", "22 Juni 08:00 - 24 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Pengumuman", "25 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
-      window.APP_CONFIG._jadwal("Daftar Ulang", "25-26 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
+      _jadwal("Pengajuan Akun", "22-23 Juni 2026, 08:00-10:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Verifikasi Berkas", "22-23 Juni 2026, 08:00-14:00 WIB", "Sekolah Pilihan 1", null),
+      _jadwal("Aktivasi & Pilih Sekolah", "22 Juni 08:00 - 24 Juni 13:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Pengumuman", "25 Juni 2026, 08:00 WIB", "Online", "https://yogya.spmb.id"),
+      _jadwal("Daftar Ulang", "25-26 Juni 2026, 08:00-14:00 WIB", "Sekolah Diterima", null)
     ],
     tkad: [
-      window.APP_CONFIG._jadwal("Pendaftaran TKAD", "10-17 Juni 2026, 08:00-14:00 WIB", "Disdikpora Kota / Online", "https://dindikpora.jogjakota.go.id"),
-      window.APP_CONFIG._jadwal("Pelaksanaan TKAD", "18 Juni 2026, 09:00-10:30 WIB", "Disdikpora Kota", null),
-      window.APP_CONFIG._jadwal("Pengambilan Hasil", "19 Juni 2026, 09:00-14:00 WIB", "Disdikpora Kota", null)
+      _jadwal("Pendaftaran TKAD", "10-17 Juni 2026, 08:00-14:00 WIB", "Disdikpora Kota / Online", "https://dindikpora.jogjakota.go.id"),
+      _jadwal("Pelaksanaan TKAD", "18 Juni 2026, 09:00-10:30 WIB", "Disdikpora Kota", null),
+      _jadwal("Pengambilan Hasil", "19 Juni 2026, 09:00-14:00 WIB", "Disdikpora Kota", null)
     ]
   },
 
-  // ===== PASSING GRADE 2025 (Referensi) =====
+  // ===== PASSING GRADE 2025 =====
   passingGrade2025: {
     prestasiAkademik: { "SMPN1": 272.38, "SMPN2": 263.10, "SMPN3": 172.26, "SMPN4": 249.88, "SMPN5": 285.96, "SMPN6": 257.03, "SMPN7": 243.46, "SMPN8": 282.62, "SMPN9": 267.62, "SMPN10": 230.36, "SMPN11": 218.46, "SMPN12": 229.64, "SMPN13": 199.88, "SMPN14": 198.21, "SMPN15": 180.96, "SMPN16": 235.12 },
     prestasiUmum: { "SMPN1": 275.96, "SMPN2": 269.24, "SMPN3": 227.86, "SMPN4": 264.40, "SMPN5": 282.62, "SMPN6": 266.21, "SMPN7": 257.86, "SMPN8": 278.93, "SMPN9": 267.74, "SMPN10": 250.60, "SMPN11": 239.08, "SMPN12": 244.04, "SMPN13": 226.31, "SMPN14": 233.93, "SMPN15": 232.62, "SMPN16": 254.29 },
@@ -207,5 +207,5 @@ window.APP_CONFIG = {
   }
 };
 
-// Export helper shortcut
-window._jadwal = window.APP_CONFIG._jadwal;
+// Export helper ke global window
+window._jadwal = _jadwal;
