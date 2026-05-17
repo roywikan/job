@@ -85,7 +85,7 @@ window.KELURAHAN_SMPN_HINT = {
   "Tegalpanggung": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
   "Suryatmajan": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
 
-  "Baciro": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
+  "Baciro": ["SMPN1", "SMPN5", "SMPN8", "SMPN4"],
   "Demangan": ["SMPN1", "SMPN5", "SMPN8"],
   "Kotabaru": ["SMPN5", "SMPN1", "SMPN8", "SMPN2"],
   "Klitren": ["SMPN1", "SMPN5", "SMPN8", "SMPN2"],
