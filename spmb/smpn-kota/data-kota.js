@@ -152,7 +152,7 @@ window.showKelurahanRecommendation = function(kelurahanName) {
       : '';
     
     html += `<span style="background:#f0f4ff; padding:4px 8px; border-radius:6px; display:inline-block; margin:4px 0;">
-      ${idx+1}. <b>${name}</b>${favBadge} (PG Domisili '25: ${pgVal})
+      ${idx+1}. <b>${name}</b>${favBadge} (PG Domisili 2025: ${pgVal})
     </span><br>`;
   });
   
