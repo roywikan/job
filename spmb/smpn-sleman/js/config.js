@@ -68,7 +68,7 @@ mutasi: [
   
   // TKAD untuk siswa luar DIY (wajib untuk jalur Prestasi & Mutasi)
   tkad: [
-    ["Pendaftaran TKAD Luar Daerah", "4 Mei – 29 Mei 2026", "Online: https://bit.ly/Daftar-TKAD26"],
+    ["Pendaftaran TKAD Luar Daerah", "4 Mei – 29 Mei 2026", "Online: https://docs.google.com/forms/d/e/1FAIpQLSdehMIx52cRtaCiT_tQXh2WN0-NX3V9_NADOYRkv3PyA8i6hQ/viewform"],
     ["Pelaksanaan TKAD Luar Daerah", "3 Juni 2026 pukul 07.00", "SMP Negeri 1 Sleman"],
     ["Pengumuman TKAD Luar Daerah", "5 Juni 2026", "Grup WhatsApp peserta"]
   ]
