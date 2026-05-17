@@ -342,23 +342,28 @@ function analyzeStudent() {
   }
   
   // ===== DOMISILI RADIUS =====
+  // ===== DOMISILI RADIUS =====
   {
     let allowed = true, reasons = [];
     
-    // ✅ VALIDASI KETAT: Hanya KK Kota Yogyakarta
+    // 1. Validasi KK
     if (kk !== 'kota') {
       allowed = false;
       reasons.push('Jalur Domisili Radius <strong>hanya untuk penduduk Kota Yogyakarta</strong> (KK terdaftar di Kota Yogya).');
     }
     
+    // 2. Validasi Koordinat (Hanya jika mode koordinat aktif)
     const isCoordMode = document.querySelector('input[name="locMode"][value="coord"]')?.checked;
+    if (allowed && isCoordMode && (!userLat || !userLng)) {
+      allowed = false;
+      reasons.push('Koordinat lokasi RW harus diisi untuk jalur radius.');
+    }
     
-    // ✅ VALIDASI KOORDINAT: Cek apakah koordinat masih dalam area Yogyakarta
+    // 3. Validasi Jarak dari Pusat Kota (Anti-fake location)
     if (allowed && isCoordMode && userLat && userLng) {
-      // Pusat Kota Yogyakarta (approximate center)
       const YOGYA_CENTER_LAT = -7.7956;
       const YOGYA_CENTER_LNG = 110.3695;
-      const MAX_DISTANCE_FROM_CITY = 15000; // 15 km dari pusat kota
+      const MAX_DISTANCE_FROM_CITY = 15000; // 15 km
       
       const distanceFromCity = window.hitungJarak?.(userLat, userLng, YOGYA_CENTER_LAT, YOGYA_CENTER_LNG) || 0;
       
@@ -366,20 +371,38 @@ function analyzeStudent() {
         allowed = false;
         reasons.push(`⚠️ Koordinat Anda berjarak <strong>${(distanceFromCity/1000).toFixed(1)} km</strong> dari pusat Kota Yogyakarta.`);
         reasons.push('Jalur Domisili Radius hanya untuk penduduk yang berdomisili di wilayah Kota Yogyakarta.');
-        reasons.push(`Silakan gunakan jalur <strong>Prestasi Umum</strong> jika KK Anda di luar Kota Yogyakarta.`);
       }
     }
-    
-    if (allowed && isCoordMode && (!userLat || !userLng)) {
-      allowed = false;
-      reasons.push('Koordinat lokasi RW harus diisi untuk jalur radius.');
-    }
-    
+
     if (sdOrigin === 'outsideDIY' && !tkadDone) {
       allowed = false;
       reasons.push('Lulusan luar DIY wajib mengikuti TKAD.');
     }
     
+    // ===== CEK HASIL PREDIKSI ENGINE =====
+    // Jika semua syarat input terpenuhi, kita coba hitung sekolahnya.
+    // Jika hasilnya NOL, maka berarti lokasi user memang jauh dari sekolah manapun -> Gagal.
+    let predictionResult = null;
+    if (allowed && typeof KotaEngine?.predict === 'function') {
+      try {
+        predictionResult = KotaEngine.predict(ngDasar, ngPrestasi, calculateAutoOptimisme(ngDasar), {
+          jalur: 'domisiliRadius',
+          userLat, userLng, radiusMeter
+        });
+        
+        // VALIDASI KRUSIAL: Cek apakah ada sekolah yang ditemukan
+        if (!predictionResult.domisili || predictionResult.domisili.length === 0) {
+          allowed = false;
+          reasons.push(`❌ Tidak ditemukan sekolah dalam radius <strong>${radiusMeter} meter</strong>.`);
+          reasons.push('Lokasi RW Anda terlalu jauh dari sekolah manapun. Silakan perbesar radius atau cek koordinat.');
+        }
+      } catch(e) {
+        console.error('Radius predict error:', e);
+        // Jika error, jangan langsung reject, biarkan user lihat hasilnya
+      }
+    }
+
+    // Jika semua lolos (ada sekolah), tampilkan alasan sukses
     if (allowed) {
       if (isCoordMode) {
         reasons.push(`Lokasi: ${userLat?.toFixed(4)}, ${userLng?.toFixed(4)}`);
@@ -392,31 +415,21 @@ function analyzeStudent() {
       reasons.push('Siswa bisa mencoba jalur Domisili Radius.');
     }
     
+    // Render Hasil Radius
     let radiusAnalysis = '';
-    if (allowed && typeof KotaEngine?.predict === 'function') {
-      try {
-        const pred = KotaEngine.predict(ngDasar, ngPrestasi, calculateAutoOptimisme(ngDasar), {
-          jalur: 'domisiliRadius',
-          userLat, userLng, radiusMeter
-        });
-        
-        if (pred.domisili?.length > 0) {
-          radiusAnalysis = `<div class="prediction-section"><h4>🎯 Sekolah dalam Radius ${radiusMeter}m</h4>`;
-          pred.domisili.slice(0, 10).forEach((s, idx) => {
-            const pct = Math.round((s.probD || 0) * 100);
-            const cat = pct >= 80 ? 'aman' : pct >= 60 ? 'moderat' : pct >= 40 ? 'rawan' : 'sulit';
-            const dist = s.distance ? window.formatJarak?.(s.distance) : '';
-            const isFav = ["SMPN1","SMPN5","SMPN8"].includes(s.code) ? ' <span style="background:#fbbf24;color:#78350f;padding:2px 6px;border-radius:4px;font-size:11px;">⭐</span>' : '';
-            radiusAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}${dist ? `<span class="distance-badge">📍 ${dist}</span>` : ''}</span><span class="school-category cat-${cat}">${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginD !== null ? `<div class="school-margin">Margin: ${s.marginD > 0 ? '+' : ''}${s.marginD.toFixed(2)}</div>` : ''}</div>`;
-          });
-          radiusAnalysis += '</div>';
-        } else {
-          radiusAnalysis = '<p class="small">Tidak ada sekolah dalam radius yang dipilih. Coba perbesar radius atau cek koordinat.</p>';
-        }
-      } catch(e) { console.error('Radius predict error:', e); radiusAnalysis = '<p class="small">⚠️ Gagal memuat prediksi radius.</p>'; }
+    if (predictionResult && predictionResult.domisili?.length > 0) {
+      radiusAnalysis = `<div class="prediction-section"><h4>🎯 Sekolah dalam Radius ${radiusMeter}m</h4>`;
+      predictionResult.domisili.slice(0, 10).forEach((s, idx) => {
+        const pct = Math.round((s.probD || 0) * 100);
+        const cat = pct >= 80 ? 'aman' : pct >= 60 ? 'moderat' : pct >= 40 ? 'rawan' : 'sulit';
+        const dist = s.distance ? window.formatJarak?.(s.distance) : '';
+        const isFav = ["SMPN1","SMPN5","SMPN8"].includes(s.code) ? ' <span style="background:#fbbf24;color:#78350f;padding:2px 6px;border-radius:4px;font-size:11px;">⭐</span>' : '';
+        radiusAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}${dist ? `<span class="distance-badge">📍 ${dist}</span>` : ''}</span><span class="school-category cat-${cat}">${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginD !== null ? `<div class="school-margin">Margin: ${s.marginD > 0 ? '+' : ''}${s.marginD.toFixed(2)}</div>` : ''}</div>`;
+      });
+      radiusAnalysis += '</div>';
     }
     
-    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'BELUM MEMENUHI SYARAT'}</div><h2>Jalur Domisili Radius</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Pilih sekolah dengan jarak terdekat dari RW Anda.</li><li>Hanya boleh memilih <strong>1 sekolah</strong>.</li><li>Prioritas: jarak terdekat → urutan pilihan → waktu aktivasi.</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>Kartu Keluarga (minimal 1 tahun)</li><li>Akta kelahiran</li><li>Surat keterangan lulus SD</li><li>Sertifikat Hasil TKA & TKAD (lulusan 2026)</li><li>Surat pernyataan domisili</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.domisiliRadius)}` : ''}</div>${radiusAnalysis}`;
+    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'TIDAK BISA MENDAFTAR'}</div><h2>Jalur Domisili Radius</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Pilih sekolah dengan jarak terdekat dari RW Anda.</li><li>Hanya boleh memilih <strong>1 sekolah</strong>.</li><li>Prioritas: jarak terdekat → urutan pilihan → waktu aktivasi.</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>Kartu Keluarga (minimal 1 tahun)</li><li>Akta kelahiran</li><li>Surat keterangan lulus SD</li><li>Sertifikat Hasil TKA & TKAD (lulusan 2026)</li><li>Surat pernyataan domisili</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.domisiliRadius)}` : ''}</div>${radiusAnalysis}`;
   }
   
   // ===== DOMISILI DAERAH =====
