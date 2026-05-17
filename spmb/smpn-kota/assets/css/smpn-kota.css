@@ -1,0 +1,105 @@
+/* smpn-kota.css — Component overrides untuk SPMB Kota */
+
+/* Coordinate input styling */
+.coord-input-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 10px 0;
+}
+@media (max-width: 600px) {
+  .coord-input-group { grid-template-columns: 1fr; }
+}
+
+/* Distance badge */
+.distance-badge {
+  background: #2196F3;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+/* School card in prediction */
+.school-card {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 8px 0;
+  border-left: 4px solid #28a745;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.school-card.rawan { border-left-color: #fd7e14; }
+.school-card.sulit { border-left-color: #dc3545; }
+
+.school-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.school-title { font-weight: 600; font-size: 1rem; }
+.school-category {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.cat-aman { background: #d4edda; color: #155724; }
+.cat-moderat { background: #fff3cd; color: #856404; }
+.cat-rawan { background: #ffe5d0; color: #c65a00; }
+.cat-sulit { background: #f8d7da; color: #721c24; }
+
+.school-margin {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Geo hint */
+.geo-hint {
+  background: #e3f2fd;
+  border-left: 3px solid #2196F3;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin: 10px 0;
+  font-size: 0.9rem;
+}
+
+/* Toggle location button */
+.btn-geo {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-geo:hover { background: #1976D2; }
+
+/* Result section */
+#result .route h3 {
+  margin: 16px 0 10px;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+#result .route ul {
+  padding-left: 18px;
+  margin: 8px 0;
+}
+#result .route li {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+/* Affiliate modal override */
+#spo-modal-container {
+  z-index: 1000;
+}
