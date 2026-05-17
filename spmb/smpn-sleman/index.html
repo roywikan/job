@@ -392,7 +392,32 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 // ================= LOGIKA APLIKASI UTAMA =================
-function buildTimeline(items){return`<div class="timeline">${items.map(i=>`<div class="timeline-item"><b>${i[0]}</b><br>Waktu: ${i[1]}<br>Lokasi: ${i[2]}</div>`).join("")}</div>`}
+//function buildTimeline(items){return`<div class="timeline">${items.map(i=>`<div class="timeline-item"><b>${i[0]}</b><br>Waktu: ${i[1]}<br>Lokasi: ${i[2]}</div>`).join("")}</div>`}
+
+
+function buildTimeline(items) {
+  return `<div class="timeline">${items.map(item => {
+    const kegiatan = item[0] || item.kegiatan;
+    const waktu = item[1] || item.waktu;
+    const lokasi = item[2] || item.lokasi;
+    const url = item[3] || item.url;
+    
+    // Buat lokasi menjadi clickable jika ada URL
+    const lokasiHTML = url 
+      ? `<a href="${url}" target="_blank" style="color:#007bff;text-decoration:underline;">${lokasi}</a>`
+      : lokasi;
+    
+    return `<div class="timeline-item">
+      <b>${kegiatan}</b><br>
+      Waktu: ${waktu}<br>
+      Lokasi: ${lokasiHTML}
+    </div>`;
+  }).join("")}</div>`;
+}
+
+
+
+  
 function routeCard(title,allowed,reasons,schools,strategy,docs,schedule){return`<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'BELUM MEMENUHI SYARAT'}</div><h2>${title}</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Pilihan Sekolah</h3><div>${schools}</div><h3>Cara Memilih Sekolah</h3><ul>${strategy.map(s=>`<li>${s}</li>`).join('')}</ul><h3>Dokumen yang Harus Disiapkan</h3><ul>${docs.map(d=>`<li>${d}</li>`).join('')}</ul><h3>Jadwal & Kegiatan</h3>${buildTimeline(schedule)}`:''}</div>`}
 
 function analyzeStudent(){
