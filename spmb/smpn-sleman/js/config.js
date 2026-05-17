@@ -19,58 +19,194 @@ const OPTIMISME_LABEL = {
 const SCHEDULES = {
   // Jalur Prestasi Khusus & Daerah (sama jadwalnya)
   khusus: [
-    ["Pengajuan akun", "9–10 Juni 2026", "Online: https://sleman.spmb.id"],
-    ["Verifikasi berkas", "9–10 Juni 2026 pukul 08.00–13.00", "Sekolah tujuan pertama"],
-    ["Pendaftaran", "9–10 Juni 2026 pukul 08.00–14.00", "Online"],
-    ["Pengumuman", "11 Juni 2026 pukul 08.00", "Sekolah"],
-    ["Daftar ulang", "11 Juni 2026 pukul 09.00–11.30", "Sekolah penerima"]
+    {
+      kegiatan: "Pengajuan akun",
+      waktu: "9–10 Juni 2026",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Verifikasi berkas",
+      waktu: "9–10 Juni 2026 pukul 08.00–13.00",
+      lokasi: "Sekolah tujuan pertama",
+      url: null
+    },
+    {
+      kegiatan: "Pendaftaran",
+      waktu: "9–10 Juni 2026 pukul 08.00–14.00",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Pengumuman",
+      waktu: "11 Juni 2026 pukul 08.00",
+      lokasi: "Sekolah",
+      url: null
+    },
+    {
+      kegiatan: "Daftar ulang",
+      waktu: "11 Juni 2026 pukul 09.00–11.30",
+      lokasi: "Sekolah penerima",
+      url: null
+    }
   ],
   
   // Jalur Domisili Radius, Afirmasi, Mutasi (sama jadwalnya)
   domisili_radius: [
-    ["Pengajuan akun", "17–18 Juni 2026", "Online: https://sleman.spmb.id"],
-    ["Verifikasi berkas", "17–18 Juni 2026 pukul 08.00–13.00", "Sekolah tujuan"],
-    ["Pendaftaran", "17–18 Juni 2026 pukul 08.00–14.00", "Online"],
-    ["Pengumuman", "19 Juni 2026 pukul 08.00", "Sekolah"],
-    ["Daftar ulang", "19 Juni 2026 pukul 09.00–11.30", "Sekolah penerima"]
+    {
+      kegiatan: "Pengajuan akun",
+      waktu: "17–18 Juni 2026",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Verifikasi berkas",
+      waktu: "17–18 Juni 2026 pukul 08.00–13.00",
+      lokasi: "Sekolah tujuan",
+      url: null
+    },
+    {
+      kegiatan: "Pendaftaran",
+      waktu: "17–18 Juni 2026 pukul 08.00–14.00",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Pengumuman",
+      waktu: "19 Juni 2026 pukul 08.00",
+      lokasi: "Sekolah",
+      url: null
+    },
+    {
+      kegiatan: "Daftar ulang",
+      waktu: "19 Juni 2026 pukul 09.00–11.30",
+      lokasi: "Sekolah penerima",
+      url: null
+    }
   ],
 
-
-
-
-// Jalur Mutasi (jadwal sama dengan domisili_radius, tapi dipisah agar jelas)
-mutasi: [
-  ["Pengajuan akun", "17–18 Juni 2026", "Online: https://sleman.spmb.id"],
-  ["Verifikasi berkas", "17–18 Juni 2026 pukul 08.00–13.00", "Sekolah tujuan"],
-  ["Pendaftaran", "17–18 Juni 2026 pukul 08.00–14.00", "Online"],
-  ["Pengumuman", "19 Juni 2026 pukul 08.00", "Sekolah"],
-  ["Daftar ulang", "19 Juni 2026 pukul 09.00–11.30", "Sekolah penerima"]
-],
-
+  // Jalur Mutasi (jadwal sama dengan domisili_radius, tapi dipisah agar jelas)
+  mutasi: [
+    {
+      kegiatan: "Pengajuan akun",
+      waktu: "17–18 Juni 2026",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Verifikasi berkas",
+      waktu: "17–18 Juni 2026 pukul 08.00–13.00",
+      lokasi: "Sekolah tujuan",
+      url: null
+    },
+    {
+      kegiatan: "Pendaftaran",
+      waktu: "17–18 Juni 2026 pukul 08.00–14.00",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Pengumuman",
+      waktu: "19 Juni 2026 pukul 08.00",
+      lokasi: "Sekolah",
+      url: null
+    },
+    {
+      kegiatan: "Daftar ulang",
+      waktu: "19 Juni 2026 pukul 09.00–11.30",
+      lokasi: "Sekolah penerima",
+      url: null
+    }
+  ],
   
   // Jalur Prestasi Umum
   prestasi: [
-    ["Pengajuan akun", "23–24 Juni 2026", "Online: https://sleman.spmb.id"],
-    ["Verifikasi berkas", "23–24 Juni 2026 pukul 08.00–13.00", "Sekolah pilihan pertama"],
-    ["Pendaftaran", "23–24 Juni 2026 pukul 08.00–14.00", "Online"],
-    ["Pengumuman", "25 Juni 2026 pukul 08.00", "Sekolah"],
-    ["Daftar ulang", "25 Juni 2026 pukul 09.00–13.00", "Sekolah penerima"]
+    {
+      kegiatan: "Pengajuan akun",
+      waktu: "23–24 Juni 2026",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Verifikasi berkas",
+      waktu: "23–24 Juni 2026 pukul 08.00–13.00",
+      lokasi: "Sekolah pilihan pertama",
+      url: null
+    },
+    {
+      kegiatan: "Pendaftaran",
+      waktu: "23–24 Juni 2026 pukul 08.00–14.00",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Pengumuman",
+      waktu: "25 Juni 2026 pukul 08.00",
+      lokasi: "Sekolah",
+      url: null
+    },
+    {
+      kegiatan: "Daftar ulang",
+      waktu: "25 Juni 2026 pukul 09.00–13.00",
+      lokasi: "Sekolah penerima",
+      url: null
+    }
   ],
   
   // ✅ BARU: Jalur Domisili Wilayah (jadwal berbeda!)
   domisili_wilayah: [
-    ["Pengajuan akun", "23–25 Juni 2026", "Online: https://sleman.spmb.id"],
-    ["Verifikasi berkas", "23–25 Juni 2026 pukul 08.00–13.00", "Sekolah pilihan pertama"],
-    ["Pendaftaran", "23–25 Juni 2026 pukul 08.00–14.00", "Online"],
-    ["Pengumuman", "26 Juni 2026 pukul 08.00", "Sekolah"],
-    ["Daftar ulang", "26 Juni 2026 pukul 08.00–11.00", "Sekolah penerima"]
+    {
+      kegiatan: "Pengajuan akun",
+      waktu: "23–25 Juni 2026",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Verifikasi berkas",
+      waktu: "23–25 Juni 2026 pukul 08.00–13.00",
+      lokasi: "Sekolah pilihan pertama",
+      url: null
+    },
+    {
+      kegiatan: "Pendaftaran",
+      waktu: "23–25 Juni 2026 pukul 08.00–14.00",
+      lokasi: "Online",
+      url: "https://sleman.spmb.id"
+    },
+    {
+      kegiatan: "Pengumuman",
+      waktu: "26 Juni 2026 pukul 08.00",
+      lokasi: "Sekolah",
+      url: null
+    },
+    {
+      kegiatan: "Daftar ulang",
+      waktu: "26 Juni 2026 pukul 08.00–11.00",
+      lokasi: "Sekolah penerima",
+      url: null
+    }
   ],
   
   // TKAD untuk siswa luar DIY (wajib untuk jalur Prestasi & Mutasi)
   tkad: [
-    ["Pendaftaran TKAD Luar Daerah", "4 Mei – 29 Mei 2026", "Online: https://docs.google.com/forms/d/e/1FAIpQLSdehMIx52cRtaCiT_tQXh2WN0-NX3V9_NADOYRkv3PyA8i6hQ/viewform"],
-    ["Pelaksanaan TKAD Luar Daerah", "3 Juni 2026 pukul 07.00", "SMP Negeri 1 Sleman"],
-    ["Pengumuman TKAD Luar Daerah", "5 Juni 2026", "Grup WhatsApp peserta"]
+    {
+      kegiatan: "Pendaftaran TKAD Luar Daerah",
+      waktu: "4 Mei – 29 Mei 2026",
+      lokasi: "Online",
+      url: "https://docs.google.com/forms/d/e/1FAIpQLSdehMIx52cRtaCiT_tQXh2WN0-NX3V9_NADOYRkv3PyA8i6hQ/viewform"
+    },
+    {
+      kegiatan: "Pelaksanaan TKAD Luar Daerah",
+      waktu: "3 Juni 2026 pukul 07.00",
+      lokasi: "SMP Negeri 1 Sleman",
+      url: null
+    },
+    {
+      kegiatan: "Pengumuman TKAD Luar Daerah",
+      waktu: "5 Juni 2026",
+      lokasi: "Grup WhatsApp peserta",
+      url: null
+    }
   ]
 };
 
@@ -192,7 +328,10 @@ const PRESTASI_RULES = {
   // Aturan kurasi untuk lomba non-pemerintah
   kurasi_requirement: {
     min_bintang: 3,  // Minimal bintang 3 dari Pusat Prestasi Nasional
-    kurasi_url: "https://kurasi-prestasi.kemendikdasmen.go.id/ dan https://simt.kemendikdasmen.go.id/"
+    kurasi_urls: [
+      "https://kurasi-prestasi.kemendikdasmen.go.id/",
+      "https://simt.kemendikdasmen.go.id/"
+    ]
   }
 };
 
@@ -211,15 +350,19 @@ const CONFIG = {
   
   // Domain & URL resmi
   official_domain: "sleman.spmb.id",
+  official_url: "https://sleman.spmb.id",
   disdik_url: "https://disdik.slemankab.go.id",
   pengajuan_prestasi_url: "https://disdik.slemankab.go.id/prestasi-sleman",
   
   // Kontak layanan
   hotline_whatsapp: "628112500028",
+  hotline_whatsapp_url: "https://wa.me/628112500028",
   hotline_email: "disdik.pendidikan.sleman@gmail.com",
-  call_center: "0274-868512",  // ← Koma ditambahkan di sini
+  hotline_email_url: "mailto:disdik.pendidikan.sleman@gmail.com",
+  call_center: "0274-868512",
+  
+  // ✅ BARU: Batas waktu dokumen mutasi
   sk_mutasi_cutoff: "2025-07-01"  // SK mutasi maksimal 1 Juli 2025
-
 };
 
 // ✅ EKSPOR KE GLOBAL SCOPE (untuk static site tanpa bundler)
