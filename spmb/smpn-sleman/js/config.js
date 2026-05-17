@@ -16,7 +16,7 @@ const OPTIMISME_LABEL = {
 };
 
 // ✅ JADWAL KEGIATAN PER JALUR (sesuai BAB IV Huruf I Juknis 2026)
-const SCHEDULES = {
+const SCHEDULES_OBJ = {
   // Jalur Prestasi Khusus & Daerah (sama jadwalnya)
   khusus: [
     {
@@ -209,6 +209,58 @@ const SCHEDULES = {
     }
   ]
 };
+////////////////////////////////////////////////////////////////////////////////////////////////
+// ✅ JADWAL KEGIATAN PER JALUR (Format Array dengan URL terpisah)
+const SCHEDULES = {
+  khusus: [
+    ["Pengajuan akun", "9–10 Juni 2026", "Online", "https://sleman.spmb.id"],
+    ["Verifikasi berkas", "9–10 Juni 2026 pukul 08.00–13.00", "Sekolah tujuan pertama", null],
+    ["Pendaftaran", "9–10 Juni 2026 pukul 08.00–14.00", "Online", "https://sleman.spmb.id"],
+    ["Pengumuman", "11 Juni 2026 pukul 08.00", "Sekolah", null],
+    ["Daftar ulang", "11 Juni 2026 pukul 09.00–11.30", "Sekolah penerima", null]
+  ],
+  
+  domisili_radius: [
+    ["Pengajuan akun", "17–18 Juni 2026", "Online", "https://sleman.spmb.id"],
+    ["Verifikasi berkas", "17–18 Juni 2026 pukul 08.00–13.00", "Sekolah tujuan", null],
+    ["Pendaftaran", "17–18 Juni 2026 pukul 08.00–14.00", "Online", "https://sleman.spmb.id"],
+    ["Pengumuman", "19 Juni 2026 pukul 08.00", "Sekolah", null],
+    ["Daftar ulang", "19 Juni 2026 pukul 09.00–11.30", "Sekolah penerima", null]
+  ],
+
+  mutasi: [
+    ["Pengajuan akun", "17–18 Juni 2026", "Online", "https://sleman.spmb.id"],
+    ["Verifikasi berkas", "17–18 Juni 2026 pukul 08.00–13.00", "Sekolah tujuan", null],
+    ["Pendaftaran", "17–18 Juni 2026 pukul 08.00–14.00", "Online", "https://sleman.spmb.id"],
+    ["Pengumuman", "19 Juni 2026 pukul 08.00", "Sekolah", null],
+    ["Daftar ulang", "19 Juni 2026 pukul 09.00–11.30", "Sekolah penerima", null]
+  ],
+  
+  prestasi: [
+    ["Pengajuan akun", "23–24 Juni 2026", "Online", "https://sleman.spmb.id"],
+    ["Verifikasi berkas", "23–24 Juni 2026 pukul 08.00–13.00", "Sekolah pilihan pertama", null],
+    ["Pendaftaran", "23–24 Juni 2026 pukul 08.00–14.00", "Online", "https://sleman.spmb.id"],
+    ["Pengumuman", "25 Juni 2026 pukul 08.00", "Sekolah", null],
+    ["Daftar ulang", "25 Juni 2026 pukul 09.00–13.00", "Sekolah penerima", null]
+  ],
+  
+  domisili_wilayah: [
+    ["Pengajuan akun", "23–25 Juni 2026", "Online", "https://sleman.spmb.id"],
+    ["Verifikasi berkas", "23–25 Juni 2026 pukul 08.00–13.00", "Sekolah pilihan pertama", null],
+    ["Pendaftaran", "23–25 Juni 2026 pukul 08.00–14.00", "Online", "https://sleman.spmb.id"],
+    ["Pengumuman", "26 Juni 2026 pukul 08.00", "Sekolah", null],
+    ["Daftar ulang", "26 Juni 2026 pukul 08.00–11.00", "Sekolah penerima", null]
+  ],
+  
+  tkad: [
+    ["Pendaftaran TKAD Luar Daerah", "4 Mei – 29 Mei 2026", "Online", "https://docs.google.com/forms/d/e/1FAIpQLSdehMIx52cRtaCiT_tQXh2WN0-NX3V9_NADOYRkv3PyA8i6hQ/viewform"],
+    ["Pelaksanaan TKAD Luar Daerah", "3 Juni 2026 pukul 07.00", "SMP Negeri 1 Sleman", null],
+    ["Pengumuman TKAD Luar Daerah", "5 Juni 2026", "Grup WhatsApp peserta", null]
+  ]
+};
+
+
+
 
 // ✅ TANGGAL PENTING & DEADLINE (BAB IV Juknis 2026)
 const IMPORTANT_DATES = {
