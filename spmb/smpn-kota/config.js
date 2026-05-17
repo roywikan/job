@@ -11,7 +11,7 @@ const _jadwal = (kegiatan, waktu, lokasi, url) => ({ kegiatan, waktu, lokasi, ur
 window.APP_CONFIG = {
   // ===== META =====
   meta: {
-    title: "Kalkulator SPMB SMPN Kota Yogyakarta 2026",
+    title: "Jalur SPMB SMPN Kota Yogyakarta 2026 Logic System",
     version: "1.0.0",
     lastUpdate: "2026-01-17",
     sourceDoc: "Kepka POS No. 100.3/776 Tahun 2026",
