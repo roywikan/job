@@ -19,8 +19,8 @@
   .hidden { display: none !important; }
   .btn { width: 100%; padding: 12px; background: var(--p); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
   .btn:hover { background: #1e40af; }
-  .checks { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 10px 0; }
-  @media(min-width:600px){ .checks { grid-template-columns: 1fr 1fr; } }
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+  @media(max-width:600px){ .checks { grid-template-columns: 1fr; } }
   .check-item { display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 10px; border-radius: 8px; cursor: pointer; }
   .check-item input { width: auto; margin: 0; }
   .check-item label { margin: 0; font-weight: 500; cursor: pointer; }
@@ -37,6 +37,12 @@
   .prob-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin-top: 4px; }
   .prob-fill { height: 100%; background: linear-gradient(90deg, #22c55e, #10b981); }
   .info-box { background: #eff6ff; border-left: 4px solid var(--p); padding: 10px; margin: 10px 0; border-radius: 6px; }
+  .rapor-toggle { display: flex; gap: 15px; margin: 10px 0; flex-wrap: wrap; }
+  .rapor-toggle label { display: flex; align-items: center; gap: 6px; font-weight: normal; margin: 0; cursor: pointer; }
+  .semester-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 8px; }
+  .semester-grid label { font-size: 0.85rem; text-align: center; margin: 0; }
+  .semester-grid input { text-align: center; padding: 6px; }
+  @media(max-width:600px){ .semester-grid { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
@@ -78,10 +84,25 @@
       <div><label>Prestasi Non-Akademik</label><input type="number" id="prestasi" min="0" max="7.5" step="0.01" value="0"></div>
     </div>
 
-    <div style="margin-top:12px;">
-      <label>📖 Jumlah Rata-rata Rapor (5 Mapel × 5 Sem)</label>
-      <input type="number" id="raporSum" step="0.01" placeholder="Contoh: 425.00">
-      <div class="small">*Isi total rata-rata pengetahuan semester 7-11. (Maks: 500)</div>
+    <div style="margin-top:16px;">
+      <label>📖 Input Nilai Rapor</label>
+      <div class="rapor-toggle">
+        <label><input type="radio" name="raporMode" value="mapel" checked onchange="toggleRapor()"> Sudah hitung rata-rata per mapel</label>
+        <label><input type="radio" name="raporMode" value="semester" onchange="toggleRapor()"> Belum (input nilai per semester)</label>
+      </div>
+      
+      <!-- Mode 1: Rata-rata per Mapel -->
+      <div id="raporMapel" class="grid">
+        <div><label>Agama</label><input type="number" id="rap_agm" step="0.01"></div>
+        <div><label>Pancasila</label><input type="number" id="rap_pnk" step="0.01"></div>
+        <div><label>B. Indonesia</label><input type="number" id="rap_ind" step="0.01"></div>
+        <div><label>Matematika</label><input type="number" id="rap_mtk" step="0.01"></div>
+        <div style="grid-column:1/-1;"><label>IPAS</label><input type="number" id="rap_ipa" step="0.01"></div>
+      </div>
+
+      <!-- Mode 2: Nilai per Semester (5x5 Grid) -->
+      <div id="raporSemester" class="hidden"></div>
+      <div class="small">* Maksimal nilai 100. Sistem akan otomatis menghitung jumlah rata-rata 5 mapel.</div>
     </div>
   </div>
 
@@ -90,6 +111,7 @@
     <div class="checks">
       <div class="check-item"><input type="checkbox" id="optRadius" onchange="toggleFields()"><label for="optRadius">Jalur Domisili Radius</label></div>
       <div class="check-item"><input type="checkbox" id="optDaerah" checked onchange="toggleFields()"><label for="optDaerah">Jalur Domisili Daerah</label></div>
+      <div class="check-item"><input type="checkbox" id="optPrestasiUmum" onchange="toggleFields()"><label for="optPrestasiUmum">Jalur Prestasi Umum</label></div>
       <div class="check-item"><input type="checkbox" id="optMutasi" onchange="toggleFields()"><label for="optMutasi">Jalur Mutasi / Kemaslahatan Guru</label></div>
       <div class="check-item"><input type="checkbox" id="optTKAD" onchange="toggleFields()"><label for="optTKAD">Ikut TKAD Luar DIY</label></div>
       <div class="check-item"><input type="checkbox" id="optAfirmasi" onchange="toggleFields()"><label for="optAfirmasi">Jalur Afirmasi (KSJPS/Disabilitas)</label></div>
@@ -165,9 +187,56 @@ function toggleFields() {
   document.getElementById('lbl3').innerText = is26 ? 'TKAD IPAS' : 'ASPD IPA/S';
 }
 
+// Auto-toggle pathways based on KK
+document.getElementById('kk').addEventListener('change', function() {
+  const kk = this.value;
+  const optRadius = document.getElementById('optRadius');
+  const optDaerah = document.getElementById('optDaerah');
+  const optPrestasiUmum = document.getElementById('optPrestasiUmum');
+  const optAfirmasi = document.getElementById('optAfirmasi');
+  
+  if (kk === 'kota') {
+    optRadius.checked = true;
+    optDaerah.checked = true;
+    optPrestasiUmum.checked = false;
+    optAfirmasi.checked = true;
+  } else {
+    optRadius.checked = false;
+    optDaerah.checked = false;
+    optPrestasiUmum.checked = true; // Otomatis terpilih untuk KK Luar
+    optAfirmasi.checked = false;
+  }
+  toggleFields();
+});
+
 document.getElementById('tahun').addEventListener('change', toggleFields);
-document.getElementById('kk').addEventListener('change', toggleFields);
 document.getElementById('asal').addEventListener('change', toggleFields);
+
+// Toggle Rapor Input Mode
+function toggleRapor() {
+  const mode = document.querySelector('input[name="raporMode"]:checked').value;
+  document.getElementById('raporMapel').classList.toggle('hidden', mode !== 'mapel');
+  document.getElementById('raporSemester').classList.toggle('hidden', mode !== 'semester');
+}
+
+// Generate 5x5 Grid on load
+(function(){
+  const mapels = [
+    {id:'agm', name:'Agama'}, {id:'pnk', name:'Pancasila'}, {id:'ind', name:'B.Indonesia'},
+    {id:'mtk', name:'Matematika'}, {id:'ipa', name:'IPAS'}
+  ];
+  let html = '';
+  mapels.forEach(m => {
+    html += `<div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
+      <strong>${m.name}</strong>
+      <div class="semester-grid">`;
+    for(let s=7; s<=11; s++) {
+      html += `<div><label>S${s}</label><input type="number" id="rap_${m.id}_s${s}" max="100" step="0.01"></div>`;
+    }
+    html += `</div></div>`;
+  });
+  document.getElementById('raporSemester').innerHTML = html;
+})();
 
 // Geolocation
 document.getElementById('btnGeo').addEventListener('click', function() {
@@ -191,6 +260,21 @@ document.getElementById('btnAnalyze').addEventListener('click', function() {
   }, 300);
 });
 
+function hitungRaporSum() {
+  const mode = document.querySelector('input[name="raporMode"]:checked').value;
+  let sum = 0;
+  if(mode === 'mapel') {
+    sum = getVal('rap_agm') + getVal('rap_pnk') + getVal('rap_ind') + getVal('rap_mtk') + getVal('rap_ipa');
+  } else {
+    ['agm','pnk','ind','mtk','ipa'].forEach(m => {
+      let total = 0, count = 0;
+      for(let s=7; s<=11; s++) { const v = getVal(`rap_${m.id}_s${s}`); if(v>0){total+=v; count++;} }
+      sum += (count>0 ? total/count : 0);
+    });
+  }
+  return sum;
+}
+
 function runAnalysis() {
   const kk = document.getElementById('kk').value;
   const asal = document.getElementById('asal').value;
@@ -199,7 +283,7 @@ function runAnalysis() {
   const tes1 = getVal('tes1'), tes2 = getVal('tes2'), tes3 = getVal('tes3');
   const tesSum = tes1 + tes2 + tes3;
   const prestasi = Math.min(getVal('prestasi'), 7.5);
-  const raporSum = getVal('raporSum');
+  const raporSum = hitungRaporSum();
   
   // Rumus Juknis 2026
   const ngDaerah = (tesSum * 0.9) + ((raporSum * 0.6) * 0.1) + prestasi;
@@ -268,7 +352,7 @@ function runAnalysis() {
   }
 
   // ===== 4. PRESTASI UMUM (KK Luar Kota) =====
-  if(kk !== 'kota') {
+  if(document.getElementById('optPrestasiUmum').checked && kk !== 'kota') {
     if(typeof KotaEngine?.predict === 'function') {
       const pred = KotaEngine.predict(ngDaerah, ngPrestasiUmum, 10);
       if(pred.prestasi?.length) {
@@ -306,6 +390,7 @@ function runAnalysis() {
 }
 
 // Init
+document.getElementById('kk').dispatchEvent(new Event('change'));
 toggleFields();
 </script>
 </body>
