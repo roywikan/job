@@ -66,9 +66,15 @@
     <div><label>Nilai TKA</label><input type="number" id="tka" placeholder="Contoh: 145.50" step="0.01"></div>
     <div><label>Nilai TKAD</label><input type="number" id="tkad" placeholder="Contoh: 142.30" step="0.01"></div>
     <div><label>Rata-rata Rapor (5 mapel, 5 semester)</label><input type="number" id="rapor" placeholder="Contoh: 85.50" step="0.01"></div>
-    <div><label>Nilai Gabungan (NG) Dasar</label>
-      <input type="number" id="ng" placeholder="Hitung otomatis atau isi manual" step="0.01" readonly>
-      <div class="small">NG = ((TKA+TKAD)×90%) + (Rapor×0.6×10%)</div>
+    <div>
+      <label>Nilai Gabungan (NG) Dasar</label>
+      <input type="number" id="ng" placeholder="Otomatis dihitung" step="0.01" readonly>
+      <div class="small">
+        💡 Rumus: ((TKA+TKAD)×90%) + (Rapor×0.6×10%) + Prestasi<br>
+        <a href="https://tkatkad.github.io/smp-kota/" target="_blank" rel="noopener">
+          Hitung detail di Kalkulator NG SMP Kota →
+        </a>
+      </div>
     </div>
   </div>
 
@@ -117,7 +123,6 @@
         </div>
       </div>
       <div id="kelurahan-hint" class="geo-hint" style="display:none; margin-top:12px; background:#fffbe6; border-left:4px solid #d97706; padding:12px; border-radius:8px;"></div>
-
     </div>
   </div>
 
@@ -278,7 +283,7 @@ document.getElementById('btn-geo')?.addEventListener('click', function() {
 });
 
 // ================= AUTO-CALCULATE NG =================
-['tka','tkad','rapor'].forEach(id => {
+['tka','tkad','rapor','nilai-prestasi'].forEach(id => {
   document.getElementById(id)?.addEventListener('input', calculateNG);
 });
 
@@ -286,8 +291,15 @@ function calculateNG() {
   const tka = parseFloat(document.getElementById('tka').value) || 0;
   const tkad = parseFloat(document.getElementById('tkad').value) || 0;
   const rapor = parseFloat(document.getElementById('rapor').value) || 0;
+  const prestasi = parseFloat(document.getElementById('nilai-prestasi').value) || 0;
   const lulusan = document.getElementById('graduateYear').value;
-  const ng = window.KotaHelpers?.hitungNG?.({ tka, tkad, raporAvg: rapor, lulusan: lulusan === '2025' ? '2025' : '2026' }) || 0;
+  
+  // Hitung NG Domisili (dengan rapor)
+  const ng = window.KotaHelpers?.hitungNG?.({ 
+    tka, tkad, raporAvg: rapor, prestasi, 
+    lulusan: lulusan === '2025' ? '2025' : '2026' 
+  }) || 0;
+  
   document.getElementById('ng').value = ng.toFixed(2);
   return ng;
 }
@@ -308,8 +320,11 @@ function analyzeStudent() {
   const rapor = parseFloat(document.getElementById('rapor').value) || 0;
   const prestasi = parseFloat(document.getElementById('nilai-prestasi').value) || 0;
   
-  const ngDasar = window.KotaHelpers?.hitungNG?.({ tka, tkad, raporAvg: rapor, prestasi: 0, lulusan: graduateYear === '2025' ? '2025' : '2026' }) || 0;
-  const ngPrestasi = ngDasar + Math.min(prestasi, window.APP_CONFIG?.CONFIG?.MAX_PRESTASI_CAP || 7.50);
+  // Hitung NG per jalur (raw input → kalkulasi internal)
+  const ngDasar = ((tka + tkad) * 0.90) + ((rapor * 0.6) * 0.10); // Tanpa prestasi untuk dasar
+  const ngDomisili = ngDasar + prestasi; // Domisili: +prestasi
+  const ngPrestasiUmum = (tka + tkad) + prestasi; // Prestasi Umum: TANPA rapor!
+  const nilaiPrestasiKhusus = tka + tkad; // Prestasi Khusus Akademik: TANPA rapor & prestige
   
   const userLat = parseFloat(document.getElementById('userLat').value);
   const userLng = parseFloat(document.getElementById('userLng').value);
@@ -339,7 +354,6 @@ function analyzeStudent() {
     return;
   }
   
-  // ===== DOMISILI RADIUS =====
   // ===== DOMISILI RADIUS =====
   {
     let allowed = true, reasons = [];
@@ -378,12 +392,10 @@ function analyzeStudent() {
     }
     
     // ===== CEK HASIL PREDIKSI ENGINE =====
-    // Jika semua syarat input terpenuhi, kita coba hitung sekolahnya.
-    // Jika hasilnya NOL, maka berarti lokasi user memang jauh dari sekolah manapun -> Gagal.
     let predictionResult = null;
     if (allowed && typeof KotaEngine?.predict === 'function') {
       try {
-        predictionResult = KotaEngine.predict(ngDasar, ngPrestasi, calculateAutoOptimisme(ngDasar), {
+        predictionResult = KotaEngine.predict(ngDomisili, ngPrestasiUmum, calculateAutoOptimisme(ngDomisili), {
           jalur: 'domisiliRadius',
           userLat, userLng, radiusMeter
         });
@@ -396,7 +408,6 @@ function analyzeStudent() {
         }
       } catch(e) {
         console.error('Radius predict error:', e);
-        // Jika error, jangan langsung reject, biarkan user lihat hasilnya
       }
     }
 
@@ -435,12 +446,15 @@ function analyzeStudent() {
     let allowed = true, reasons = [];
     if (kk !== 'kota') { allowed = false; reasons.push('Jalur Domisili Daerah wajib KK Kota Yogyakarta.'); }
     if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
-    if (allowed) { reasons.push(`NG Dasar: <strong>${ngDasar.toFixed(2)}</strong>`); reasons.push('Siswa memenuhi syarat Domisili Daerah.'); }
+    if (allowed) { 
+      reasons.push(`NG Dasar: <strong>${ngDomisili.toFixed(2)}</strong>`); 
+      reasons.push('Siswa memenuhi syarat Domisili Daerah.'); 
+    }
     
     let daerahAnalysis = '';
     if (allowed && typeof KotaEngine?.predict === 'function') {
       try {
-        const pred = KotaEngine.predict(ngDasar, ngPrestasi, calculateAutoOptimisme(ngDasar));
+        const pred = KotaEngine.predict(ngDomisili, ngPrestasiUmum, calculateAutoOptimisme(ngDomisili));
         if (pred.domisili?.length > 0) {
           daerahAnalysis = `<div class="prediction-section"><h4>🎯 Prediksi Peluang — Domisili Daerah</h4>`;
           pred.domisili.slice(0, 12).forEach((s, idx) => {
@@ -501,12 +515,15 @@ function analyzeStudent() {
     let allowed = true, reasons = [];
     if (kk === 'kota') { allowed = false; reasons.push('Jalur Prestasi Umum khusus untuk penduduk <strong>luar</strong> Kota Yogyakarta.'); }
     if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
-    if (allowed) { reasons.push(`NG Prestasi: <strong>${ngPrestasi.toFixed(2)}</strong> (termasuk poin prestasi)`); reasons.push('Siswa memenuhi syarat Prestasi Umum.'); }
+    if (allowed) { 
+      reasons.push(`Nilai Seleksi: <strong>${ngPrestasiUmum.toFixed(2)}</strong> (TKA+TKAD + Prestasi, tanpa rapor)`); 
+      reasons.push('Siswa memenuhi syarat Prestasi Umum.'); 
+    }
     
     let prestasiAnalysis = '';
     if (allowed && typeof KotaEngine?.predict === 'function') {
       try {
-        const pred = KotaEngine.predict(ngDasar, ngPrestasi, calculateAutoOptimisme(ngDasar));
+        const pred = KotaEngine.predict(ngDomisili, ngPrestasiUmum, calculateAutoOptimisme(ngDomisili));
         if (pred.prestasi?.length > 0) {
           prestasiAnalysis = `<div class="prediction-section"><h4>🎯 Prediksi Peluang — Prestasi Umum</h4>`;
           pred.prestasi.slice(0, 12).forEach((s, idx) => {
