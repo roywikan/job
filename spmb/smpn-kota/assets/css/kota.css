@@ -299,3 +299,142 @@ th { background: #eff6ff; font-weight: 600; }
   .hero h1 { font-size: 1.5rem; }
   .card { padding: 16px; }
 }
+
+
+
+/************************************baru*********************/
+
+/* assets/css/kota.css */
+:root {
+  --primary: #1d4ed8;
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #111827;
+  --border: #d1d5db;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--primary), #3b82f6);
+  color: white;
+  padding: 30px 20px;
+  border-radius: var(--radius);
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.hero h1 { margin: 0 0 10px; font-size: 1.5rem; }
+.hero p { margin: 0; opacity: 0.9; }
+
+.card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+h2 { margin-top: 0; color: var(--primary); font-size: 1.25rem; }
+
+/* FORM GRID RESPONSIVE */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+@media (min-width: 600px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px; /* Mencegah zoom di iOS */
+  background: #fff;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+}
+
+/* BUTTONS */
+button {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover { background: #1e40af; }
+button:disabled { background: #9ca3af; cursor: not-allowed; }
+
+.btn-geo {
+  background: #059669;
+  margin-top: 10px;
+}
+.btn-geo:hover { background: #047857; }
+
+/* RESULT SECTION */
+.route {
+  border-left: 4px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.route.allowed { border-left-color: #10b981; background: #ecfdf5; }
+.route.denied { border-left-color: #ef4444; background: #fef2f2; }
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.badge.ok { background: #d1fae5; color: #065f46; }
+.badge.no { background: #fee2e2; color: #991b1b; }
+
+.small { font-size: 0.85rem; color: #6b7280; margin-top: 4px; }
+
+.hidden { display: none !important; }
