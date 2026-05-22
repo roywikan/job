@@ -30,64 +30,62 @@
 
 <div class="card">
   <h2>Data Calon Siswa :</h2>
-  <div class="grid">
-    <div><label>Usia pada 1 Juli 2026</label>
-      <select id="age">
-        <option value="">-- Pilih Usia --</option>
-        <option value="10">10 tahun</option>
-        <option value="11">11 tahun</option>
-        <option value="12" selected>12 tahun</option>
-        <option value="13">13 tahun</option>
-        <option value="14">14 tahun</option>
-      </select>
-    </div>
-    <div><label>Tahun Lulus SD</label>
-      <select id="graduateYear">
-        <option value="2026">2026</option>
-        <option value="2025">2025</option>
-        <option value="2024">2024</option>
-        <option value="older">2023 atau sebelumnya</option>
-      </select>
-    </div>
-    <div><label>Domisili KK siswa</label>
-      <select id="kk">
-        <option value="kota">Kota Yogyakarta</option>
-        <option value="diy">Kab/Kota lain di DIY</option>
-        <option value="outsideDIY">Luar DIY</option>
-      </select>
-    </div>
-    <div><label>Asal SD siswa</label>
-      <select id="sdOrigin">
-        <option value="kota">SD Kota Yogyakarta</option>
-        <option value="diy">SD luar Kota tetapi masih DIY</option>
-        <option value="outsideDIY">SD luar DIY</option>
-      </select>
-    </div>
-    <div><label>Nilai TKA</label><input type="number" id="tka" placeholder="Contoh: 145.50" step="0.01"></div>
-    <div><label>Nilai TKAD</label><input type="number" id="tkad" placeholder="Contoh: 142.30" step="0.01"></div>
-    <div><label>Rata-rata Rapor (5 mapel, 5 semester)</label><input type="number" id="rapor" placeholder="Contoh: 85.50" step="0.01"></div>
-    <div>
-      <label>Nilai Gabungan (NG) Dasar</label>
-      <input type="number" id="ng" placeholder="Otomatis dihitung" step="0.01" readonly>
-      <div class="small">
-        💡 Rumus: ((TKA+TKAD)×90%) + (Rapor×0.6×10%) + Prestasi<br>
-        <a href="https://tkatkad.github.io/smp-kota/" target="_blank" rel="noopener">
-          Hitung detail di Kalkulator NG SMP Kota →
-        </a>
-      </div>
+  
+  <!-- ===== TAHUN KELULUSAN ===== -->
+  <div style="margin-bottom:16px;">
+    <label>🎓 Tahun Kelulusan:</label>
+    <div style="display:flex; gap:12px; margin-top:8px;">
+      <label style="cursor:pointer; display:flex; align-items:center; gap:8px; background:#eef4ff; padding:8px 14px; border-radius:8px; border:2px solid var(--border);">
+        <input type="radio" name="tahun" value="2026" checked onchange="toggleTahun()"> 
+        2026 (TKA+TKAD)
+      </label>
+      <label style="cursor:pointer; display:flex; align-items:center; gap:8px; background:#f0fff5; padding:8px 14px; border-radius:8px; border:2px solid var(--border);">
+        <input type="radio" name="tahun" value="2025" onchange="toggleTahun()"> 
+        2025 (ASPD)
+      </label>
     </div>
   </div>
 
-  <div style="margin:16px 0;">
-    <div id="prestasi-input-group">
-      <label>🏆 Poin Tambahan Prestasi (0-7.50):</label>
-      <input type="number" id="nilai-prestasi" min="0" max="7.50" step="0.01" placeholder="Kosongkan jika tidak ada prestasi" value="0">
-      <div class="small" style="color:#155724;margin-top:6px;">Maksimal 7.50 poin dari sertifikat non-akademik yang diverifikasi. Kosongkan jika tidak punya.</div>
+  <!-- ===== NILAI TES AKADEMIK ===== -->
+  <div class="section-title">📚 Nilai Tes Akademik</div>
+  <div id="tes-akademik-container" class="grid">
+    <!-- Diisi otomatis oleh JS berdasarkan tahun -->
+  </div>
+  <div class="small" id="tes-hint" style="margin-top:6px; color:#666;">
+    • Maksimal 100 per input | Isi semua field
+  </div>
+
+  <!-- ===== NILAI RAPOR (5 MAPEL × 5 SEMESTER) ===== -->
+  <div class="section-title">📖 Nilai Rapor (Semester 7-11)</div>
+  <div id="rapor-container" style="display:grid; gap:12px; margin:12px 0;">
+    <!-- Diisi otomatis oleh JS -->
+  </div>
+  <div class="small" style="color:#666; margin-top:6px;">
+    • Isi nilai pengetahuan 5 mapel × 5 semester terakhir<br>
+    • Maksimal 100 per input | Rata-rata otomatis dihitung
+  </div>
+
+  <!-- ===== NILAI GABUNGAN (HASIL OTOMATIS) ===== -->
+  <div style="margin:16px 0; padding:14px; background:#e8f5e9; border-left:4px solid #2e7d32; border-radius:8px;">
+    <label style="margin:0; color:#1b5e20; font-weight:bold;">🎯 Nilai Gabungan (NG) Hasil:</label>
+    <div id="ng-result" style="font-size:1.4rem; font-weight:bold; color:#1b5e20; margin-top:4px;">-</div>
+    <div class="small" style="color:#388e3c; margin-top:4px;" id="ng-formula">
+      Rumus: ((TKA+TKAD)×90%) + (Jml.Rerata Rapor×0.6×10%) + Prestasi
+    </div>
+  </div>
+
+  <!-- ===== PRESTASI NON-AKADEMIK ===== -->
+  <div class="section-title">🏆 Prestasi Non-Akademik (Opsional)</div>
+  <div style="margin:8px 0;">
+    <label>Nilai Prestasi (0 - 7.50):</label>
+    <input type="number" id="nilai-prestasi" min="0" max="7.50" step="0.01" placeholder="0.00" value="0" style="margin-top:6px;">
+    <div class="small" style="color:#155724; margin-top:6px;">
+      Maksimal 7.50 poin dari sertifikat non-akademik yang diverifikasi Dinas. Kosongkan jika tidak punya.
     </div>
   </div>
 
   <!-- ===== TOGGLE MODE LOKASI (HANYA MUNCUL JIKA KK = KOTA) ===== -->
-  <div id="lokasi-section" style="display:none; margin-top:20px; border-top:2px dashed var(--border); padding-top:16px;">
+  <div id="lokasi-section" style="display:none; margin-top:24px; border-top:2px dashed var(--border); padding-top:16px;">
     <div class="section-title">📍 Lokasi untuk Jalur Domisili Radius</div>
     
     <div style="display:flex; gap:12px; margin:12px 0; flex-wrap:wrap;">
@@ -126,6 +124,7 @@
     </div>
   </div>
 
+  <!-- ===== DATA TAMBAHAN (CHECKBOX) ===== -->
   <div class="section-title">Data Tambahan :</div>
   <div class="checks">
     <div class="check-item">
@@ -188,7 +187,7 @@
     </div>
   </div>
   
-  <button id="btn-analyze" type="button">🔍 Analisis Jalur</button>
+  <button id="btn-analyze" type="button" style="margin-top:20px;">🔍 Analisis Jalur</button>
 </div>
 
 <div id="result"></div>
@@ -211,23 +210,155 @@
 <script src="https://job.web.id/smart.js"></script>
 
 <script>
-// ================= TOGGLE MUTASI DATE =================
-document.getElementById('mutation')?.addEventListener('change', function() {
-  const skMutasiInput = document.getElementById('sk-mutasi-input');
-  if (skMutasiInput) skMutasiInput.style.display = this.checked ? 'block' : 'none';
-});
+// ================= KONFIGURASI INPUT (MIRROR KALKULATOR KOTA) =================
+const INPUT_CONFIG = {
+  MAPEL_RAPOR: [
+    { id: 'agama', label: 'Pendidikan Agama dan Budi Pekerti' },
+    { id: 'pancasila', label: 'Pendidikan Pancasila' },
+    { id: 'indo', label: 'Bahasa Indonesia' },
+    { id: 'mtk', label: 'Matematika' },
+    { id: 'ipas', label: 'Ilmu Pengetahuan Alam dan Sosial (IPAS)' }
+  ],
+  SEMESTERS: [7, 8, 9, 10, 11],
+  TES_2026: [
+    { id: 'tka_mtk', label: 'TKA Matematika', placeholder: '0-100', max: 100 },
+    { id: 'tka_indo', label: 'TKA Bahasa Indonesia', placeholder: '0-100', max: 100 },
+    { id: 'tkad_ipas', label: 'TKAD IPAS', placeholder: '0-100', max: 100 }
+  ],
+  TES_2025: [
+    { id: 'aspd_mtk', label: 'ASPD Matematika', placeholder: '0-100', max: 100 },
+    { id: 'aspd_indo', label: 'ASPD Bahasa Indonesia', placeholder: '0-100', max: 100 },
+    { id: 'aspd_ipa', label: 'ASPD IPA/S', placeholder: '0-100', max: 100 }
+  ],
+  BOBOT_AKADEMIK: 0.90,
+  BOBOT_RAPOR: 0.10,
+  KOEF_RAPOR: 0.6,
+  MAX_PRESTASI: 7.50
+};
 
-// ================= TOGGLE LOKASI SECTION (berdasarkan KK) =================
-document.getElementById('kk').addEventListener('change', function() {
-  const isKota = this.value === 'kota';
-  document.getElementById('lokasi-section').style.display = isKota ? 'block' : 'none';
-});
+let currentTahun = '2026';
 
-// ================= TOGGLE MODE LOKASI (coord vs kelurahan) =================
+// ================= RENDER INPUT DINAMIS =================
+function renderTesAkademik() {
+  const container = document.getElementById('tes-akademik-container');
+  const hint = document.getElementById('tes-hint');
+  const fields = currentTahun === '2026' ? INPUT_CONFIG.TES_2026 : INPUT_CONFIG.TES_2025;
+  
+  container.innerHTML = fields.map(f => `
+    <div>
+      <label>${f.label} <span style="color:#dc3545">*</span></label>
+      <input type="number" id="${f.id}" min="0" max="${f.max}" step="0.01" placeholder="${f.placeholder}" value="">
+    </div>
+  `).join('');
+  
+  hint.textContent = currentTahun === '2026' 
+    ? '• Lulusan 2026: Isi TKA Matematika, TKA B.Indonesia, TKAD IPAS'
+    : '• Lulusan 2025: Isi ASPD Matematika, ASPD B.Indonesia, ASPD IPA/S';
+  
+  // Attach event listeners untuk auto-calc
+  fields.forEach(f => {
+    document.getElementById(f.id)?.addEventListener('input', hitungNG);
+  });
+}
+
+function renderRaporInputs() {
+  const container = document.getElementById('rapor-container');
+  
+  container.innerHTML = INPUT_CONFIG.MAPEL_RAPOR.map(mapel => {
+    const semInputs = INPUT_CONFIG.SEMESTERS.map(sem => `
+      <div style="display:flex; align-items:center; gap:8px;">
+        <label style="margin:0; font-size:13px; width:32px;">S${sem}</label>
+        <input type="number" id="rapor_${mapel.id}_s${sem}" min="0" max="100" step="0.01" placeholder="-" data-mapel="${mapel.id}" data-sem="${sem}">
+      </div>
+    `).join('');
+    
+    return `
+      <div style="background:#f8fbff; padding:12px; border-radius:10px; border:1px solid var(--border);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="font-size:14px;">${mapel.label}</strong>
+          <span id="avg_${mapel.id}" style="font-size:13px; color:#666;">Rata-rata: -</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:6px;">
+          ${semInputs}
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  // Attach event listeners
+  INPUT_CONFIG.MAPEL_RAPOR.forEach(mapel => {
+    INPUT_CONFIG.SEMESTERS.forEach(sem => {
+      document.getElementById(`rapor_${mapel.id}_s${sem}`)?.addEventListener('input', function() {
+        updateRaporAverage(mapel.id);
+        hitungNG();
+      });
+    });
+  });
+}
+
+function updateRaporAverage(mapelId) {
+  let total = 0, count = 0;
+  INPUT_CONFIG.SEMESTERS.forEach(sem => {
+    const val = parseFloat(document.getElementById(`rapor_${mapelId}_s${sem}`)?.value) || 0;
+    if (val > 0) { total += val; count++; }
+  });
+  const avg = count > 0 ? total / count : 0;
+  const avgEl = document.getElementById(`avg_${mapelId}`);
+  if (avgEl) avgEl.textContent = `Rata-rata: ${avg.toFixed(2)}`;
+  return avg;
+}
+
+function getRaporSum() {
+  let sum = 0;
+  INPUT_CONFIG.MAPEL_RAPOR.forEach(mapel => {
+    sum += updateRaporAverage(mapel.id);
+  });
+  return sum;
+}
+
+function getTesSum() {
+  const fields = currentTahun === '2026' ? INPUT_CONFIG.TES_2026 : INPUT_CONFIG.TES_2025;
+  let sum = 0;
+  fields.forEach(f => {
+    const val = parseFloat(document.getElementById(f.id)?.value) || 0;
+    sum += val;
+  });
+  return sum;
+}
+
+// ================= HITUNG NG (MIRROR KALKULATOR KOTA) =================
+function hitungNG() {
+  const tesSum = getTesSum();
+  const raporSum = getRaporSum();
+  const prestasi = parseFloat(document.getElementById('nilai-prestasi')?.value) || 0;
+  
+  // Rumus: ((Tes) × 90%) + (Jml.Rerata Rapor × 0.6 × 10%) + Prestasi
+  const komponenTes = tesSum * INPUT_CONFIG.BOBOT_AKADEMIK;
+  const komponenRapor = (raporSum * INPUT_CONFIG.KOEF_RAPOR) * INPUT_CONFIG.BOBOT_RAPOR;
+  const ng = komponenTes + komponenRapor + Math.min(prestasi, INPUT_CONFIG.MAX_PRESTASI);
+  
+  // Tampilkan hasil
+  document.getElementById('ng-result').textContent = ng.toFixed(2);
+  
+  return { ng, tesSum, raporSum, prestasi };
+}
+
+function toggleTahun() {
+  currentTahun = document.querySelector('input[name="tahun"]:checked').value;
+  renderTesAkademik();
+  hitungNG();
+}
+
 function toggleLocMode(mode) {
   document.getElementById('loc-coord-mode').style.display = mode === 'coord' ? 'block' : 'none';
   document.getElementById('loc-kelurahan-mode').style.display = mode === 'kelurahan' ? 'block' : 'none';
 }
+
+// ================= TOGGLE LOKASI SECTION (berdasarkan KK) =================
+document.getElementById('kk')?.addEventListener('change', function() {
+  const isKota = this.value === 'kota';
+  document.getElementById('lokasi-section').style.display = isKota ? 'block' : 'none';
+});
 
 // ================= POPULATE DROPDOWN WILAYAH =================
 function populateWilayahDropdowns() {
@@ -282,28 +413,13 @@ document.getElementById('btn-geo')?.addEventListener('click', function() {
   );
 });
 
-// ================= AUTO-CALCULATE NG =================
-['tka','tkad','rapor','nilai-prestasi'].forEach(id => {
-  document.getElementById(id)?.addEventListener('input', calculateNG);
+// ================= MUTASI DATE TOGGLE =================
+document.getElementById('mutation')?.addEventListener('change', function() {
+  const skMutasiInput = document.getElementById('sk-mutasi-input');
+  if (skMutasiInput) skMutasiInput.style.display = this.checked ? 'block' : 'none';
 });
 
-function calculateNG() {
-  const tka = parseFloat(document.getElementById('tka').value) || 0;
-  const tkad = parseFloat(document.getElementById('tkad').value) || 0;
-  const rapor = parseFloat(document.getElementById('rapor').value) || 0;
-  const prestasi = parseFloat(document.getElementById('nilai-prestasi').value) || 0;
-  const lulusan = document.getElementById('graduateYear').value;
-  
-  // Hitung NG Domisili (dengan rapor)
-  const ng = window.KotaHelpers?.hitungNG?.({ 
-    tka, tkad, raporAvg: rapor, prestasi, 
-    lulusan: lulusan === '2025' ? '2025' : '2026' 
-  }) || 0;
-  
-  document.getElementById('ng').value = ng.toFixed(2);
-  return ng;
-}
-
+// ================= AUTO-OPTIMISME =================
 function calculateAutoOptimisme(ng) {
   if (ng < 200) return 14; if (ng < 220) return 13; if (ng < 240) return 12;
   if (ng < 260) return 11; if (ng < 280) return 10; if (ng < 300) return 9; return 8;
@@ -311,24 +427,16 @@ function calculateAutoOptimisme(ng) {
 
 // ================= MAIN ANALYSIS =================
 function analyzeStudent() {
+  // ===== AMBIL INPUT =====
+  const { ng, tesSum, raporSum, prestasi } = hitungNG();
+  const userLat = parseFloat(document.getElementById('userLat').value);
+  const userLng = parseFloat(document.getElementById('userLng').value);
+  const radiusMeter = parseInt(document.getElementById('radiusMeter').value) || 500;
+  
   const age = parseInt(document.getElementById('age').value) || 12;
   const graduateYear = document.getElementById('graduateYear').value;
   const kk = document.getElementById('kk').value;
   const sdOrigin = document.getElementById('sdOrigin').value;
-  const tka = parseFloat(document.getElementById('tka').value) || 0;
-  const tkad = parseFloat(document.getElementById('tkad').value) || 0;
-  const rapor = parseFloat(document.getElementById('rapor').value) || 0;
-  const prestasi = parseFloat(document.getElementById('nilai-prestasi').value) || 0;
-  
-  // Hitung NG per jalur (raw input → kalkulasi internal)
-  const ngDasar = ((tka + tkad) * 0.90) + ((rapor * 0.6) * 0.10); // Tanpa prestasi untuk dasar
-  const ngDomisili = ngDasar + prestasi; // Domisili: +prestasi
-  const ngPrestasiUmum = (tka + tkad) + prestasi; // Prestasi Umum: TANPA rapor!
-  const nilaiPrestasiKhusus = tka + tkad; // Prestasi Khusus Akademik: TANPA rapor & prestige
-  
-  const userLat = parseFloat(document.getElementById('userLat').value);
-  const userLng = parseFloat(document.getElementById('userLng').value);
-  const radiusMeter = parseInt(document.getElementById('radiusMeter').value) || 500;
   
   const nationalAchievement = document.getElementById('nationalAchievement').checked;
   const top10Academic = document.getElementById('top10Academic').checked;
@@ -354,190 +462,155 @@ function analyzeStudent() {
     return;
   }
   
+  // ===== NILAI PER JALUR =====
+  const nilaiDomisili = ng; // Full NG untuk Domisili & Afirmasi
+  const nilaiPrestasiUmum = tesSum + Math.min(prestasi, INPUT_CONFIG.MAX_PRESTASI); // Tanpa rapor
+  const nilaiPrestasiAkademik = tesSum; // Tanpa rapor & tanpa prestasi
+  const nilaiMutasi = currentTahun === '2026' ? (parseFloat(document.getElementById('tka_mtk')?.value)||0) : (parseFloat(document.getElementById('aspd_mtk')?.value)||0); // TKA/ASPD MTK saja
+  
   // ===== DOMISILI RADIUS =====
   {
     let allowed = true, reasons = [];
+    if (kk !== 'kota') { allowed = false; reasons.push('Jalur Domisili Radius <strong>hanya untuk penduduk Kota Yogyakarta</strong>.'); }
     
-    // 1. Validasi KK
-    if (kk !== 'kota') {
-      allowed = false;
-      reasons.push('Jalur Domisili Radius <strong>hanya untuk penduduk Kota Yogyakarta</strong> (KK terdaftar di Kota Yogya).');
-    }
-    
-    // 2. Validasi Koordinat (Hanya jika mode koordinat aktif)
     const isCoordMode = document.querySelector('input[name="locMode"][value="coord"]')?.checked;
-    if (allowed && isCoordMode && (!userLat || !userLng)) {
-      allowed = false;
-      reasons.push('Koordinat lokasi RW harus diisi untuk jalur radius.');
-    }
+    if (allowed && isCoordMode && (!userLat || !userLng)) { allowed = false; reasons.push('Koordinat lokasi RW harus diisi.'); }
     
-    // 3. Validasi Jarak dari Pusat Kota (Anti-fake location)
     if (allowed && isCoordMode && userLat && userLng) {
-      const YOGYA_CENTER_LAT = -7.7956;
-      const YOGYA_CENTER_LNG = 110.3695;
-      const MAX_DISTANCE_FROM_CITY = 15000; // 15 km
-      
-      const distanceFromCity = window.hitungJarak?.(userLat, userLng, YOGYA_CENTER_LAT, YOGYA_CENTER_LNG) || 0;
-      
-      if (distanceFromCity > MAX_DISTANCE_FROM_CITY) {
+      const YOGYA_CENTER_LAT = -7.7956, YOGYA_CENTER_LNG = 110.3695, MAX_DIST = 15000;
+      const distFromCity = window.hitungJarak?.(userLat, userLng, YOGYA_CENTER_LAT, YOGYA_CENTER_LNG) || 0;
+      if (distFromCity > MAX_DIST) {
         allowed = false;
-        reasons.push(`⚠️ Koordinat Anda berjarak <strong>${(distanceFromCity/1000).toFixed(1)} km</strong> dari pusat Kota Yogyakarta.`);
-        reasons.push('Jalur Domisili Radius hanya untuk penduduk yang berdomisili di wilayah Kota Yogyakarta.');
+        reasons.push(`⚠️ Koordinat berjarak <strong>${(distFromCity/1000).toFixed(1)} km</strong> dari pusat Kota Yogyakarta.`);
       }
     }
-
-    if (sdOrigin === 'outsideDIY' && !tkadDone) {
-      allowed = false;
-      reasons.push('Lulusan luar DIY wajib mengikuti TKAD.');
-    }
     
-    // ===== CEK HASIL PREDIKSI ENGINE =====
+    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib TKAD.'); }
+    
     let predictionResult = null;
     if (allowed && typeof KotaEngine?.predict === 'function') {
       try {
-        predictionResult = KotaEngine.predict(ngDomisili, ngPrestasiUmum, calculateAutoOptimisme(ngDomisili), {
-          jalur: 'domisiliRadius',
-          userLat, userLng, radiusMeter
+        predictionResult = KotaEngine.predict(nilaiDomisili, nilaiPrestasiUmum, calculateAutoOptimisme(nilaiDomisili), {
+          jalur: 'domisiliRadius', userLat, userLng, radiusMeter
         });
-        
-        // VALIDASI KRUSIAL: Cek apakah ada sekolah yang ditemukan
-        if (!predictionResult.domisili || predictionResult.domisili.length === 0) {
+        if (!predictionResult.domisili?.length) {
           allowed = false;
-          reasons.push(`❌ Tidak ditemukan sekolah dalam radius <strong>${radiusMeter} meter</strong>.`);
-          reasons.push('Lokasi RW Anda terlalu jauh dari sekolah manapun. Silakan perbesar radius atau cek koordinat.');
+          reasons.push(`❌ Tidak ditemukan sekolah dalam radius <strong>${radiusMeter}m</strong>.`);
         }
-      } catch(e) {
-        console.error('Radius predict error:', e);
-      }
+      } catch(e) { console.error('Radius error:', e); }
     }
-
-    // Jika semua lolos (ada sekolah), tampilkan alasan sukses
+    
     if (allowed) {
-      if (isCoordMode) {
-        reasons.push(`Lokasi: ${userLat?.toFixed(4)}, ${userLng?.toFixed(4)}`);
-        reasons.push(`Radius: ${radiusMeter} meter dari titik RW.`);
-      } else {
-        const kel = document.getElementById('kalurahan-select')?.value;
-        if (kel) reasons.push(`Estimasi berdasarkan Kelurahan: <strong>${kel}</strong>`);
-        reasons.push(`Radius: ${radiusMeter} meter (estimasi).`);
-      }
+      reasons.push(isCoordMode ? `Lokasi: ${userLat?.toFixed(4)}, ${userLng?.toFixed(4)}` : `Estimasi: ${document.getElementById('kalurahan-select')?.value || '-'}`);
+      reasons.push(`Radius: ${radiusMeter}m`);
       reasons.push('Siswa bisa mencoba jalur Domisili Radius.');
     }
     
-    // Render Hasil Radius
     let radiusAnalysis = '';
-    if (predictionResult && predictionResult.domisili?.length > 0) {
+    if (predictionResult?.domisili?.length) {
       radiusAnalysis = `<div class="prediction-section"><h4>🎯 Sekolah dalam Radius ${radiusMeter}m</h4>`;
-      predictionResult.domisili.slice(0, 10).forEach((s, idx) => {
-        const pct = Math.round((s.probD || 0) * 100);
-        const cat = pct >= 80 ? 'aman' : pct >= 60 ? 'moderat' : pct >= 40 ? 'rawan' : 'sulit';
+      predictionResult.domisili.slice(0,10).forEach((s,idx) => {
+        const pct = Math.round((s.probD||0)*100), cat = pct>=80?'aman':pct>=60?'moderat':pct>=40?'rawan':'sulit';
         const dist = s.distance ? window.formatJarak?.(s.distance) : '';
         const isFav = ["SMPN1","SMPN5","SMPN8"].includes(s.code) ? ' <span style="background:#fbbf24;color:#78350f;padding:2px 6px;border-radius:4px;font-size:11px;">⭐</span>' : '';
-        radiusAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}${dist ? `<span class="distance-badge">📍 ${dist}</span>` : ''}</span><span class="school-category cat-${cat}">${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginD !== null ? `<div class="school-margin">Margin: ${s.marginD > 0 ? '+' : ''}${s.marginD.toFixed(2)}</div>` : ''}</div>`;
+        radiusAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}${dist?`<span class="distance-badge">📍 ${dist}</span>`:''}</span><span class="school-category cat-${cat}">${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginD!==null?`<div class="school-margin">Margin: ${s.marginD>0?'+':''}${s.marginD.toFixed(2)}</div>`:''}</div>`;
       });
       radiusAnalysis += '</div>';
     }
     
-    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'TIDAK BISA MENDAFTAR'}</div><h2>Jalur Domisili Radius</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Pilih sekolah dengan jarak terdekat dari RW Anda.</li><li>Hanya boleh memilih <strong>1 sekolah</strong>.</li><li>Prioritas: jarak terdekat → urutan pilihan → waktu aktivasi.</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>Kartu Keluarga (minimal 1 tahun)</li><li>Akta kelahiran</li><li>Surat keterangan lulus SD</li><li>Sertifikat Hasil TKA & TKAD (lulusan 2026)</li><li>Surat pernyataan domisili</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.domisiliRadius)}` : ''}</div>${radiusAnalysis}`;
+    output += `<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'TIDAK BISA MENDAFTAR'}</div><h2>Jalur Domisili Radius</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Cara Memilih</h3><ul><li>Pilih sekolah terdekat.</li><li>Hanya 1 sekolah.</li><li>Prioritas: jarak → pilihan → waktu aktivasi.</li></ul><h3>Dokumen</h3><ul><li>KK (min. 1 tahun)</li><li>Akta lahir</li><li>Surat lulus</li><li>SHTKA & SHTKAD</li><li>Surat pernyataan domisili</li></ul><h3>Jadwal</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.domisiliRadius)}`:''}</div>${radiusAnalysis}`;
   }
   
   // ===== DOMISILI DAERAH =====
   {
     let allowed = true, reasons = [];
-    if (kk !== 'kota') { allowed = false; reasons.push('Jalur Domisili Daerah wajib KK Kota Yogyakarta.'); }
-    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
-    if (allowed) { 
-      reasons.push(`NG Dasar: <strong>${ngDomisili.toFixed(2)}</strong>`); 
-      reasons.push('Siswa memenuhi syarat Domisili Daerah.'); 
-    }
+    if (kk !== 'kota') { allowed = false; reasons.push('Wajib KK Kota Yogyakarta.'); }
+    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib TKAD.'); }
+    if (allowed) { reasons.push(`NG: <strong>${nilaiDomisili.toFixed(2)}</strong>`); reasons.push('Memenuhi syarat Domisili Daerah.'); }
     
     let daerahAnalysis = '';
     if (allowed && typeof KotaEngine?.predict === 'function') {
       try {
-        const pred = KotaEngine.predict(ngDomisili, ngPrestasiUmum, calculateAutoOptimisme(ngDomisili));
-        if (pred.domisili?.length > 0) {
-          daerahAnalysis = `<div class="prediction-section"><h4>🎯 Prediksi Peluang — Domisili Daerah</h4>`;
-          pred.domisili.slice(0, 12).forEach((s, idx) => {
-            const pct = Math.round((s.probD || 0) * 100);
-            const cat = pct >= 80 ? 'aman' : pct >= 60 ? 'moderat' : pct >= 40 ? 'rawan' : 'sulit';
+        const pred = KotaEngine.predict(nilaiDomisili, nilaiPrestasiUmum, calculateAutoOptimisme(nilaiDomisili));
+        if (pred.domisili?.length) {
+          daerahAnalysis = `<div class="prediction-section"><h4>🎯 Prediksi — Domisili Daerah</h4>`;
+          pred.domisili.slice(0,12).forEach((s,idx) => {
+            const pct = Math.round((s.probD||0)*100), cat = pct>=80?'aman':pct>=60?'moderat':pct>=40?'rawan':'sulit';
             const isFav = ["SMPN1","SMPN5","SMPN8"].includes(s.code) ? ' <span style="background:#fbbf24;color:#78350f;padding:2px 6px;border-radius:4px;font-size:11px;">⭐</span>' : '';
-            daerahAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}</span><span class="school-category cat-${cat}">${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginD !== null ? `<div class="school-margin">Margin: ${s.marginD > 0 ? '+' : ''}${s.marginD.toFixed(2)}</div>` : ''}</div>`;
+            daerahAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}</span><span class="school-category cat-${cat}">${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginD!==null?`<div class="school-margin">Margin: ${s.marginD>0?'+':''}${s.marginD.toFixed(2)}</div>`:''}</div>`;
           });
           daerahAnalysis += '</div>';
         }
-      } catch(e) { console.error('Daerah predict error:', e); }
+      } catch(e) { console.error('Daerah error:', e); }
     }
     
-    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'BELUM MEMENUHI SYARAT'}</div><h2>Jalur Domisili Daerah</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Boleh memilih maksimal <strong>2 sekolah</strong>.</li><li>Urutkan dari peluang tertinggi ke terendah.</li><li>Perhatikan passing grade tahun sebelumnya sebagai referensi.</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>Kartu Keluarga</li><li>Akta kelahiran</li><li>Surat keterangan lulus SD</li><li>Sertifikat Hasil TKA & TKAD (lulusan 2026)</li><li>Surat Keterangan Nilai Rapor</li><li>Surat Keterangan Prestasi (jika ada)</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.domisiliDaerah)}` : ''}</div>${daerahAnalysis}`;
+    output += `<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'BELUM MEMENUHI'}</div><h2>Jalur Domisili Daerah</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Cara Memilih</h3><ul><li>Maksimal 2 sekolah.</li><li>Urutkan dari peluang tertinggi.</li><li>Lihat passing grade 2025 sebagai referensi.</li></ul><h3>Dokumen</h3><ul><li>KK, Akta lahir, Surat lulus</li><li>SHTKA & SHTKAD</li><li>Surat Keterangan Nilai Rapor</li><li>Surat Prestasi (jika ada)</li></ul><h3>Jadwal</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.domisiliDaerah)}`:''}</div>${daerahAnalysis}`;
   }
   
   // ===== PRESTASI KHUSUS =====
   {
     let allowed = true, reasons = [];
-    if (!nationalAchievement && !top10Academic) { allowed = false; reasons.push('Harus memiliki prestasi nasional ATAU masuk 10% terbaik akademik di SD Kota Yogya.'); }
-    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
+    if (!nationalAchievement && !top10Academic) { allowed = false; reasons.push('Harus punya prestasi nasional ATAU 10% terbaik akademik.'); }
+    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib TKAD.'); }
     if (allowed) {
-      if (nationalAchievement) reasons.push('✅ Memiliki prestasi tingkat nasional (OSN/O2SN/FLS2N).');
-      if (top10Academic) reasons.push('✅ Masuk 10% terbaik akademik di SD asal (Kota Yogyakarta).');
-      reasons.push('Siswa memenuhi syarat Prestasi Khusus.');
+      if (nationalAchievement) reasons.push('✅ Prestasi nasional.');
+      if (top10Academic) reasons.push('✅ 10% terbaik akademik.');
+      reasons.push('Memenuhi syarat Prestasi Khusus.');
     }
-    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'BELUM MEMENUHI SYARAT'}</div><h2>Jalur Prestasi Khusus</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Hanya boleh memilih <strong>1 sekolah</strong>.</li><li>Pilih sekolah target utama yang paling diinginkan.</li><li>Seleksi berdasarkan nilai TKA+TKAD (bukan NG penuh).</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>Piagam/sertifikat prestasi nasional (asli+foto kopi)</li><li>Surat keterangan 10% terbaik dari SD (jika jalur akademik)</li><li>Kartu Keluarga & Akta kelahiran</li><li>Sertifikat Hasil TKA & TKAD</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.prestasiKhusus)}` : ''}</div>`;
+    output += `<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'BELUM MEMENUHI'}</div><h2>Jalur Prestasi Khusus</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Cara Memilih</h3><ul><li>Hanya 1 sekolah.</li><li>Pilih target utama.</li><li>Seleksi: TKA+TKAD (tanpa rapor).</li></ul><h3>Dokumen</h3><ul><li>Sertifikat prestasi nasional / Surat 10% terbaik</li><li>KK, Akta lahir, SHTKA & SHTKAD</li></ul><h3>Jadwal</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.prestasiKhusus)}`:''}</div>`;
   }
   
   // ===== AFIRMASI KSJPS =====
   {
     let allowed = true, reasons = [];
-    if (kk !== 'kota') { allowed = false; reasons.push('Afirmasi KSJPS wajib KK Kota Yogyakarta.'); }
-    if (!ksjps) { allowed = false; reasons.push('Harus terdaftar dalam data Keluarga Sasaran Jaminan Perlindungan Sosial (KSJPS).'); }
-    if (allowed) { reasons.push('✅ Terdaftar di data KSJPS.'); reasons.push('Siswa memenuhi syarat Afirmasi KSJPS.'); }
-    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'BELUM MEMENUHI SYARAT'}</div><h2>Jalur Afirmasi KSJPS</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Boleh memilih maksimal <strong>2 sekolah</strong>.</li><li>Prioritas: sekolah dengan passing grade afirmasi realistis.</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>Bukti terdaftar di data KSJPS (dari Dinsos/Dindikpora)</li><li>Kartu Keluarga & Akta kelahiran</li><li>Surat keterangan lulus SD</li><li>Sertifikat Hasil TKA & TKAD</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.afirmasiKSJPS)}` : ''}</div>`;
+    if (kk !== 'kota') { allowed = false; reasons.push('Wajib KK Kota Yogyakarta.'); }
+    if (!ksjps) { allowed = false; reasons.push('Harus terdaftar di data KSJPS.'); }
+    if (allowed) { reasons.push('✅ Terdaftar KSJPS.'); reasons.push('Memenuhi syarat Afirmasi KSJPS.'); }
+    output += `<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'BELUM MEMENUHI'}</div><h2>Jalur Afirmasi KSJPS</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Cara Memilih</h3><ul><li>Maksimal 2 sekolah.</li><li>Prioritas: passing grade afirmasi realistis.</li></ul><h3>Dokumen</h3><ul><li>Bukti KSJPS, KK, Akta lahir</li><li>Surat lulus, SHTKA & SHTKAD</li></ul><h3>Jadwal</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.afirmasiKSJPS)}`:''}</div>`;
   }
   
-  // ===== MUTASI & KEMASLAHATAN GURU =====
+  // ===== MUTASI =====
   {
     let allowed = true, reasons = [];
-    if (!(mutation || teacherChild)) { allowed = false; reasons.push('Harus memiliki syarat mutasi kerja ATAU anak guru SMPN Kota Yogya.'); }
+    if (!(mutation || teacherChild)) { allowed = false; reasons.push('Harus mutasi kerja ATAU anak guru.'); }
     else {
       if (mutation) {
         if (!mutationCheck || !skMutasiDate) { allowed = false; reasons.push('Tanggal SK mutasi harus diisi.'); }
-        else if (skMutasiDate > '2025-01-01') { allowed = false; reasons.push(`SK mutasi melebihi batas maksimal 1 Januari 2025.`); }
-        else { reasons.push('✅ SK mutasi valid (diterbitkan sebelum 1 Jan 2025).'); }
+        else if (skMutasiDate > '2025-01-01') { allowed = false; reasons.push('SK mutasi melebihi batas 1 Jan 2025.'); }
+        else { reasons.push('✅ SK mutasi valid.'); }
       }
-      if (teacherChild) { reasons.push('✅ Anak guru SMPN Kota Yogyakarta.'); }
+      if (teacherChild) reasons.push('✅ Anak guru.');
     }
-    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
-    if (allowed) { reasons.push('Siswa memenuhi syarat jalur Mutasi.'); }
-    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'BELUM MEMENUHI SYARAT'}</div><h2>Jalur Mutasi & Kemaslahatan Guru</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Hanya boleh memilih <strong>1 sekolah</strong>.</li><li>Anak guru: hanya boleh memilih sekolah tempat orang tua mengajar.</li><li>Mutasi: pilih sekolah sesuai domisili baru.</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>SK Mutasi dari instansi (ASN/TNI/POLRI/BUMN) — maksimal 1 Jan 2025</li><li>SK Definitif guru (untuk kemaslahatan)</li><li>Kartu Keluarga & Akta kelahiran</li><li>Sertifikat Hasil TKA</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.mutasi)}` : ''}</div>`;
+    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib TKAD.'); }
+    if (allowed) reasons.push('Memenuhi syarat Mutasi.');
+    
+    output += `<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'BELUM MEMENUHI'}</div><h2>Jalur Mutasi & Kemaslahatan Guru</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Cara Memilih</h3><ul><li>Hanya 1 sekolah.</li><li>Anak guru: hanya sekolah tempat orang tua mengajar.</li></ul><h3>Dokumen</h3><ul><li>SK Mutasi / SK Guru</li><li>KK, Akta lahir, SHTKA</li></ul><h3>Jadwal</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.mutasi)}`:''}</div>`;
   }
   
   // ===== PRESTASI UMUM =====
   {
     let allowed = true, reasons = [];
-    if (kk === 'kota') { allowed = false; reasons.push('Jalur Prestasi Umum khusus untuk penduduk <strong>luar</strong> Kota Yogyakarta.'); }
-    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib mengikuti TKAD.'); }
-    if (allowed) { 
-      reasons.push(`Nilai Seleksi: <strong>${ngPrestasiUmum.toFixed(2)}</strong> (TKA+TKAD + Prestasi, tanpa rapor)`); 
-      reasons.push('Siswa memenuhi syarat Prestasi Umum.'); 
-    }
+    if (kk === 'kota') { allowed = false; reasons.push('Khusus penduduk <strong>luar</strong> Kota Yogyakarta.'); }
+    if (sdOrigin === 'outsideDIY' && !tkadDone) { allowed = false; reasons.push('Lulusan luar DIY wajib TKAD.'); }
+    if (allowed) { reasons.push(`Nilai: <strong>${nilaiPrestasiUmum.toFixed(2)}</strong> (Tes + Prestasi, tanpa rapor)`); reasons.push('Memenuhi syarat Prestasi Umum.'); }
     
     let prestasiAnalysis = '';
     if (allowed && typeof KotaEngine?.predict === 'function') {
       try {
-        const pred = KotaEngine.predict(ngDomisili, ngPrestasiUmum, calculateAutoOptimisme(ngDomisili));
-        if (pred.prestasi?.length > 0) {
-          prestasiAnalysis = `<div class="prediction-section"><h4>🎯 Prediksi Peluang — Prestasi Umum</h4>`;
-          pred.prestasi.slice(0, 12).forEach((s, idx) => {
-            const pct = Math.round((s.probP || 0) * 100);
-            const cat = pct >= 80 ? 'aman' : pct >= 60 ? 'moderat' : pct >= 40 ? 'rawan' : 'sulit';
+        const pred = KotaEngine.predict(nilaiDomisili, nilaiPrestasiUmum, calculateAutoOptimisme(nilaiDomisili));
+        if (pred.prestasi?.length) {
+          prestasiAnalysis = `<div class="prediction-section"><h4>🎯 Prediksi — Prestasi Umum</h4>`;
+          pred.prestasi.slice(0,12).forEach((s,idx) => {
+            const pct = Math.round((s.probP||0)*100), cat = pct>=80?'aman':pct>=60?'moderat':pct>=40?'rawan':'sulit';
             const isFav = ["SMPN1","SMPN5","SMPN8"].includes(s.code) ? ' <span style="background:#fbbf24;color:#78350f;padding:2px 6px;border-radius:4px;font-size:11px;">⭐</span>' : '';
-            prestasiAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}</span><span class="school-category cat-${cat}">${s.labelP} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginP !== null ? `<div class="school-margin">Margin: ${s.marginP > 0 ? '+' : ''}${s.marginP.toFixed(2)}</div>` : ''}</div>`;
+            prestasiAnalysis += `<div class="school-card ${cat}"><div class="school-header"><span class="school-title">${idx+1}. ${s.school}${isFav}</span><span class="school-category cat-${cat}">${s.labelP} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div>${s.marginP!==null?`<div class="school-margin">Margin: ${s.marginP>0?'+':''}${s.marginP.toFixed(2)}</div>`:''}</div>`;
           });
           prestasiAnalysis += '</div>';
         }
-      } catch(e) { console.error('Prestasi predict error:', e); }
+      } catch(e) { console.error('Prestasi error:', e); }
     }
     
-    output += `<div class="route ${allowed ? 'allowed' : 'denied'}"><div class="badge ${allowed ? 'ok' : 'no'}">${allowed ? 'BISA MENDAFTAR' : 'BELUM MEMENUHI SYARAT'}</div><h2>Jalur Prestasi Umum</h2><h3>Analisis</h3><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>${allowed ? `<h3>Cara Memilih Sekolah</h3><ul><li>Boleh memilih maksimal <strong>3 sekolah</strong>.</li><li>Urutkan: sekolah ambisius → realistis → pengaman.</li><li>Perhatikan kuota maksimal 10% per sekolah.</li></ul><h3>Dokumen yang Harus Disiapkan</h3><ul><li>Kartu Keluarga (luar Kota Yogyakarta)</li><li>Akta kelahiran</li><li>Surat keterangan lulus SD</li><li>Sertifikat Hasil TKA & TKAD</li><li>Sertifikat prestasi non-akademik (jika ada)</li></ul><h3>Jadwal & Kegiatan</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.prestasiUmum)}` : ''}</div>${prestasiAnalysis}`;
+    output += `<div class="route ${allowed?'allowed':'denied'}"><div class="badge ${allowed?'ok':'no'}">${allowed?'BISA MENDAFTAR':'BELUM MEMENUHI'}</div><h2>Jalur Prestasi Umum</h2><h3>Analisis</h3><ul>${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>${allowed?`<h3>Cara Memilih</h3><ul><li>Maksimal 3 sekolah.</li><li>Urutkan: ambisius → realistis → pengaman.</li><li>Kuota maksimal 10% per sekolah.</li></ul><h3>Dokumen</h3><ul><li>KK luar Kota, Akta lahir, Surat lulus</li><li>SHTKA & SHTKAD, Sertifikat prestasi (jika ada)</li></ul><h3>Jadwal</h3>${window.KotaHelpers?.buildTimeline?.(window.APP_CONFIG?.SCHEDULES?.prestasiUmum)}`:''}</div>${prestasiAnalysis}`;
   }
   
   // ===== TKAD INFO =====
@@ -562,10 +635,23 @@ document.getElementById('btn-analyze')?.addEventListener('click', function() {
   setTimeout(() => { analyzeStudent(); btn.textContent = origText; btn.disabled = false; }, 300);
 });
 
+// ================= INIT =================
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('kk').dispatchEvent(new Event('change'));
+  // Render input dinamis
+  renderTesAkademik();
+  renderRaporInputs();
+  
+  // Init dropdown wilayah
   populateWilayahDropdowns();
-  if (document.getElementById('tka').value || document.getElementById('tkad').value || document.getElementById('rapor').value) calculateNG();
+  
+  // Trigger toggle KK untuk show/hide lokasi section
+  document.getElementById('kk')?.dispatchEvent(new Event('change'));
+  
+  // Auto-calc NG jika ada input
+  document.getElementById('nilai-prestasi')?.addEventListener('input', hitungNG);
+  
+  // Load saved values if any (optional)
+  // ... bisa tambah localStorage logic nanti
 });
 </script>
 </body>
