@@ -43,6 +43,53 @@
   .semester-grid label { font-size: 0.85rem; text-align: center; margin: 0; }
   .semester-grid input { text-align: center; padding: 6px; }
   @media(max-width:600px){ .semester-grid { grid-template-columns: repeat(2, 1fr); } }
+  
+  /* FIX 3: CSS Symmetry - Hasil Perhitungan sama dengan Input Data */
+  .hasil-card { 
+    background: var(--c); 
+    padding: 16px; 
+    border-radius: 12px; 
+    margin-bottom: 16px; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border-top: 3px solid var(--p);
+  }
+  .hasil-card h2 {
+    color: var(--p);
+    font-size: 1.2rem;
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .nilai-summary {
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+  }
+  .nilai-summary p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+  }
+  .timeline-box {
+    background: #fef3c7;
+    border-left: 4px solid var(--warn);
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 6px;
+  }
+  .timeline-box h3 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: #92400e;
+  }
+  .timeline-box ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 0.9rem;
+  }
+  .timeline-box li {
+    margin: 4px 0;
+  }
 </style>
 </head>
 <body>
@@ -290,11 +337,15 @@ function runAnalysis() {
   const ngPrestasiUmum = tesSum + prestasi; // Tanpa rapor
   const nilaiMutasi = tes1; // Seleksi Mutasi hanya pakai TKA Matematika (sesuai juknis)
   
-  let out = `<div class="card"><h2>📊 Hasil Perhitungan</h2>
-    <p>Estimasi Nilai Anda:<br>
-    • <b>NG Domisili/Afirmasi:</b> ${ngDaerah.toFixed(2)}<br>
-    • <b>Nilai Prestasi Umum:</b> ${ngPrestasiUmum.toFixed(2)}<br>
-    • <b>Nilai Mutasi:</b> ${nilaiMutasi.toFixed(2)}</p></div>`;
+  // FIX 3: Hasil Perhitungan dengan styling yang simetris
+  let out = `<div class="hasil-card">
+    <h2>📊 Hasil Perhitungan</h2>
+    <div class="nilai-summary">
+      <p><strong>NG Domisili/Afirmasi:</strong> ${ngDaerah.toFixed(2)}</p>
+      <p><strong>Nilai Prestasi Umum:</strong> ${ngPrestasiUmum.toFixed(2)}</p>
+      <p><strong>Nilai Mutasi:</strong> ${nilaiMutasi.toFixed(2)}</p>
+    </div>
+  </div>`;
 
   // ===== 1. DOMISILI RADIUS =====
   if(document.getElementById('optRadius').checked) {
@@ -317,7 +368,7 @@ function runAnalysis() {
                 const pct = Math.round((s.probD||0)*100);
                 out += `<div class="school-card"><div style="display:flex;justify-content:space-between;"><b>${i+1}. ${s.school}</b><span>${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div>`;
               });
-              out += `</div>`;
+              out += `<div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>15-17 Juni 2026:</b> Pengajuan akun & verifikasi</li><li><b>17-18 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>19 Juni 2026:</b> Pengumuman hasil</li><li><b>19 atau 22 Juni 2026:</b> Daftar ulang</li></ul></div></div>`;
             } else {
               out += `<div class="route warn"><span class="badge warn">⚠️ Tidak Ada Sekolah</span><h3>📍 Jalur Domisili Radius</h3><p>Tidak ditemukan sekolah dalam radius 500m. Perbesar radius atau cek koordinat.</p></div>`;
             }
@@ -337,18 +388,19 @@ function runAnalysis() {
           const pct = Math.round((s.probD||0)*100);
           out += `<div class="school-card"><div style="display:flex;justify-content:space-between;"><b>${i+1}. ${s.school}</b><span>${s.labelD} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div>`;
         });
-        out += `</div>`;
+        out += `<div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>29-30 Juni 2026:</b> Pengajuan akun & verifikasi</li><li><b>29 Juni - 1 Juli 2026:</b> Aktivasi token & pilih sekolah</li><li><b>2 Juli 2026:</b> Pengumuman hasil</li><li><b>2 atau 3 Juli 2026:</b> Daftar ulang</li></ul></div></div>`;
       }
     }
   }
   
   if(document.getElementById('optAfirmasi').checked && kk === 'kota') {
-    out += `<div class="route ok"><span class="badge ok">✅ POTENSIAL</span><h3>🤝 Jalur Afirmasi (KSJPS/Disabilitas)</h3><p>Seleksi menggunakan rumus NG yang sama dengan Domisili Daerah. Pastikan bukti KSJPS/Dokumen asesmen disabilitas lengkap.</p></div>`;
+    out += `<div class="route ok"><span class="badge ok">✅ POTENSIAL</span><h3>🤝 Jalur Afirmasi (KSJPS/Disabilitas)</h3><p>Seleksi menggunakan rumus NG yang sama dengan Domisili Daerah.</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>29-30 Juni 2026:</b> Pengajuan akun & verifikasi</li><li><b>29 Juni - 1 Juli 2026:</b> Aktivasi token & pilih sekolah</li><li><b>2 Juli 2026:</b> Pengumuman hasil</li></ul></div></div>`;
   }
 
-  // ===== 3. PRESTASI KHUSUS (Otomatis jika KK Kota & Asal Kota) =====
-  if(kk === 'kota' && asal === 'kota') {
-    out += `<div class="route ok"><span class="badge ok">ℹ️ INFO</span><h3>🏆 Jalur Prestasi Khusus</h3><p>Jika Anda masuk <b>10% terbaik</b> di SD asal, Anda bisa mendaftar jalur ini. Seleksi murni TKA+TKAD.</p></div>`;
+  // ===== 3. PRESTASI KHUSUS =====
+  // FIX 1: Prestasi Khusus bisa diikuti asal SD di Kota (tidak harus KK Kota)
+  if(asal === 'kota') {
+    out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>🏆 Jalur Prestasi Khusus (Akademik)</h3><p>Jika Anda masuk <b>10% terbaik</b> di SD asal Kota Yogyakarta, Anda bisa mendaftar jalur ini. Seleksi murni TKA+TKAD (tanpa rapor).</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>9-10 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>11 Juni 2026:</b> Pengumuman hasil</li><li><b>11 atau 12 Juni 2026:</b> Daftar ulang</li></ul></div></div>`;
   }
 
   // ===== 4. PRESTASI UMUM (KK Luar Kota) =====
@@ -361,9 +413,9 @@ function runAnalysis() {
           const pct = Math.round((s.probP||0)*100);
           out += `<div class="school-card"><div style="display:flex;justify-content:space-between;"><b>${i+1}. ${s.school}</b><span>${s.labelP} (${pct}%)</span></div><div class="prob-bar"><div class="prob-fill" style="width:${pct}%"></div></div></div>`;
         });
-        out += `</div>`;
+        out += `<div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>22-23 Juni 2026:</b> Pengajuan akun & verifikasi</li><li><b>22-24 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>25 Juni 2026:</b> Pengumuman hasil</li><li><b>25 atau 26 Juni 2026:</b> Daftar ulang</li></ul></div></div>`;
       } else {
-        out += `<div class="route warn"><span class="badge warn">⚠️ Persaingan Ketat</span><h3>🌍 Jalur Prestasi Umum</h3><p>Nilai Anda mungkin di bawah passing grade tahun lalu. Coba naikkan nilai tes atau sertifikat prestasi.</p></div>`;
+        out += `<div class="route warn"><span class="badge warn">⚠️ Persaingan Ketat</span><h3>🌍 Jalur Prestasi Umum</h3><p>Nilai Anda mungkin di bawah passing grade tahun lalu.</p></div>`;
       }
     }
   }
@@ -376,7 +428,7 @@ function runAnalysis() {
     } else if(sk > '2025-01-01') {
       out += `<div class="route err"><span class="badge err">❌ SK Tidak Valid</span><h3>📜 Jalur Mutasi</h3><p>SK Mutasi maksimal diterbitkan <b>1 Januari 2025</b>.</p></div>`;
     } else {
-      out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>📜 Jalur Mutasi & Kemaslahatan Guru</h3><p>Seleksi berdasarkan Nilai TKA: <b>${nilaiMutasi.toFixed(2)}</b>. Pastikan membawa SK asli saat verifikasi.</p></div>`;
+      out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>📜 Jalur Mutasi & Kemaslahatan Guru</h3><p>Seleksi berdasarkan Nilai TKA: <b>${nilaiMutasi.toFixed(2)}</b>.</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>15-17 Juni 2026:</b> Pengajuan berkas di Disdikpora</li><li><b>17-18 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>19 Juni 2026:</b> Pengumuman hasil</li></ul></div></div>`;
     }
   }
 
