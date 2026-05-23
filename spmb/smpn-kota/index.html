@@ -6,8 +6,7 @@
 <title>Jalur SPMB SMPN Kota Yogyakarta</title>
 <link rel="stylesheet" href="https://job.web.id/smart.css">
 <link rel="stylesheet" href="assets/css/kota.css">
-<link rel="stylesheet" href="assets/css/smpn-kota.css">  
-
+<link rel="stylesheet" href="assets/css/smpn-kota.css">
 </head>
 <body>
 <div class="container">
@@ -96,7 +95,7 @@
       <div><label>Latitude RW</label><input type="number" id="lat" step="0.0001"></div>
       <div><label>Longitude RW</label><input type="number" id="lng" step="0.0001"></div>
     </div>
-    < type="" id="btnGeo" style="margin-top:8px; width:auto; padding:8px 12px;">Deteksi Lokasi Saya</>
+    <button type="button" id="btnGeo" style="margin-top:8px; width:auto; padding:8px 12px;">Deteksi Lokasi Saya</button>
     <div class="lokasi-hint">
       <span>atau</span>
       <a href="https://maps.google.com" target="_blank">Buka dan Copy dari Google Maps</a>
@@ -121,20 +120,9 @@
     </ul>
   </div>
 
-
-
-
-  
   <button class="btn" id="btnAnalyze">🔍 Analisis & Prediksi Peluang</button>
 
-
-
-
-
-
-
-  
-  <!-- ===== HASIL PERHITUNGAN (SUDAH DI DALAM CONTAINER) ===== -->
+  <!-- ===== HASIL PERHITUNGAN (DI DALAM CONTAINER) ===== -->
   <div id="result"></div>
 </div>
 
@@ -215,48 +203,160 @@
   </div>
 </div>
 
+<!-- Load Dependencies -->
 <script src="config.js"></script>
 <script src="data-kota.js"></script>
 <script src="helpers.js"></script>
 <script src="engine.js"></script>
 
+<!-- Load Affiliate Module -->
+<script src="assets/js/under.js"></script>
+
 <script>
+// ================= UTILS (Safe Null-Check) =================
 function getVal(id) { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; }
 function setVal(id, v) { const el = document.getElementById(id); if(el) el.value = v; }
-function show(id) { document.getElementById(id).classList.remove('hidden'); }
-function hide(id) { document.getElementById(id).classList.add('hidden'); }
+function show(id) { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }
+function hide(id) { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }
 
 let prestasiJalur = '';
 
-function toggleFields() {
-  const kk = document.getElementById('kk').value;
-  const asal = document.getElementById('asal').value;
-  document.getElementById('secRadius').classList.toggle('hidden', !document.getElementById('optRadius').checked || kk !== 'kota');
-  document.getElementById('secMutasi').classList.toggle('hidden', !document.getElementById('optMutasi').checked);
-  document.getElementById('secTKAD').classList.toggle('hidden', !(document.getElementById('optTKAD').checked || asal === 'luar'));
-  const is26 = document.getElementById('tahun').value === '2026';
-  document.getElementById('lbl1').innerText = is26 ? 'TKA Matematika' : 'ASPD Matematika';
-  document.getElementById('lbl2').innerText = is26 ? 'TKA B. Indonesia' : 'ASPD B. Indonesia';
-  document.getElementById('lbl3').innerText = is26 ? 'TKAD IPAS' : 'ASPD IPA/S';
+// ================= SETUP EVENT LISTENERS (Safe) =================
+function setupEventListeners() {
+  // Toggle Fields
+  const kkSelect = document.getElementById('kk');
+  if(kkSelect) kkSelect.addEventListener('change', function() {
+    const kk = this.value;
+    const optRadius = document.getElementById('optRadius');
+    const optDaerah = document.getElementById('optDaerah');
+    const optPrestasiUmum = document.getElementById('optPrestasiUmum');
+    const optAfirmasi = document.getElementById('optAfirmasi');
+    if(optRadius) optRadius.checked = kk === 'kota';
+    if(optDaerah) optDaerah.checked = kk === 'kota';
+    if(optPrestasiUmum) optPrestasiUmum.checked = kk !== 'kota';
+    if(optAfirmasi) optAfirmasi.checked = kk === 'kota';
+    toggleFields();
+  });
+
+  const tahunSelect = document.getElementById('tahun');
+  if(tahunSelect) tahunSelect.addEventListener('change', toggleFields);
+
+  const asalSelect = document.getElementById('asal');
+  if(asalSelect) asalSelect.addEventListener('change', toggleFields);
+
+  // btnGeo (Geolocation)
+  const btnGeo = document.getElementById('btnGeo');
+  if(btnGeo) {
+    btnGeo.addEventListener('click', function() {
+      if(!navigator.geolocation) return alert('Browser tidak mendukung GPS');
+      this.textContent = '📍 Mencari...';
+      navigator.geolocation.getCurrentPosition(p => {
+        setVal('lat', p.coords.latitude.toFixed(4));
+        setVal('lng', p.coords.longitude.toFixed(4));
+        this.textContent = '✅ Lokasi Ditemukan';
+        setTimeout(()=> this.textContent = 'Deteksi Lokasi Saya', 2000);
+      }, () => { 
+        this.textContent = '❌ Gagal';
+        alert('Gagal mengambil lokasi. Pastikan GPS aktif dan izin lokasi diberikan.');
+      });
+    });
+  }
+
+  // Popup Functions (expose to global for onclick)
+  window.openPrestasiPopup = function() {
+    const popup = document.getElementById('prestasi-popup');
+    if(popup) popup.classList.add('show');
+  }
+  window.closePrestasiPopup = function() {
+    const popup = document.getElementById('prestasi-popup');
+    if(popup) popup.classList.remove('show');
+  }
+  window.selectPrestasiJalur = function(jalur) {
+    prestasiJalur = jalur;
+    document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('active'));
+    const radio = document.querySelector(`input[value="${jalur}"]`);
+    if(radio && radio.parentElement) {
+      radio.parentElement.classList.add('active');
+      radio.checked = true;
+    }
+    hide('prestasi-nasional-info');
+    hide('prestasi-akademik-info');
+    if(jalur === 'nasional') show('prestasi-nasional-info');
+    else if(jalur === 'akademik') show('prestasi-akademik-info');
+  }
+  window.savePrestasiPilihan = function() {
+    if(!prestasiJalur) { alert('Pilih salah satu jalur prestasi khusus terlebih dahulu'); return; }
+    const infoEl = document.getElementById('prestasi-info');
+    if(infoEl) {
+      if(prestasiJalur === 'nasional') {
+        infoEl.innerHTML = '<b>✅ Terpilih:</b> Prestasi Tingkat Nasional (OSN/O2SN/FLS2N)<br><small>Jadwal: 9-12 Juni 2026</small>';
+        infoEl.style.color = '#16a34a';
+      } else {
+        infoEl.innerHTML = '<b>✅ Terpilih:</b> Prestasi Akademik (10% Terbaik SD Kota)<br><small>Jadwal: 9-12 Juni 2026</small>';
+        infoEl.style.color = '#16a34a';
+      }
+    }
+    closePrestasiPopup();
+  }
+
+  // Close popup when clicking outside
+  const popupOverlay = document.getElementById('prestasi-popup');
+  if(popupOverlay) {
+    popupOverlay.addEventListener('click', function(e) {
+      if(e.target === this) closePrestasiPopup();
+    });
+  }
+
+  // btnAnalyze
+  const btnAnalyze = document.getElementById('btnAnalyze');
+  if(btnAnalyze) {
+    btnAnalyze.addEventListener('click', function() {
+      this.disabled = true; this.textContent = '⏳ Memproses...';
+      setTimeout(() => {
+        try { runAnalysis(); } 
+        catch(e) { console.error(e); document.getElementById('result').innerHTML = `<div class="route err">⚠️ Error: ${e.message}</div>`; }
+        this.disabled = false; this.textContent = '🔍 Analisis & Prediksi Peluang';
+      }, 300);
+    });
+  }
+
+  console.log('✅ Event listeners initialized');
 }
 
-document.getElementById('kk').addEventListener('change', function() {
-  const kk = this.value;
-  document.getElementById('optRadius').checked = kk === 'kota';
-  document.getElementById('optDaerah').checked = kk === 'kota';
-  document.getElementById('optPrestasiUmum').checked = kk !== 'kota';
-  document.getElementById('optAfirmasi').checked = kk === 'kota';
-  toggleFields();
-});
-document.getElementById('tahun').addEventListener('change', toggleFields);
-document.getElementById('asal').addEventListener('change', toggleFields);
+// ================= CORE FUNCTIONS =================
+function toggleFields() {
+  const kk = document.getElementById('kk')?.value;
+  const asal = document.getElementById('asal')?.value;
+  const secRadius = document.getElementById('secRadius');
+  const secMutasi = document.getElementById('secMutasi');
+  const secTKAD = document.getElementById('secTKAD');
+  const optRadius = document.getElementById('optRadius');
+  const optMutasi = document.getElementById('optMutasi');
+  const optTKAD = document.getElementById('optTKAD');
+  const tahun = document.getElementById('tahun')?.value;
+  const lbl1 = document.getElementById('lbl1');
+  const lbl2 = document.getElementById('lbl2');
+  const lbl3 = document.getElementById('lbl3');
+
+  if(secRadius && optRadius) secRadius.classList.toggle('hidden', !optRadius.checked || kk !== 'kota');
+  if(secMutasi && optMutasi) secMutasi.classList.toggle('hidden', !optMutasi.checked);
+  if(secTKAD) secTKAD.classList.toggle('hidden', !((optTKAD?.checked) || asal === 'luar'));
+
+  const is26 = tahun === '2026';
+  if(lbl1) lbl1.innerText = is26 ? 'TKA Matematika' : 'ASPD Matematika';
+  if(lbl2) lbl2.innerText = is26 ? 'TKA B. Indonesia' : 'ASPD B. Indonesia';
+  if(lbl3) lbl3.innerText = is26 ? 'TKAD IPAS' : 'ASPD IPA/S';
+}
 
 function toggleRapor() {
-  const mode = document.querySelector('input[name="raporMode"]:checked').value;
-  document.getElementById('raporMapel').classList.toggle('hidden', mode !== 'mapel');
-  document.getElementById('raporSemester').classList.toggle('hidden', mode !== 'semester');
+  const mode = document.querySelector('input[name="raporMode"]:checked')?.value;
+  if(mode) {
+    document.getElementById('raporMapel')?.classList.toggle('hidden', mode !== 'mapel');
+    document.getElementById('raporSemester')?.classList.toggle('hidden', mode !== 'semester');
+  }
 }
 
+// Generate 5x5 Grid for rapor semester
 (function(){
   const mapels = [{id:'agm', name:'Agama'}, {id:'pnk', name:'Pancasila'}, {id:'ind', name:'B.Indonesia'}, {id:'mtk', name:'Matematika'}, {id:'ipa', name:'IPAS'}];
   let html = '';
@@ -265,82 +365,16 @@ function toggleRapor() {
     for(let s=7; s<=11; s++) html += `<div><label>S${s}</label><input type="number" id="rap_${m.id}_s${s}" max="100" step="0.01"></div>`;
     html += `</div></div>`;
   });
-  document.getElementById('raporSemester').innerHTML = html;
+  const raporSem = document.getElementById('raporSemester');
+  if(raporSem) raporSem.innerHTML = html;
 })();
 
-document.getElementById('btnGeo').addEventListener('click', function() {
-  if(!navigator.geolocation) return alert('Browser tidak mendukung GPS');
-  this.textContent = '📍 Mencari...';
-  navigator.geolocation.getCurrentPosition(p => {
-    setVal('lat', p.coords.latitude.toFixed(4));
-    setVal('lng', p.coords.longitude.toFixed(4));
-    this.textContent = '✅ Lokasi Ditemukan';
-    setTimeout(()=> this.textContent = 'Deteksi Lokasi Saya', 2000);
-  }, () => { this.textContent = '❌ Gagal'; });
-});
-
-// ===== POPUP FUNCTIONS =====
-function openPrestasiPopup() {
-  document.getElementById('prestasi-popup').classList.add('show');
-}
-
-function closePrestasiPopup() {
-  document.getElementById('prestasi-popup').classList.remove('show');
-}
-
-function selectPrestasiJalur(jalur) {
-  prestasiJalur = jalur;
-  document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('active'));
-  document.querySelector(`input[value="${jalur}"]`).parentElement.classList.add('active');
-  document.querySelector(`input[value="${jalur}"]`).checked = true;
-  
-  hide('prestasi-nasional-info');
-  hide('prestasi-akademik-info');
-  
-  if(jalur === 'nasional') {
-    show('prestasi-nasional-info');
-  } else if(jalur === 'akademik') {
-    show('prestasi-akademik-info');
-  }
-}
-
-function savePrestasiPilihan() {
-  if(!prestasiJalur) {
-    alert('Pilih salah satu jalur prestasi khusus terlebih dahulu');
-    return;
-  }
-  
-  const infoEl = document.getElementById('prestasi-info');
-  if(prestasiJalur === 'nasional') {
-    infoEl.innerHTML = '<b>✅ Terpilih:</b> Prestasi Tingkat Nasional (OSN/O2SN/FLS2N)<br><small>Jadwal: 9-12 Juni 2026</small>';
-    infoEl.style.color = '#16a34a';
-  } else {
-    infoEl.innerHTML = '<b>✅ Terpilih:</b> Prestasi Akademik (10% Terbaik SD Kota)<br><small>Jadwal: 9-12 Juni 2026</small>';
-    infoEl.style.color = '#16a34a';
-  }
-  
-  closePrestasiPopup();
-}
-
-// Close popup when clicking outside
-document.getElementById('prestasi-popup').addEventListener('click', function(e) {
-  if(e.target === this) closePrestasiPopup();
-});
-
-document.getElementById('btnAnalyze').addEventListener('click', function() {
-  this.disabled = true; this.textContent = '⏳ Memproses...';
-  setTimeout(() => {
-    try { runAnalysis(); } 
-    catch(e) { console.error(e); document.getElementById('result').innerHTML = `<div class="route err">⚠️ Error: ${e.message}</div>`; }
-    this.disabled = false; this.textContent = '🔍 Analisis & Prediksi Peluang';
-  }, 300);
-});
-
 function hitungRaporSum() {
-  const mode = document.querySelector('input[name="raporMode"]:checked').value;
+  const mode = document.querySelector('input[name="raporMode"]:checked')?.value;
   let sum = 0;
-  if(mode === 'mapel') sum = getVal('rap_agm') + getVal('rap_pnk') + getVal('rap_ind') + getVal('rap_mtk') + getVal('rap_ipa');
-  else {
+  if(mode === 'mapel') {
+    sum = getVal('rap_agm') + getVal('rap_pnk') + getVal('rap_ind') + getVal('rap_mtk') + getVal('rap_ipa');
+  } else {
     ['agm','pnk','ind','mtk','ipa'].forEach(m => {
       let total = 0, count = 0;
       for(let s=7; s<=11; s++) { const v = getVal(`rap_${m.id}_s${s}`); if(v>0){total+=v; count++;} }
@@ -351,8 +385,8 @@ function hitungRaporSum() {
 }
 
 function runAnalysis() {
-  const kk = document.getElementById('kk').value;
-  const asal = document.getElementById('asal').value;
+  const kk = document.getElementById('kk')?.value;
+  const asal = document.getElementById('asal')?.value;
   const tes1 = getVal('tes1'), tes2 = getVal('tes2'), tes3 = getVal('tes3');
   const tesSum = tes1 + tes2 + tes3;
   const prestasi = Math.min(getVal('prestasi'), 7.5);
@@ -400,7 +434,7 @@ function runAnalysis() {
     }
   }
 
-  if(document.getElementById('optRadius').checked) {
+  if(document.getElementById('optRadius')?.checked) {
     if(kk !== 'kota') out += `<div class="route err"><span class="badge err">❌ TIDAK BISA</span><h3>📍 Jalur Domisili Radius</h3><p>Khusus pemegang KK Kota Yogyakarta.</p></div>`;
     else {
       const lat = getVal('lat'), lng = getVal('lng');
@@ -438,7 +472,7 @@ function runAnalysis() {
     }
   }
 
-  if(document.getElementById('optDaerah').checked && kk === 'kota') {
+  if(document.getElementById('optDaerah')?.checked && kk === 'kota') {
     if(typeof KotaEngine?.predict === 'function') {
       const pred = KotaEngine.predict(ngDaerah, ngPrestasiUmum, 10);
       if(pred.domisili?.length) {
@@ -465,7 +499,7 @@ function runAnalysis() {
     }
   }
   
-  if(document.getElementById('optAfirmasi').checked && kk === 'kota') {
+  if(document.getElementById('optAfirmasi')?.checked && kk === 'kota') {
     out += `<div class="route ok"><span class="badge ok">✅ POTENSIAL</span><h3>🤝 Jalur Afirmasi (KSJPS/Disabilitas)</h3><p>Seleksi menggunakan rumus NG yang sama dengan Domisili Daerah.</p>
       <div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul>
         <li><b>29-30 Juni 2026:</b> Pengajuan akun & verifikasi</li>
@@ -481,7 +515,7 @@ function runAnalysis() {
         </ul></div></div>`;
   }
 
-  if(document.getElementById('optPrestasiUmum').checked && kk !== 'kota') {
+  if(document.getElementById('optPrestasiUmum')?.checked && kk !== 'kota') {
     if(typeof KotaEngine?.predict === 'function') {
       const pred = KotaEngine.predict(ngDaerah, ngPrestasiUmum, 10);
       if(pred.prestasi?.length) {
@@ -507,8 +541,8 @@ function runAnalysis() {
     }
   }
 
-  if(document.getElementById('optMutasi').checked) {
-    const sk = document.getElementById('skDate').value;
+  if(document.getElementById('optMutasi')?.checked) {
+    const sk = document.getElementById('skDate')?.value;
     if(!sk) out += `<div class="route warn"><span class="badge warn">📝 Input SK</span><h3>📜 Jalur Mutasi</h3><p>Masukkan tanggal SK Mutasi.</p></div>`;
     else if(sk > '2025-01-01') out += `<div class="route err"><span class="badge err">❌ SK Tidak Valid</span><h3>📜 Jalur Mutasi</h3><p>SK Mutasi maksimal 1 Januari 2025.</p></div>`;
     else {
@@ -529,7 +563,7 @@ function runAnalysis() {
     }
   }
 
-  if(document.getElementById('optTKAD').checked || asal === 'luar') {
+  if(document.getElementById('optTKAD')?.checked || asal === 'luar') {
     out += `<div class="route ok"><span class="badge ok">📝 WAJIB</span><h3>📝 TKAD Luar DIY</h3><p>Wajib mengikuti TKAD mapel IPAS pada <b>18 Juni 2026</b>.</p>
       <div class="dokumen-box"><h4>📄 Berkas Pendaftaran TKAD:</h4><ul>
         <li><b>Fotokopi KK:</b> 1 lembar (dari Disdukcapil)</li>
@@ -539,28 +573,32 @@ function runAnalysis() {
       </ul></div></div>`;
   }
 
-  document.getElementById('result').innerHTML = out;
-  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+  const resultEl = document.getElementById('result');
+  if(resultEl) {
+    resultEl.innerHTML = out;
+    resultEl.scrollIntoView({behavior:'smooth'});
+  }
 }
 
-document.getElementById('kk').dispatchEvent(new Event('change'));
-toggleFields();
-</script>
-
-
-
-<!-- Load affiliate module -->
-<script src="assets/js/under.js"></script>
-<script>
-  // Inisialisasi setelah semua script lain load
-  document.addEventListener('DOMContentLoaded', function() {
-    // Pastikan module sudah load
-    if (typeof Affiliate !== 'undefined') {
-      Affiliate.init();
-    }
-  });
-</script>
-
+// ================= INIT ON DOM READY =================
+document.addEventListener('DOMContentLoaded', function() {
+  // Setup all event listeners
+  setupEventListeners();
   
+  // Initial toggle
+  toggleFields();
+  
+  // Trigger KK change to auto-select pathways
+  const kkSelect = document.getElementById('kk');
+  if(kkSelect) kkSelect.dispatchEvent(new Event('change'));
+  
+  // Init affiliate module
+  if(typeof Affiliate !== 'undefined') {
+    Affiliate.init();
+  }
+  
+  console.log('✅ App initialized');
+});
+</script>
 </body>
 </html>
