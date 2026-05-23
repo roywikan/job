@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPMB SMPN Kota Yogyakarta 2026</title>
+<title>Jalur SPMB SMPN Kota Yogyakarta</title>
 <link rel="stylesheet" href="https://job.web.id/smart.css">
+<link rel="stylesheet" href="assets/css/kota.css">
 <style>
   :root { --p:#1d4ed8; --bg:#f8fafc; --c:#fff; --ok:#16a34a; --warn:#d97706; --err:#dc2626; }
   body { font-family: system-ui, sans-serif; background: var(--bg); color: #111; margin: 0; padding: 15px; }
@@ -57,6 +58,81 @@
   .lokasi-hint { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.9rem; color: #64748b; flex-wrap: wrap; }
   .lokasi-hint a { color: var(--p); text-decoration: none; }
   .lokasi-hint a:hover { text-decoration: underline; }
+  
+  /* ===== POPUP STYLES (dari kalkulator NG Kota) ===== */
+  .popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .popup-overlay.show { display: flex; }
+  .popup-content {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  .popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .popup-header h3 { margin: 0; color: var(--p); }
+  .popup-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #64748b;
+    width: auto;
+    padding: 0;
+    margin: 0;
+  }
+  .popup-close:hover { color: var(--err); }
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .radio-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .radio-item:hover { background: #f1f5f9; }
+  .radio-item.active { border-color: var(--p); background: #eff6ff; }
+  .radio-item input[type="radio"] {
+    margin: 3px 0 0 0;
+    width: auto;
+  }
+  .radio-item label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .radio-item .desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 4px;
+  }
 </style>
 </head>
 <body>
@@ -115,6 +191,17 @@
       <div id="raporSemester" class="hidden"></div>
       <div class="small">* Maksimal nilai 100. Sistem akan otomatis menghitung jumlah rata-rata 5 mapel.</div>
     </div>
+
+    <!-- ===== PRESTASI KHUSUS (Nasional/Akademik) ===== -->
+    <div style="margin-top:16px;">
+      <label>🏆 Prestasi Khusus</label>
+      <button type="button" class="btn" style="background:#059669; margin-top:6px;" onclick="openPrestasiPopup()">
+        📝 Pilih Jalur Prestasi Khusus
+      </button>
+      <div id="prestasi-info" class="small" style="margin-top:8px; color:#64748b;">
+        Klik tombol di atas untuk memilih jalur prestasi khusus
+      </div>
+    </div>
   </div>
 
   <div class="card">
@@ -161,9 +248,87 @@
   </div>
 
   <button class="btn" id="btnAnalyze">🔍 Analisis & Prediksi Peluang</button>
+
+  <!-- ===== HASIL PERHITUNGAN (SUDAH DI DALAM CONTAINER) ===== -->
+  <div id="result"></div>
 </div>
 
-<div id="result"></div>
+<!-- ===== POPUP PRESTASI KHUSUS ===== -->
+<div id="prestasi-popup" class="popup-overlay">
+  <div class="popup-content">
+    <div class="popup-header">
+      <h3>🏆 Pilih Jalur Prestasi Khusus</h3>
+      <button class="popup-close" onclick="closePrestasiPopup()">&times;</button>
+    </div>
+    
+    <div class="radio-group">
+      <div class="radio-item" onclick="selectPrestasiJalur('nasional')">
+        <input type="radio" name="prestasiJalur" id="prestasiNasional" value="nasional">
+        <div>
+          <label for="prestasiNasional">🥇 Prestasi Tingkat Nasional</label>
+          <div class="desc">OSN, O2SN, FLS2N/FLS3N, LS2N, Lomba Perpustakaan Nasional (2023-2025)</div>
+        </div>
+      </div>
+      
+      <div class="radio-item" onclick="selectPrestasiJalur('akademik')">
+        <input type="radio" name="prestasiJalur" id="prestasiAkademik" value="akademik">
+        <div>
+          <label for="prestasiAkademik">📚 Prestasi Akademik (10% Terbaik)</label>
+          <div class="desc">Khusus SD asal Kota Yogyakarta, peringkat 10% terbaik di sekolah</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="prestasi-nasional-info" class="hidden">
+      <div class="timeline-box">
+        <h3>📅 Jadwal Prestasi Nasional:</h3>
+        <ul>
+          <li><b>9-10 Juni 2026 (08.00-10.00 WIB):</b> Pengajuan berkas di Disdikpora</li>
+          <li><b>9-10 Juni 2026 (08.00-10.00 WIB):</b> Verifikasi & token</li>
+          <li><b>9 Juni 08.00 - 10 Juni 13.00 WIB:</b> Aktivasi & pilih sekolah</li>
+          <li><b>11 Juni 2026 (08.00 WIB):</b> Pengumuman</li>
+          <li><b>11-12 Juni 2026 (08.00-14.00 WIB):</b> Daftar ulang</li>
+        </ul>
+      </div>
+      <div class="dokumen-box">
+        <h4>📄 Dokumen yang Harus Disiapkan:</h4>
+        <ul>
+          <li><b>Sertifikat Prestasi Nasional:</b> Asli + fotokopi legalisir (OSN/O2SN/FLS2N/FLS3N/LS2N tahun 2023-2025)</li>
+          <li><b>Kartu Keluarga:</b> Asli + fotokopi (dari Disdukcapil)</li>
+          <li><b>Akta Kelahiran:</b> Fotokopi (dari Disdukcapil)</li>
+          <li><b>Surat Keterangan Lulus SD:</b> Asli (dari SD asal)</li>
+          <li><b>Sertifikat Hasil TKA & TKAD:</b> Asli (lulusan 2026) atau ASPD (lulusan 2025)</li>
+          <li><b>Formulir Pengajuan:</b> 2 lembar (dari Disdikpora)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="prestasi-akademik-info" class="hidden">
+      <div class="timeline-box">
+        <h3>📅 Jadwal Prestasi Akademik:</h3>
+        <ul>
+          <li><b>9 Juni 08.00 - 10 Juni 10.00 WIB:</b> Aktivasi token & pilih sekolah</li>
+          <li><b>9 Juni 08.00 - 10 Juni 14.00 WIB:</b> Perubahan pilihan sekolah</li>
+          <li><b>11 Juni 2026 (08.00 WIB):</b> Pengumuman hasil</li>
+          <li><b>11-12 Juni 2026 (08.00-14.00 WIB):</b> Daftar ulang</li>
+        </ul>
+      </div>
+      <div class="dokumen-box">
+        <h4>📄 Dokumen yang Harus Disiapkan:</h4>
+        <ul>
+          <li><b>Surat Keterangan 10% Terbaik:</b> Asli dari SD asal (format juknis, ditandatangani Kepala SD)</li>
+          <li><b>Kartu Keluarga:</b> Asli + fotokopi (dari Disdukcapil)</li>
+          <li><b>Akta Kelahiran:</b> Fotokopi (dari Disdukcapil)</li>
+          <li><b>Surat Keterangan Lulus SD:</b> Asli (dari SD asal)</li>
+          <li><b>Sertifikat Hasil TKA & TKAD:</b> Asli (dari sekolah/panitia)</li>
+          <li><b>Print Bukti Pendaftaran:</b> 2 lembar rangkap (dari https://yogya.spmb.id)</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="btn" onclick="savePrestasiPilihan()" style="margin-top:16px;">✅ Simpan Pilihan</button>
+  </div>
+</div>
 
 <script src="config.js"></script>
 <script src="data-kota.js"></script>
@@ -175,6 +340,8 @@ function getVal(id) { const el = document.getElementById(id); return el ? (parse
 function setVal(id, v) { const el = document.getElementById(id); if(el) el.value = v; }
 function show(id) { document.getElementById(id).classList.remove('hidden'); }
 function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+let prestasiJalur = '';
 
 function toggleFields() {
   const kk = document.getElementById('kk').value;
@@ -227,6 +394,54 @@ document.getElementById('btnGeo').addEventListener('click', function() {
   }, () => { this.textContent = '❌ Gagal'; });
 });
 
+// ===== POPUP FUNCTIONS =====
+function openPrestasiPopup() {
+  document.getElementById('prestasi-popup').classList.add('show');
+}
+
+function closePrestasiPopup() {
+  document.getElementById('prestasi-popup').classList.remove('show');
+}
+
+function selectPrestasiJalur(jalur) {
+  prestasiJalur = jalur;
+  document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('active'));
+  document.querySelector(`input[value="${jalur}"]`).parentElement.classList.add('active');
+  document.querySelector(`input[value="${jalur}"]`).checked = true;
+  
+  hide('prestasi-nasional-info');
+  hide('prestasi-akademik-info');
+  
+  if(jalur === 'nasional') {
+    show('prestasi-nasional-info');
+  } else if(jalur === 'akademik') {
+    show('prestasi-akademik-info');
+  }
+}
+
+function savePrestasiPilihan() {
+  if(!prestasiJalur) {
+    alert('Pilih salah satu jalur prestasi khusus terlebih dahulu');
+    return;
+  }
+  
+  const infoEl = document.getElementById('prestasi-info');
+  if(prestasiJalur === 'nasional') {
+    infoEl.innerHTML = '<b>✅ Terpilih:</b> Prestasi Tingkat Nasional (OSN/O2SN/FLS2N)<br><small>Jadwal: 9-12 Juni 2026</small>';
+    infoEl.style.color = '#16a34a';
+  } else {
+    infoEl.innerHTML = '<b>✅ Terpilih:</b> Prestasi Akademik (10% Terbaik SD Kota)<br><small>Jadwal: 9-12 Juni 2026</small>';
+    infoEl.style.color = '#16a34a';
+  }
+  
+  closePrestasiPopup();
+}
+
+// Close popup when clicking outside
+document.getElementById('prestasi-popup').addEventListener('click', function(e) {
+  if(e.target === this) closePrestasiPopup();
+});
+
 document.getElementById('btnAnalyze').addEventListener('click', function() {
   this.disabled = true; this.textContent = '⏳ Memproses...';
   setTimeout(() => {
@@ -266,11 +481,45 @@ function runAnalysis() {
     <p><strong>Nilai Prestasi Umum:</strong> ${ngPrestasiUmum.toFixed(2)}</p>
     <p><strong>Nilai Mutasi:</strong> ${nilaiMutasi.toFixed(2)}</p></div></div>`;
 
+  // Prestasi Khusus (dari popup)
+  if(prestasiJalur === 'nasional') {
+    out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>🏆 Jalur Prestasi Khusus (Nasional)</h3><p>Anda memiliki prestasi tingkat nasional. Seleksi berdasarkan verifikasi sertifikat.</p>
+      <div class="timeline-box"><h3>📅 Jadwal:</h3><ul>
+        <li><b>9-10 Juni 2026:</b> Pengajuan & verifikasi berkas di Disdikpora</li>
+        <li><b>9-10 Juni 2026:</b> Aktivasi token & pilih sekolah</li>
+        <li><b>11 Juni 2026:</b> Pengumuman hasil</li>
+        <li><b>11-12 Juni 2026:</b> Daftar ulang</li></ul>
+        <div class="dokumen-box"><h4>📄 Dokumen:</h4><ul>
+          <li>Sertifikat Prestasi Nasional (OSN/O2SN/FLS2N/FLS3N/LS2N 2023-2025) - Asli + legalisir</li>
+          <li>KK + Akta Kelahiran (fotokopi)</li>
+          <li>Surat Keterangan Lulus SD (asli)</li>
+          <li>Sertifikat Hasil TKA & TKAD/ASPD</li>
+          <li>Formulir dari Disdikpora (2 lembar)</li>
+        </ul></div></div>`;
+  } else if(prestasiJalur === 'akademik') {
+    if(asal === 'kota') {
+      out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>🏆 Jalur Prestasi Khusus (Akademik)</h3><p>Jika Anda masuk <b>10% terbaik</b> di SD asal Kota Yogyakarta.</p>
+        <div class="timeline-box"><h3>📅 Jadwal:</h3><ul>
+          <li><b>9-10 Juni 2026:</b> Aktivasi token & pilih sekolah</li>
+          <li><b>11 Juni 2026:</b> Pengumuman hasil</li>
+          <li><b>11-12 Juni 2026:</b> Daftar ulang</li></ul>
+          <div class="dokumen-box"><h4>📄 Dokumen:</h4><ul>
+            <li>Surat Keterangan 10% Terbaik dari SD asal (asli, format juknis)</li>
+            <li>KK + Akta Kelahiran (fotokopi)</li>
+            <li>Surat Keterangan Lulus SD (asli)</li>
+            <li>Sertifikat Hasil TKA & TKAD (asli)</li>
+            <li>Print Bukti Pendaftaran 2 lembar (dari yogya.spmb.id)</li>
+          </ul></div></div>`;
+    } else {
+      out += `<div class="route err"><span class="badge err">❌ TIDAK BISA</span><h3>🏆 Jalur Prestasi Khusus (Akademik)</h3><p>Khusus untuk SD asal <b>Kota Yogyakarta</b>. Anda berasal dari SD ${asal === 'diy' ? 'DIY (Luar Kota)' : 'Luar DIY'}.</p></div>`;
+    }
+  }
+
   if(document.getElementById('optRadius').checked) {
     if(kk !== 'kota') out += `<div class="route err"><span class="badge err">❌ TIDAK BISA</span><h3>📍 Jalur Domisili Radius</h3><p>Khusus pemegang KK Kota Yogyakarta.</p></div>`;
     else {
       const lat = getVal('lat'), lng = getVal('lng');
-      if(!lat || !lng) out += `<div class="route warn"><span class="badge warn">📝 Input Lokasi</span><h3>📍 Jalur Domisili Radius</h3><p>Masukkan koordinat RW.</p></div>`;
+      if(!lat || !lng) out += `<div class="route warn"><span class="badge warn">📝 Input Lokasi</span><h3>📍 Jalur Domisili Radius</h3><p>Masukkan koordinat RW untuk cek kelayakan & prediksi sekolah terdekat.</p></div>`;
       else {
         const distCity = window.hitungJarak?.(lat, lng, -7.7956, 110.3695) || 0;
         if(distCity > 15000) out += `<div class="route err"><span class="badge err">⚠️ Lokasi Jauh</span><h3>📍 Jalur Domisili Radius</h3><p>Koordinat berjarak ${(distCity/1000).toFixed(1)} km dari pusat Kota Yogyakarta.</p></div>`;
@@ -344,21 +593,6 @@ function runAnalysis() {
           <li><b>Sertifikat Hasil TKA & TKAD:</b> Asli (lulusan 2026)</li>
           <li><b>Surat Keterangan Nilai Rapor:</b> Asli (dari SD asal)</li>
           <li><b>Print Bukti Pengajuan Akun:</b> 2 lembar (dari https://yogya.spmb.id)</li>
-        </ul></div></div>`;
-  }
-
-  if(asal === 'kota') {
-    out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>🏆 Jalur Prestasi Khusus (Akademik)</h3><p>Jika Anda masuk <b>10% terbaik</b> di SD asal Kota Yogyakarta.</p>
-      <div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul>
-        <li><b>9-10 Juni 2026:</b> Aktivasi token & pilih sekolah</li>
-        <li><b>11 Juni 2026:</b> Pengumuman hasil</li>
-        <li><b>11 atau 12 Juni 2026:</b> Daftar ulang</li></ul>
-        <div class="dokumen-box"><h4>📄 Berkas yang Harus Disiapkan:</h4><ul>
-          <li><b>KK + Akta Kelahiran:</b> Fotokopi (dari Disdukcapil)</li>
-          <li><b>Surat Keterangan Lulus SD:</b> Asli (dari SD asal)</li>
-          <li><b>Sertifikat Hasil TKA & TKAD:</b> Asli (dari sekolah)</li>
-          <li><b>Surat Keterangan 10% Terbaik:</b> Asli (dari SD asal, format juknis)</li>
-          <li><b>Print Bukti Pendaftaran:</b> 2 lembar rangkap (dari https://yogya.spmb.id)</li>
         </ul></div></div>`;
   }
 
