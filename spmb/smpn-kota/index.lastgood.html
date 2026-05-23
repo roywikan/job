@@ -8,7 +8,14 @@
 <style>
   :root { --p:#1d4ed8; --bg:#f8fafc; --c:#fff; --ok:#16a34a; --warn:#d97706; --err:#dc2626; }
   body { font-family: system-ui, sans-serif; background: var(--bg); color: #111; margin: 0; padding: 15px; }
-  .container { max-width: 800px; margin: 0 auto; }
+  
+  /* CONTAINER UTAMA */
+  .container { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    background: var(--bg); /* Agar background konsisten */
+  }
+
   .hero { background: linear-gradient(135deg, var(--p), #2563eb); color: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
   .card { background: var(--c); padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
   h2 { margin-top: 0; color: var(--p); font-size: 1.2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
@@ -24,6 +31,8 @@
   .check-item { display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 10px; border-radius: 8px; cursor: pointer; }
   .check-item input { width: auto; margin: 0; }
   .check-item label { margin: 0; font-weight: 500; cursor: pointer; }
+  
+  /* RESULT STYLES */
   .route { border-left: 4px solid #ccc; padding: 12px; margin: 10px 0; background: #fff; border-radius: 8px; }
   .route.ok { border-left-color: var(--ok); background: #f0fdf4; }
   .route.warn { border-left-color: var(--warn); background: #fffbeb; }
@@ -44,55 +53,18 @@
   .semester-grid input { text-align: center; padding: 6px; }
   @media(max-width:600px){ .semester-grid { grid-template-columns: repeat(2, 1fr); } }
   
-  /* FIX 3: CSS Symmetry - Hasil Perhitungan sama dengan Input Data */
-  .hasil-card { 
-    background: var(--c); 
-    padding: 16px; 
-    border-radius: 12px; 
-    margin-bottom: 16px; 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    border-top: 3px solid var(--p);
-  }
-  .hasil-card h2 {
-    color: var(--p);
-    font-size: 1.2rem;
-    margin-top: 0;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #e2e8f0;
-  }
-  .nilai-summary {
-    background: #f8fafc;
-    padding: 12px;
-    border-radius: 8px;
-    margin: 10px 0;
-  }
-  .nilai-summary p {
-    margin: 6px 0;
-    font-size: 0.95rem;
-  }
-  .timeline-box {
-    background: #fef3c7;
-    border-left: 4px solid var(--warn);
-    padding: 12px;
-    margin: 12px 0;
-    border-radius: 6px;
-  }
-  .timeline-box h3 {
-    margin: 0 0 8px 0;
-    font-size: 1rem;
-    color: #92400e;
-  }
-  .timeline-box ul {
-    margin: 0;
-    padding-left: 20px;
-    font-size: 0.9rem;
-  }
-  .timeline-box li {
-    margin: 4px 0;
-  }
+  .hasil-card { background: var(--c); padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-top: 3px solid var(--p); }
+  .hasil-card h2 { color: var(--p); font-size: 1.2rem; margin-top: 0; padding-bottom: 12px; border-bottom: 2px solid #e2e8f0; }
+  .nilai-summary { background: #f8fafc; padding: 12px; border-radius: 8px; margin: 10px 0; }
+  .timeline-box { background: #fef3c7; border-left: 4px solid var(--warn); padding: 12px; margin: 12px 0; border-radius: 6px; }
+  .timeline-box h3 { margin: 0 0 8px 0; font-size: 1rem; color: #92400e; }
+  .timeline-box ul { margin: 0; padding-left: 20px; font-size: 0.9rem; }
+  .timeline-box li { margin: 4px 0; }
 </style>
 </head>
 <body>
+
+<!-- CONTAINER DIBUKA DI SINI -->
 <div class="container">
   <div class="hero">
     <h1> SPMB SMPN Kota Yogyakarta</h1>
@@ -138,7 +110,6 @@
         <label><input type="radio" name="raporMode" value="semester" onchange="toggleRapor()"> Belum (input nilai per semester)</label>
       </div>
       
-      <!-- Mode 1: Rata-rata per Mapel -->
       <div id="raporMapel" class="grid">
         <div><label>Agama</label><input type="number" id="rap_agm" step="0.01"></div>
         <div><label>Pancasila</label><input type="number" id="rap_pnk" step="0.01"></div>
@@ -146,8 +117,6 @@
         <div><label>Matematika</label><input type="number" id="rap_mtk" step="0.01"></div>
         <div style="grid-column:1/-1;"><label>IPAS</label><input type="number" id="rap_ipa" step="0.01"></div>
       </div>
-
-      <!-- Mode 2: Nilai per Semester (5x5 Grid) -->
       <div id="raporSemester" class="hidden"></div>
       <div class="small">* Maksimal nilai 100. Sistem akan otomatis menghitung jumlah rata-rata 5 mapel.</div>
     </div>
@@ -194,9 +163,11 @@
   </div>
 
   <button class="btn" id="btnAnalyze">🔍 Analisis & Prediksi Peluang</button>
-</div>
 
-<div id="result"></div>
+  <!-- RESULT SUDAH DIPINDAHKAN KE DALAM CONTAINER -->
+  <div id="result"></div>
+</div>
+<!-- CONTAINER DITUTUP DI SINI -->
 
 <!-- DEPENDENCIES -->
 <script src="config.js"></script>
@@ -205,68 +176,43 @@
 <script src="engine.js"></script>
 
 <script>
-// ================= UTILS =================
 function getVal(id) { const el = document.getElementById(id); return el ? (parseFloat(el.value) || 0) : 0; }
 function setVal(id, v) { const el = document.getElementById(id); if(el) el.value = v; }
 function show(id) { document.getElementById(id).classList.remove('hidden'); }
 function hide(id) { document.getElementById(id).classList.add('hidden'); }
 
-// ================= UI TOGGLES =================
 function toggleFields() {
   const kk = document.getElementById('kk').value;
   const asal = document.getElementById('asal').value;
   
-  // Radius hanya untuk KK Kota
-  document.getElementById('secRadius').classList.toggle('hidden', 
-    !document.getElementById('optRadius').checked || kk !== 'kota');
-  
-  // Mutasi
+  document.getElementById('secRadius').classList.toggle('hidden', !document.getElementById('optRadius').checked || kk !== 'kota');
   document.getElementById('secMutasi').classList.toggle('hidden', !document.getElementById('optMutasi').checked);
-  
-  // TKAD otomatis muncul jika asal luar DIY atau dicentang manual
-  document.getElementById('secTKAD').classList.toggle('hidden', 
-    !(document.getElementById('optTKAD').checked || asal === 'luar'));
+  document.getElementById('secTKAD').classList.toggle('hidden', !(document.getElementById('optTKAD').checked || asal === 'luar'));
 
-  // Update label tahun
   const is26 = document.getElementById('tahun').value === '2026';
   document.getElementById('lbl1').innerText = is26 ? 'TKA Matematika' : 'ASPD Matematika';
   document.getElementById('lbl2').innerText = is26 ? 'TKA B. Indonesia' : 'ASPD B. Indonesia';
   document.getElementById('lbl3').innerText = is26 ? 'TKAD IPAS' : 'ASPD IPA/S';
 }
 
-// Auto-toggle pathways based on KK
 document.getElementById('kk').addEventListener('change', function() {
   const kk = this.value;
-  const optRadius = document.getElementById('optRadius');
-  const optDaerah = document.getElementById('optDaerah');
-  const optPrestasiUmum = document.getElementById('optPrestasiUmum');
-  const optAfirmasi = document.getElementById('optAfirmasi');
-  
-  if (kk === 'kota') {
-    optRadius.checked = true;
-    optDaerah.checked = true;
-    optPrestasiUmum.checked = false;
-    optAfirmasi.checked = true;
-  } else {
-    optRadius.checked = false;
-    optDaerah.checked = false;
-    optPrestasiUmum.checked = true; // Otomatis terpilih untuk KK Luar
-    optAfirmasi.checked = false;
-  }
+  document.getElementById('optRadius').checked = kk === 'kota';
+  document.getElementById('optDaerah').checked = kk === 'kota';
+  document.getElementById('optPrestasiUmum').checked = kk !== 'kota';
+  document.getElementById('optAfirmasi').checked = kk === 'kota';
   toggleFields();
 });
 
 document.getElementById('tahun').addEventListener('change', toggleFields);
 document.getElementById('asal').addEventListener('change', toggleFields);
 
-// Toggle Rapor Input Mode
 function toggleRapor() {
   const mode = document.querySelector('input[name="raporMode"]:checked').value;
   document.getElementById('raporMapel').classList.toggle('hidden', mode !== 'mapel');
   document.getElementById('raporSemester').classList.toggle('hidden', mode !== 'semester');
 }
 
-// Generate 5x5 Grid on load
 (function(){
   const mapels = [
     {id:'agm', name:'Agama'}, {id:'pnk', name:'Pancasila'}, {id:'ind', name:'B.Indonesia'},
@@ -285,7 +231,6 @@ function toggleRapor() {
   document.getElementById('raporSemester').innerHTML = html;
 })();
 
-// Geolocation
 document.getElementById('btnGeo').addEventListener('click', function() {
   if(!navigator.geolocation) return alert('Browser tidak mendukung GPS');
   this.textContent = '📍 Mencari...';
@@ -297,7 +242,6 @@ document.getElementById('btnGeo').addEventListener('click', function() {
   }, () => { this.textContent = '❌ Gagal'; });
 });
 
-// ================= CORE LOGIC =================
 document.getElementById('btnAnalyze').addEventListener('click', function() {
   this.disabled = true; this.textContent = '⏳ Memproses...';
   setTimeout(() => {
@@ -332,12 +276,10 @@ function runAnalysis() {
   const prestasi = Math.min(getVal('prestasi'), 7.5);
   const raporSum = hitungRaporSum();
   
-  // Rumus Juknis 2026
   const ngDaerah = (tesSum * 0.9) + ((raporSum * 0.6) * 0.1) + prestasi;
-  const ngPrestasiUmum = tesSum + prestasi; // Tanpa rapor
-  const nilaiMutasi = tes1; // Seleksi Mutasi hanya pakai TKA Matematika (sesuai juknis)
+  const ngPrestasiUmum = tesSum + prestasi;
+  const nilaiMutasi = tes1;
   
-  // FIX 3: Hasil Perhitungan dengan styling yang simetris
   let out = `<div class="hasil-card">
     <h2>📊 Hasil Perhitungan</h2>
     <div class="nilai-summary">
@@ -347,7 +289,6 @@ function runAnalysis() {
     </div>
   </div>`;
 
-  // ===== 1. DOMISILI RADIUS =====
   if(document.getElementById('optRadius').checked) {
     if(kk !== 'kota') {
       out += `<div class="route err"><span class="badge err">❌ TIDAK BISA</span><h3>📍 Jalur Domisili Radius</h3><p>Khusus pemegang KK Kota Yogyakarta.</p></div>`;
@@ -378,7 +319,6 @@ function runAnalysis() {
     }
   }
 
-  // ===== 2. DOMISILI DAERAH & AFIRMASI =====
   if(document.getElementById('optDaerah').checked && kk === 'kota') {
     if(typeof KotaEngine?.predict === 'function') {
       const pred = KotaEngine.predict(ngDaerah, ngPrestasiUmum, 10);
@@ -394,16 +334,13 @@ function runAnalysis() {
   }
   
   if(document.getElementById('optAfirmasi').checked && kk === 'kota') {
-    out += `<div class="route ok"><span class="badge ok">✅ POTENSIAL</span><h3>🤝 Jalur Afirmasi (KSJPS/Disabilitas)</h3><p>Seleksi menggunakan rumus NG yang sama dengan Domisili Daerah.</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>29-30 Juni 2026:</b> Pengajuan akun & verifikasi</li><li><b>29 Juni - 1 Juli 2026:</b> Aktivasi token & pilih sekolah</li><li><b>2 Juli 2026:</b> Pengumuman hasil</li></ul></div></div>`;
+    out += `<div class="route ok"><span class="badge ok">✅ POTENSIAL</span><h3>🤝 Jalur Afirmasi (KSJPS/Disabilitas)</h3><p>Seleksi menggunakan rumus NG yang sama dengan Domisili Daerah. Pastikan bukti KSJPS/Dokumen asesmen disabilitas lengkap.</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>29-30 Juni 2026:</b> Pengajuan akun & verifikasi</li><li><b>29 Juni - 1 Juli 2026:</b> Aktivasi token & pilih sekolah</li><li><b>2 Juli 2026:</b> Pengumuman hasil</li></ul></div></div>`;
   }
 
-  // ===== 3. PRESTASI KHUSUS =====
-  // FIX 1: Prestasi Khusus bisa diikuti asal SD di Kota (tidak harus KK Kota)
   if(asal === 'kota') {
-    out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>🏆 Jalur Prestasi Khusus (Akademik)</h3><p>Jika Anda masuk <b>10% terbaik</b> di SD asal Kota Yogyakarta, Anda bisa mendaftar jalur ini. Seleksi murni TKA+TKAD (tanpa rapor).</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>9-10 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>11 Juni 2026:</b> Pengumuman hasil</li><li><b>11 atau 12 Juni 2026:</b> Daftar ulang</li></ul></div></div>`;
+    out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>🏆 Jalur Prestasi Khusus (Akademik)</h3><p>Jika Anda masuk <b>10% terbaik</b> di SD asal Kota Yogyakarta, Anda bisa mendaftar jalur ini. Seleksi murni TKA+TKAD.</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>9-10 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>11 Juni 2026:</b> Pengumuman hasil</li><li><b>11 atau 12 Juni 2026:</b> Daftar ulang</li></ul></div></div>`;
   }
 
-  // ===== 4. PRESTASI UMUM (KK Luar Kota) =====
   if(document.getElementById('optPrestasiUmum').checked && kk !== 'kota') {
     if(typeof KotaEngine?.predict === 'function') {
       const pred = KotaEngine.predict(ngDaerah, ngPrestasiUmum, 10);
@@ -420,7 +357,6 @@ function runAnalysis() {
     }
   }
 
-  // ===== 5. MUTASI =====
   if(document.getElementById('optMutasi').checked) {
     const sk = document.getElementById('skDate').value;
     if(!sk) {
@@ -428,11 +364,10 @@ function runAnalysis() {
     } else if(sk > '2025-01-01') {
       out += `<div class="route err"><span class="badge err">❌ SK Tidak Valid</span><h3>📜 Jalur Mutasi</h3><p>SK Mutasi maksimal diterbitkan <b>1 Januari 2025</b>.</p></div>`;
     } else {
-      out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>📜 Jalur Mutasi & Kemaslahatan Guru</h3><p>Seleksi berdasarkan Nilai TKA: <b>${nilaiMutasi.toFixed(2)}</b>.</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>15-17 Juni 2026:</b> Pengajuan berkas di Disdikpora</li><li><b>17-18 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>19 Juni 2026:</b> Pengumuman hasil</li></ul></div></div>`;
+      out += `<div class="route ok"><span class="badge ok">✅ BISA MENDAFTAR</span><h3>📜 Jalur Mutasi & Kemaslahatan Guru</h3><p>Seleksi berdasarkan Nilai TKA: <b>${nilaiMutasi.toFixed(2)}</b>. Pastikan membawa SK asli saat verifikasi.</p><div class="timeline-box"><h3>📅 Jadwal Penting:</h3><ul><li><b>15-17 Juni 2026:</b> Pengajuan berkas di Disdikpora</li><li><b>17-18 Juni 2026:</b> Aktivasi token & pilih sekolah</li><li><b>19 Juni 2026:</b> Pengumuman hasil</li></ul></div></div>`;
     }
   }
 
-  // ===== 6. TKAD =====
   if(document.getElementById('optTKAD').checked || asal === 'luar') {
     out += `<div class="route ok"><span class="badge ok">📝 WAJIB</span><h3>📝 TKAD Luar DIY</h3><p>Lulusan SD luar DIY wajib mengikuti TKAD mapel IPAS pada <b>18 Juni 2026</b>. Pastikan sudah mendaftar sebelum <b>17 Juni 2026</b>.</p></div>`;
   }
@@ -441,7 +376,6 @@ function runAnalysis() {
   document.getElementById('result').scrollIntoView({behavior:'smooth'});
 }
 
-// Init
 document.getElementById('kk').dispatchEvent(new Event('change'));
 toggleFields();
 </script>
