@@ -96,7 +96,7 @@
       <div><label>Latitude RW</label><input type="number" id="lat" step="0.0001"></div>
       <div><label>Longitude RW</label><input type="number" id="lng" step="0.0001"></div>
     </div>
-    <button type="button" id="btnGeo" style="margin-top:8px; width:auto; padding:8px 12px;">Deteksi Lokasi Saya</button>
+    < type="" id="btnGeo" style="margin-top:8px; width:auto; padding:8px 12px;">Deteksi Lokasi Saya</>
     <div class="lokasi-hint">
       <span>atau</span>
       <a href="https://maps.google.com" target="_blank">Buka dan Copy dari Google Maps</a>
@@ -121,8 +121,19 @@
     </ul>
   </div>
 
+
+
+
+  
   <button class="btn" id="btnAnalyze">🔍 Analisis & Prediksi Peluang</button>
 
+
+
+
+
+
+
+  
   <!-- ===== HASIL PERHITUNGAN (SUDAH DI DALAM CONTAINER) ===== -->
   <div id="result"></div>
 </div>
@@ -535,5 +546,21 @@ function runAnalysis() {
 document.getElementById('kk').dispatchEvent(new Event('change'));
 toggleFields();
 </script>
+
+
+
+<!-- Load affiliate module -->
+<script src="assets/js/under.js"></script>
+<script>
+  // Inisialisasi setelah semua script lain load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Pastikan module sudah load
+    if (typeof Affiliate !== 'undefined') {
+      Affiliate.init();
+    }
+  });
+</script>
+
+  
 </body>
 </html>
