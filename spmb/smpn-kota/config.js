@@ -15,7 +15,7 @@ window.APP_CONFIG = {
     version: "1.0.0",
     lastUpdate: "2026-01-17",
     sourceDoc: "Kepka POS No. 100.3/776 Tahun 2026",
-    baseUrl: "https://job.web.id/spmb/smpn-kota/",
+    baseUrl: "https://spmb.kota.les.web.id/",
     officialUrl: "https://yogya.spmb.id"
   },
 
