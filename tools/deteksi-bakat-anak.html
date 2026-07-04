@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -153,8 +154,124 @@
             margin: 0 auto;
             padding: 0 1rem;
         }
+        :root {
+            --reader-scale: 1;
+        }
+        html.font-size-small {
+            --reader-scale: 0.94;
+        }
+        html.font-size-medium {
+            --reader-scale: 1;
+        }
+        html.font-size-large {
+            --reader-scale: 1.14;
+        }
         @media (min-width: 640px) {
             .app-container { padding: 0 1.5rem; }
+        }
+        body {
+            font-size: calc(17px * var(--reader-scale));
+            line-height: 1.65;
+        }
+        button,
+        select,
+        input,
+        textarea,
+        summary {
+            font-size: calc(1.0625rem * var(--reader-scale));
+        }
+        .text-\[9px\],
+        .text-\[10px\],
+        .text-\[11px\] {
+            font-size: calc(1rem * var(--reader-scale)) !important;
+            line-height: calc(1.55rem * var(--reader-scale)) !important;
+        }
+        .text-xs {
+            font-size: calc(1.0625rem * var(--reader-scale)) !important;
+            line-height: calc(1.7rem * var(--reader-scale)) !important;
+        }
+        .text-sm {
+            font-size: calc(1.125rem * var(--reader-scale)) !important;
+            line-height: calc(1.8rem * var(--reader-scale)) !important;
+        }
+        .text-base {
+            font-size: calc(1.1875rem * var(--reader-scale)) !important;
+            line-height: calc(1.9rem * var(--reader-scale)) !important;
+        }
+        .font-size-control[aria-pressed="true"] {
+            background: #0f766e;
+            border-color: #0f766e;
+            color: #fff;
+        }
+        .font-size-control[data-font-size="small"] {
+            font-size: 0.95rem !important;
+            line-height: 1.1rem !important;
+        }
+        .font-size-control[data-font-size="medium"] {
+            font-size: 1.2rem !important;
+            line-height: 1.35rem !important;
+        }
+        .font-size-control[data-font-size="large"] {
+            font-size: 1.55rem !important;
+            line-height: 1.7rem !important;
+        }
+        .adsbygoogle,
+        .adsense-responsive {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            overflow-x: hidden;
+            overflow-x: clip;
+        }
+        .ad-slot {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            overflow-x: clip;
+        }
+        .ads-horizontal-responsive {
+            display: inline-block !important;
+            width: 100% !important;
+            max-width: 320px;
+            height: 90px;
+        }
+        .ads-rectangle-responsive {
+            display: block !important;
+            width: 100% !important;
+            min-height: 250px;
+        }
+        @media (min-width: 500px) {
+            .ads-horizontal-responsive {
+                max-width: 468px;
+                height: 60px;
+            }
+        }
+        @media (min-width: 800px) {
+            .ads-horizontal-responsive {
+                max-width: 728px;
+                height: 90px;
+            }
+        }
+        .summary-open-label {
+            display: none;
+        }
+        details[open] .summary-open-label {
+            display: inline-flex;
+        }
+        details[open] .summary-closed-label {
+            display: none;
+        }
+        @media (min-width: 640px) {
+            body { font-size: calc(18px * var(--reader-scale)); }
+            .text-sm {
+                font-size: calc(1.1875rem * var(--reader-scale)) !important;
+                line-height: calc(1.9rem * var(--reader-scale)) !important;
+            }
+            .text-base {
+                font-size: calc(1.25rem * var(--reader-scale)) !important;
+                line-height: calc(2rem * var(--reader-scale)) !important;
+            }
         }
         @media print {
             nav, footer, .ad-slot, #ageSelectionCard, #actionButtons { display: none !important; }
@@ -165,7 +282,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden">
 
     <nav class="bg-white border-b border-slate-100 sticky top-0 z-50 shadow-xs">
         <div class="max-w-5xl mx-auto px-4 flex justify-between h-14 items-center">
@@ -187,23 +304,17 @@
     </nav>
 
     <div class="ad-slot w-full bg-slate-100 py-2 text-center border-b border-slate-200 text-[10px] text-slate-400">
-        <div class="max-w-[728px] min-h-[50px] sm:min-h-[90px] mx-auto bg-slate-200 flex items-center justify-center border border-dashed border-slate-300 rounded-sm">
-            
-                
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2447926075248129"
-     crossorigin="anonymous"></script>
-<!-- testBakatAnak-jobwebid-tools-728h -->
-<ins class="adsbygoogle"
-     style="display: block; text-align: center; width: 100%;" 
-     data-ad-client="ca-pub-2447926075248129"
-     data-ad-slot="6382838841"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-            
-         
+        <div class="mx-auto w-full max-w-[728px] px-2">
+            <!-- Ganti ca-pub-XXXXXXXXXXXXXXXX dan data-ad-slot sebelum publish. Pastikan script AdSense resmi dimuat satu kali di <head>. -->
+            <ins class="adsbygoogle ads-horizontal-responsive"
+                 style="display:inline-block"
+                 data-ad-client="ca-pub-2447926075248129"
+                 data-ad-slot="6382838841"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            <div class="mt-1 text-slate-400">Media Edukasi &amp; Parenting</div>
         </div>
     </div>
 
@@ -361,25 +472,17 @@
                 </div>
 
                 <div class="ad-slot bg-white p-3 rounded-2xl shadow-xs border border-slate-100 text-center text-xs text-slate-400">
-<div class="w-full min-h-[250px] bg-slate-50 flex items-center justify-center border border-dashed border-slate-200 rounded-xl">
-
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2447926075248129"
-     crossorigin="anonymous"></script>
-<!-- testbakat-jobwebid-tools-250 -->
-<ins class="adsbygoogle"
-     style="display: block; text-align: center; width: 100%;"
-     data-ad-client="ca-pub-2447926075248129"
-     data-ad-slot="5092019468"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-    
-</div>
+                    <!-- Ganti ca-pub-XXXXXXXXXXXXXXXX dan data-ad-slot sebelum publish. Format auto + full-width-responsive aman untuk mobile. -->
+                    <ins class="adsbygoogle adsense-responsive ads-rectangle-responsive"
+                         style="display:block"
+                         data-ad-client="ca-pub-2447926075248129"
+                         data-ad-slot="5092019468"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                    <div class="mt-1 text-slate-400">Buku Edukasi Anak</div>
                 </div>
             </div>
         </div>
@@ -393,7 +496,8 @@
                         <span class="block text-xs font-bold uppercase tracking-wider text-teal-700">Panduan untuk orang tua</span>
                         <span class="mt-1 block text-sm sm:text-base font-black text-slate-950">Buka panduan lengkap deteksi bakat anak, 34 tema bakat, contoh hasil, FAQ, dan rekomendasi</span>
                     </span>
-                    <span class="shrink-0 rounded-full border border-slate-200 px-3 py-1 text-xs font-bold text-slate-600 group-open:bg-teal-50 group-open:text-teal-700">Buka</span>
+                    <span class="summary-closed-label shrink-0 rounded-full border border-slate-200 px-3 py-1 text-xs font-bold text-slate-600">Buka</span>
+                    <span class="summary-open-label shrink-0 items-center gap-1 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-bold text-teal-700">Tutup <span aria-hidden="true">X</span></span>
                 </summary>
         <article class="border-t border-slate-100 px-4 pb-8 pt-6 sm:px-6 sm:pb-10 space-y-10 text-slate-700">
             <header class="max-w-3xl">
@@ -403,7 +507,7 @@
                     Halaman <a href="https://job.web.id/tools/deteksi-bakat-anak.html" class="font-semibold text-teal-700 hover:underline">Deteksi Bakat Anak Job Web Tools</a> membantu orang tua mengamati pola perilaku anak usia 0-18 tahun. Aplikasi di atas memakai pilihan observasi, bobot 4E, faktor keluarga, dan stimulasi belajar untuk menyusun Top 3 bakat, domain dominan, rekomendasi ekskul, jurusan SMA/SMK, jurusan kuliah, profesi, buku, serta catatan risiko remaja.
                 </p>
                 <p class="mt-3 text-sm sm:text-base leading-relaxed">
-                Ini bukan pengganti hasil personal dari aplikasi, tetapi rangkuman kemungkinan hasil yang dapat muncul saat orang tua mengisi kuesioner.
+                    Inilah rangkuman kemungkinan hasil yang dapat muncul saat orang tua mengisi kuesioner.
                 </p>
             </header>
 
@@ -529,6 +633,20 @@
             </details>
         </div>
     </main>
+
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2" aria-label="Kontrol ukuran teks dan navigasi">
+        <div class="rounded-lg border border-slate-200 bg-white/95 p-2 shadow-lg backdrop-blur">
+            <div class="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-slate-500">Ukuran Teks</div>
+            <div class="grid grid-cols-3 gap-1">
+                <button type="button" class="font-size-control rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-sm font-black text-slate-700" onclick="aturUkuranTeks('small')" data-font-size="small" aria-pressed="false" aria-label="Ukuran teks kecil">A</button>
+                <button type="button" class="font-size-control rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-base font-black text-slate-700" onclick="aturUkuranTeks('medium')" data-font-size="medium" aria-pressed="true" aria-label="Ukuran teks sedang">A</button>
+                <button type="button" class="font-size-control rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-lg font-black text-slate-700" onclick="aturUkuranTeks('large')" data-font-size="large" aria-pressed="false" aria-label="Ukuran teks besar">A</button>
+            </div>
+        </div>
+        <button type="button" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="rounded-full bg-slate-900 px-4 py-2 text-sm font-black text-white shadow-lg hover:bg-slate-800" aria-label="Kembali ke atas">
+            Ke Atas
+        </button>
+    </div>
 
     <footer class="mt-auto bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400">
         <p>&copy; 2026 Job Web Tools. Integrasi CliftonStrengths, Formula 4E, dan mitigasi risiko remaja.</p>
@@ -1007,14 +1125,89 @@
             }
         ];
 
+        const toddlerQuestionTemplates = [
+            {
+                q: "Saat bayi/batita bermain dengan benda sederhana seperti balok, sendok, bola, buku kain, atau wadah, pola yang paling sering terlihat adalah...",
+                groups: [
+                    ["Focus", "Dapat memperhatikan satu benda cukup lama, mengulang gerakan, atau terus mencoba sampai rasa penasarannya terpenuhi."],
+                    ["Input", "Suka memegang, membolak-balik, memasukkan-mengeluarkan, atau mengamati banyak benda berbeda."],
+                    ["Restorative", "Tertarik mencari tahu kenapa benda tidak pas, jatuh, macet, atau berubah saat disentuh."],
+                    ["Adaptability", "Mudah berpindah cara bermain ketika benda, posisi, atau suasana berubah."]
+                ]
+            },
+            {
+                q: "Dalam rutinitas harian seperti makan, mandi, tidur, ganti baju, atau merapikan mainan, anak biasanya...",
+                groups: [
+                    ["Discipline", "Lebih tenang jika urutan rutinitasnya mirip dari hari ke hari."],
+                    ["Responsibility", "Mulai ingin ikut melakukan bagian kecil, seperti mengambil barang, menaruh mainan, atau membantu orang tua."],
+                    ["Consistency", "Protes atau tampak bingung jika aturan sederhana berubah tanpa penjelasan atau pola yang jelas."],
+                    ["Achiever", "Tampak puas ketika berhasil menyelesaikan langkah kecil, misalnya memasang balok, membuka tutup, atau merapikan satu benda."]
+                ]
+            },
+            {
+                q: "Ketika bertemu orang dekat, orang baru, atau masuk tempat yang belum familiar, respons anak paling sering...",
+                groups: [
+                    ["Woo", "Cepat tersenyum, menyapa dengan suara/gerak tubuh, atau tertarik mendekati orang baru."],
+                    ["Relator", "Lebih nyaman dekat dengan satu-dua pengasuh atau orang yang sudah dipercaya."],
+                    ["Empathy", "Peka terhadap ekspresi wajah, nada suara, atau emosi orang di sekitarnya."],
+                    ["Deliberative", "Mengamati dulu dari jarak aman sebelum mau mendekat atau mencoba."]
+                ]
+            },
+            {
+                q: "Saat mendengar lagu, cerita, suara, gambar, atau melihat gerakan orang dewasa, anak cenderung...",
+                groups: [
+                    ["Communication", "Banyak bereaksi dengan suara, ekspresi, menunjuk, meniru kata, atau berusaha bercerita dengan caranya."],
+                    ["Ideation", "Mengubah benda menjadi permainan imajinatif sederhana, misalnya pura-pura menelepon, memberi makan boneka, atau membuat suara baru."],
+                    ["Learner", "Senang meniru gerakan/kata baru dan mengulangnya sampai lebih lancar."],
+                    ["Positivity", "Mudah ikut ceria, tertawa, menari kecil, atau membuat suasana rumah lebih hidup."]
+                ]
+            },
+            {
+                q: "Ketika mainan direbut, harus menunggu giliran, atau ada anak lain menangis, pola yang terlihat adalah...",
+                groups: [
+                    ["Harmony", "Lebih tenang ketika suasana damai dan sering berhenti saat melihat konflik."],
+                    ["Includer", "Mulai tertarik memberi benda, mengajak, atau mendekati anak lain yang sendirian."],
+                    ["Command", "Menunjukkan kemauan dengan tegas lewat menunjuk, menarik tangan, menolak, atau memilih sendiri."],
+                    ["Developer", "Senang meniru orang dewasa saat membantu, menghibur, atau mengajari boneka/adik dengan cara sederhana."]
+                ]
+            },
+            {
+                q: "Saat anak melihat sesuatu yang baru, seperti alat rumah, hewan, kendaraan, gambar, atau suara asing, ia biasanya...",
+                groups: [
+                    ["Analytical", "Mengamati detail, membandingkan, mengetuk, mencium, memutar, atau mencoba memahami pola sebab-akibat."],
+                    ["Context", "Mengingat pengalaman sebelumnya, misalnya mengaitkan benda baru dengan tempat, orang, atau kejadian yang pernah dilihat."],
+                    ["Futuristic", "Tampak membayangkan fungsi baru dari benda, mencoba kemungkinan gerak, susunan, atau permainan berikutnya."],
+                    ["Intellection", "Sering tampak diam memperhatikan lama sebelum bereaksi, seolah sedang memproses sesuatu."]
+                ]
+            },
+            {
+                q: "Ketika anak diberi pilihan sederhana, misalnya memilih baju, makanan, buku, mainan, atau jalan ke arah tertentu, ia cenderung...",
+                groups: [
+                    ["Self-Assurance", "Punya pilihan yang jelas dan cukup yakin menolak pilihan lain."],
+                    ["Activator", "Langsung mencoba, mengambil, menunjuk, atau bergerak tanpa terlalu lama menunggu arahan."],
+                    ["Strategic", "Mencari cara lain untuk mendapatkan yang diinginkan, misalnya menarik tangan orang tua, memindahkan benda, atau mencoba rute berbeda."],
+                    ["Arranger", "Suka mengatur benda, memindahkan posisi, menyusun ulang, atau memilih urutan bermain sendiri."]
+                ]
+            },
+            {
+                q: "Saat mendapat pujian, tepuk tangan, berhasil melakukan sesuatu, atau melihat orang lain memperhatikan, respons anak lebih sering...",
+                groups: [
+                    ["Significance", "Tampak senang diperhatikan, mengulang aksi, atau mencari respons dari orang sekitar."],
+                    ["Competition", "Terpacu mengulang, mencoba lebih cepat, lebih tinggi, atau tidak mau kalah dari saudara/teman sebaya."],
+                    ["Maximizer", "Mengulang bagian yang disukai agar terlihat lebih bagus, rapi, lucu, atau menarik."],
+                    ["Belief", "Mulai terlihat kuat pada kebiasaan yang terasa benar/salah baginya, misalnya menolak hal yang dianggap tidak sesuai rutinitas keluarga."]
+                ]
+            }
+        ];
+
         const ageQuestionCounts = { "0-3": 8, "4-6": 9, "7-9": 10, "10-12": 10, "13-15": 12, "16-18": 12 };
         const ageIntro = {
-            "0-3": "Amati pola spontan anak saat bermain, bereksplorasi, dan merespons rutinitas.",
-            "4-6": "Pilih perilaku yang paling sering terlihat di rumah, PAUD/TK, dan permainan bersama.",
-            "7-9": "Gunakan observasi dari tugas sekolah, permainan aturan, dan interaksi teman.",
-            "10-12": "Perhatikan pola belajar, kerja kelompok, tanggung jawab, dan minat mandiri.",
-            "13-15": "Jawab berdasarkan kebiasaan nyata remaja awal, termasuk dunia digital dan pergaulan.",
-            "16-18": "Jawab berdasarkan pola remaja akhir saat mengambil keputusan, belajar, dan bersosialisasi."
+            "0-3": "Amati dari rutinitas harian, permainan sensorik, respons emosi, bahasa awal, gerak tubuh, dan kedekatan dengan pengasuh. Jangan menilai seperti anak sekolah.",
+            "4-6": "Pilih perilaku yang paling sering terlihat saat bermain pura-pura, aktivitas PAUD/TK, rutinitas rumah, cerita, gambar, lagu, dan interaksi sederhana.",
+            "7-9": "Gunakan observasi dari tugas sekolah dasar awal, permainan aturan, kebiasaan bertanya, minat membaca/berhitung, dan interaksi teman sebaya.",
+            "10-12": "Perhatikan pola belajar mandiri, kerja kelompok, tanggung jawab rumah/sekolah, minat yang mulai konsisten, dan cara anak mengambil keputusan kecil.",
+            "13-15": "Jawab berdasarkan kebiasaan nyata remaja awal: pergaulan, identitas diri, dunia digital, tugas sekolah, emosi, dan cara menyalurkan energi.",
+            "16-18": "Jawab berdasarkan pola remaja akhir saat memilih jurusan, membangun portofolio, mengelola pergaulan, belajar serius, dan mengambil keputusan masa depan."
         };
 
         const soalHoneypot = {
@@ -1076,22 +1269,103 @@
         document.getElementById("quizForm").addEventListener("change", updateProgress);
 
         function buildQuestionBank(range) {
+            if (range === "0-3") {
+                return toddlerQuestionTemplates.map((item, index) => ({
+                    id: index + 1,
+                    q: `${ageIntro[range]} ${item.q}`,
+                    o: item.groups.map(selected => ({ t: selected[1], b: selected[0] }))
+                }));
+            }
             const count = ageQuestionCounts[range];
-            const offsetMap = { "0-3": 0, "4-6": 1, "7-9": 2, "10-12": 0, "13-15": 1, "16-18": 2 };
+            const offsetMap = { "4-6": 1, "7-9": 2, "10-12": 0, "13-15": 1, "16-18": 2 };
             return questionTemplates.slice(0, count).map((item, index) => {
                 const shift = (offsetMap[range] + index) % item.groups.length;
                 const options = item.groups.map((_, optionIndex) => {
                     const selected = item.groups[(optionIndex + shift) % item.groups.length];
                     return { t: adaptOptionText(selected[1], range), b: selected[0] };
                 });
-                return { id: index + 1, q: `${ageIntro[range]} ${item.q}`, o: options };
+                return { id: index + 1, q: `${ageIntro[range]} ${adaptQuestionText(item.q, range)}`, o: options };
             });
         }
 
+        function adaptQuestionText(text, range) {
+            if (range === "4-6") {
+                return text
+                    .replaceAll("kegiatan yang membutuhkan waktu cukup lama", "aktivitas bermain atau belajar yang agak lama")
+                    .replaceAll("mainan, tugas, atau alat", "mainan, alat gambar, buku, atau aktivitas TK")
+                    .replaceAll("kerja kelompok kecil", "bermain bersama")
+                    .replaceAll("orang baru atau masuk lingkungan baru", "orang baru, kelas PAUD/TK, atau tempat bermain baru")
+                    .replaceAll("aturan rumah atau sekolah", "aturan rumah, PAUD/TK, atau permainan")
+                    .replaceAll("menceritakan pengalaman hari itu", "bercerita tentang kejadian hari itu dengan kata, gambar, gerak, atau ekspresi")
+                    .replaceAll("kegiatan yang hasilnya bisa dinilai, seperti lomba kecil, karya, atau tugas", "aktivitas yang ada hasilnya, seperti gambar, susunan balok, hafalan lagu, atau permainan")
+                    .replaceAll("rencana harian berubah mendadak", "rutinitas bermain, makan, tidur, atau berangkat berubah mendadak")
+                    .replaceAll("perbedaan pendapat dengan teman atau saudara", "berebut mainan atau berbeda keinginan dengan teman/saudara");
+            }
+            if (range === "7-9") {
+                return text
+                    .replaceAll("kerja kelompok kecil", "kerja kelompok sederhana")
+                    .replaceAll("kegiatan yang hasilnya bisa dinilai, seperti lomba kecil, karya, atau tugas", "tugas sekolah dasar, karya, permainan, atau lomba kecil")
+                    .replaceAll("rencana harian berubah mendadak", "jadwal belajar, bermain, atau kegiatan keluarga berubah");
+            }
+            if (range === "10-12") {
+                return text
+                    .replaceAll("kerja kelompok kecil", "kerja kelompok sekolah atau kegiatan komunitas")
+                    .replaceAll("mainan, tugas, atau alat", "tugas, alat belajar, karya, atau aktivitas digital")
+                    .replaceAll("rencana harian berubah mendadak", "jadwal sekolah, les, ibadah, atau kegiatan keluarga berubah");
+            }
+            if (range === "13-15") {
+                return text
+                    .replaceAll("mainan, tugas, atau alat", "tugas sekolah, aplikasi, gawai, pertemanan, atau kegiatan organisasi")
+                    .replaceAll("permainan bersama atau kerja kelompok kecil", "kerja kelompok, organisasi, atau pergaulan")
+                    .replaceAll("kegiatan yang hasilnya bisa dinilai, seperti lomba kecil, karya, atau tugas", "tugas sekolah, konten, lomba, organisasi, atau karya digital")
+                    .replaceAll("rencana harian berubah mendadak", "jadwal sekolah, pertemanan, latihan, atau aktivitas digital berubah");
+            }
+            if (range === "16-18") {
+                return text
+                    .replaceAll("mainan, tugas, atau alat", "tugas besar, portofolio, aplikasi, pilihan jurusan, atau rencana karier")
+                    .replaceAll("permainan bersama atau kerja kelompok kecil", "organisasi, proyek sekolah, magang, komunitas, atau kerja kelompok")
+                    .replaceAll("kegiatan yang hasilnya bisa dinilai, seperti lomba kecil, karya, atau tugas", "portofolio, lomba, tugas akhir sekolah, organisasi, atau proyek pribadi")
+                    .replaceAll("rencana harian berubah mendadak", "rencana belajar, ujian, organisasi, jurusan, atau kegiatan masa depan berubah");
+            }
+            return text;
+        }
+
         function adaptOptionText(text, range) {
-            if (range === "0-3") return text.replaceAll("tugas", "permainan").replaceAll("teman", "orang sekitar").replaceAll("sekolah", "rumah");
-            if (range === "4-6") return text.replaceAll("tugas", "aktivitas TK/rumah");
-            if (range === "13-15" || range === "16-18") return text.replaceAll("mainan", "alat, aplikasi, atau tugas").replaceAll("permainan", "aktivitas, proyek, atau pergaulan");
+            if (range === "4-6") {
+                return text
+                    .replaceAll("tugas sekolah", "aktivitas PAUD/TK")
+                    .replaceAll("tugas", "aktivitas TK/rumah")
+                    .replaceAll("kerja kelompok", "bermain bersama")
+                    .replaceAll("proyek", "permainan")
+                    .replaceAll("keputusan besar", "pilihan sederhana")
+                    .replaceAll("papan skor", "pujian, giliran, atau tantangan kecil")
+                    .replaceAll("peringkat", "giliran atau hasil permainan");
+            }
+            if (range === "7-9") {
+                return text
+                    .replaceAll("keputusan besar", "pilihan sederhana")
+                    .replaceAll("alat, aplikasi, atau tugas", "alat belajar, permainan, atau tugas")
+                    .replaceAll("proyek", "tugas kecil")
+                    .replaceAll("peringkatnya", "hasilnya");
+            }
+            if (range === "10-12") {
+                return text
+                    .replaceAll("keputusan besar", "keputusan belajar atau pertemanan")
+                    .replaceAll("alat, aplikasi, atau tugas", "alat belajar, tugas, atau aktivitas digital")
+                    .replaceAll("proyek", "tugas/proyek kecil");
+            }
+            if (range === "13-15") {
+                return text
+                    .replaceAll("mainan", "alat belajar, aplikasi, atau tugas")
+                    .replaceAll("permainan", "aktivitas, proyek sekolah, atau pergaulan")
+                    .replaceAll("keputusan besar", "keputusan pertemanan, belajar, atau aktivitas digital");
+            }
+            if (range === "16-18") {
+                return text
+                    .replaceAll("mainan", "alat, aplikasi, tugas, atau rencana masa depan")
+                    .replaceAll("permainan", "proyek, organisasi, portofolio, atau pergaulan")
+                    .replaceAll("keputusan besar", "keputusan jurusan, karier awal, atau arah masa depan");
+            }
             return text;
         }
 
@@ -1503,6 +1777,29 @@
         function toggleMenu() {
             document.getElementById("mobileMenu").classList.toggle("hidden");
         }
+
+        function aturUkuranTeks(size) {
+            const allowed = ["small", "medium", "large"];
+            const selected = allowed.includes(size) ? size : "medium";
+            document.documentElement.classList.remove("font-size-small", "font-size-medium", "font-size-large");
+            document.documentElement.classList.add(`font-size-${selected}`);
+            document.querySelectorAll(".font-size-control").forEach(button => {
+                button.setAttribute("aria-pressed", button.dataset.fontSize === selected ? "true" : "false");
+            });
+            try {
+                localStorage.setItem("jobwebReaderFontSize", selected);
+            } catch (error) {
+                // localStorage can be unavailable in strict privacy modes.
+            }
+        }
+
+        aturUkuranTeks((() => {
+            try {
+                return localStorage.getItem("jobwebReaderFontSize") || "medium";
+            } catch (error) {
+                return "medium";
+            }
+        })());
     </script>
 </body>
 </html>
