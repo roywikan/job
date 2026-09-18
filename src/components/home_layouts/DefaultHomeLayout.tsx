@@ -1,0 +1,581 @@
+import { useState, useMemo, useEffect } from 'react';
+import { Post, AutoLink, SiteConfig, Product } from '../../types';
+import { Search, Clock, Eye, Sparkles, ArrowRight, BookOpen, Zap, ShoppingBag, Tag } from 'lucide-react';
+import AdSlot from '../AdSlot';
+import HeroPerformanceBox from '../HeroPerformanceBox';
+import { getOptimizedImageUrl, getResponsiveSrcSet, getOptimizedAvatarUrl } from '../../lib/imageUtils';
+
+interface LayoutProps {
+  posts: Post[];
+  autolinks: AutoLink[];
+  onSelectPost: (slug: string) => void;
+  onSelectProduct?: (slug: string) => void;
+  selectedCategory: string;
+  onSelectCategory: (category: string) => void;
+  siteConfig?: SiteConfig;
+  searchQuery: string;
+  setSearchQuery: (q: string) => void;
+  filteredPosts: Post[];
+  matchingProducts?: Product[];
+  categories: string[];
+  isKeywordMatchFallback?: boolean;
+  isLatestFallback?: boolean;
+  fallbackPosts?: Post[];
+}
+
+export default function DefaultHomeLayout({
+  posts,
+  autolinks,
+  onSelectPost,
+  onSelectProduct,
+  selectedCategory,
+  onSelectCategory,
+  siteConfig,
+  searchQuery,
+  setSearchQuery,
+  filteredPosts,
+  matchingProducts = [],
+  categories,
+  isKeywordMatchFallback = false,
+  isLatestFallback = false,
+  fallbackPosts = [],
+}: LayoutProps) {
+  const showHero = siteConfig?.show_hero_section ?? true;
+  const heroTitle = siteConfig?.hero_title || 'Panduan Pengasuhan Anak Terpercaya';
+  const heroSubtitle = siteConfig?.hero_subtitle || 'Temukan artikel, tips nutrisi, dan edukasi tumbuh kembang anak untuk orang tua modern.';
+  const heroCtaText = siteConfig?.hero_cta_text || 'Jelajahi Artikel';
+  const heroCtaLink = siteConfig?.hero_cta_link || '#artikel-terbaru';
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = siteConfig?.posts_per_page || 9;
+
+  // Reset pagination when filter or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
+
+  const featuredPost = filteredPosts[0];
+  const regularPosts = filteredPosts.length > 0 ? (selectedCategory === 'Semua' && !searchQuery ? filteredPosts.slice(1) : filteredPosts) : [];
+
+  const totalPages = Math.ceil(regularPosts.length / postsPerPage);
+
+  const paginatedRegularPosts = useMemo(() => {
+    const start = (currentPage - 1) * postsPerPage;
+    return regularPosts.slice(start, start + postsPerPage);
+  }, [regularPosts, currentPage, postsPerPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Smooth scroll to the top of articles section with offset for sticky header
+    // Wrapped in requestAnimationFrame to decouple DOM measurements from event thread and prevent Forced Reflow
+    requestAnimationFrame(() => {
+      const element = document.getElementById('artikel-terbaru');
+      if (element) {
+        const headerOffset = 90; // sticky header height (64px) + comfortable spacing (26px)
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  };
+
+  return (
+    <div className="space-y-10">
+      {/* HERO BANNER SECTION */}
+      {showHero && (
+        <section className="bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 text-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-rose-500/15 relative overflow-hidden min-h-[350px] sm:min-h-[280px] md:min-h-[240px] flex items-center">
+          <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 w-full">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-semibold text-rose-100 border border-white/20 h-7 min-h-[28px]">
+                <Zap className="w-3.5 h-3.5 text-amber-300 fill-current" />
+                <span>{siteConfig?.tech_badge_hero || 'Cloudflare D1 Edge Architecture'}</span>
+              </div>
+              <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight min-h-[2rem] sm:min-h-[3rem]">
+                {heroTitle}
+              </h1>
+              <p className="text-rose-100 text-sm sm:text-base leading-relaxed">
+                {heroSubtitle}
+              </p>
+              {heroCtaText && (
+                <div className="pt-2">
+                  <a
+                    href={heroCtaLink}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white text-rose-900 font-black text-xs shadow-lg hover:bg-rose-50 transition-transform hover:scale-105"
+                  >
+                    <span>{heroCtaText}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* PERFORMANCE METRICS BOX */}
+            <HeroPerformanceBox siteConfig={siteConfig} />
+          </div>
+        </section>
+      )}
+
+      {/* TRENDING TOPICS TICKER (CLUSTERING & ZERO CLS RESERVATION) */}
+      <div className="bg-rose-50/70 dark:bg-slate-800/60 border border-rose-200 dark:border-slate-700/60 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 min-h-[108px] sm:min-h-[68px] h-[108px] sm:h-[68px] overflow-hidden">
+        <div className="flex items-center gap-1.5 text-xs font-black text-rose-800 dark:text-rose-300 shrink-0 uppercase tracking-wide">
+          <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0" />
+          <span>{siteConfig?.autolink_ticker_label || 'Topik Trending:'}</span>
+        </div>
+        <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0 scrollbar-none min-h-[40px] h-[40px] w-full">
+          {autolinks && autolinks.length > 0 ? (
+            autolinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => {
+                  const targetSlug = link.targetUrl.split('/').pop() || '';
+                  if (targetSlug) onSelectPost(targetSlug);
+                }}
+                className="h-[32px] px-3 py-1 rounded-lg bg-white dark:bg-slate-900 border border-rose-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-100 hover:border-rose-500 hover:text-rose-700 dark:hover:text-rose-300 transition-colors shadow-2xs font-bold inline-flex items-center shrink-0 whitespace-nowrap gap-1 group leading-none"
+              >
+                <span>#{link.keyword}</span>
+                <span className="text-[10px] text-rose-700 dark:text-rose-300 font-black group-hover:translate-x-0.5 transition-transform">↗</span>
+              </button>
+            ))
+          ) : (
+            <>
+              <div className="h-[32px] w-24 rounded-lg bg-rose-200/50 dark:bg-slate-700/30 animate-pulse shrink-0" />
+              <div className="h-[32px] w-20 rounded-lg bg-rose-200/50 dark:bg-slate-700/30 animate-pulse shrink-0" />
+              <div className="h-[32px] w-28 rounded-lg bg-rose-200/50 dark:bg-slate-700/30 animate-pulse shrink-0" />
+              <div className="h-[32px] w-16 rounded-lg bg-rose-200/50 dark:bg-slate-700/30 animate-pulse shrink-0" />
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* SEARCH BAR & CATEGORIES */}
+      <div className="flex flex-col gap-4 pt-1 min-h-[60px]">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div className="relative flex-1 max-w-md">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={`Cari artikel atau kata kunci di ${siteConfig?.site_name || 'website'}...`}
+              className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500 transition-colors shadow-2xs"
+            />
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none min-h-[44px] h-[44px] shrink-0">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => onSelectCategory(cat)}
+                style={{ contentVisibility: 'auto' }}
+                className={`h-[36px] px-3.5 py-2 rounded-xl text-xs font-black shrink-0 whitespace-nowrap transition-colors inline-flex items-center justify-center leading-none ${
+                  selectedCategory === cat
+                    ? 'bg-rose-700 text-white shadow-sm shadow-rose-500/20'
+                    : 'bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 hover:border-rose-500'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* FEATURED POST */}
+      {featuredPost && !searchQuery && selectedCategory === 'Semua' && (
+        <section
+          className="group cursor-pointer h-auto lg:h-[420px] rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-colors duration-300 border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900"
+          onClick={() => onSelectPost(featuredPost.slug)}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 h-auto lg:h-[420px] w-full overflow-hidden">
+            <div className="lg:col-span-7 relative aspect-[16/9] lg:aspect-auto h-64 sm:h-72 lg:h-[420px] w-full overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
+              <img
+                src={getOptimizedImageUrl(featuredPost.featuredImage, { width: 1200, quality: 55 })}
+                srcSet={getResponsiveSrcSet(featuredPost.featuredImage, [400, 750, 1200], 55)}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 750px, 1200px"
+                alt={featuredPost.title}
+                width={1200}
+                height={675}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute top-4 left-4 min-h-[28px] flex items-center">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-rose-800 text-white text-xs font-black shadow-md uppercase tracking-wider leading-none">
+                  UTAMA • {featuredPost.category}
+                </span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between h-auto lg:h-[420px] overflow-hidden">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 text-xs text-slate-700 dark:text-slate-300 font-semibold shrink-0 min-h-[20px]">
+                  <span className="flex items-center gap-1 font-bold">
+                    <Clock className="w-3.5 h-3.5 shrink-0 text-slate-600 dark:text-slate-400" />
+                    {featuredPost.readTimeMinutes} menit baca
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1 font-bold">
+                    <Eye className="w-3.5 h-3.5 shrink-0 text-slate-600 dark:text-slate-400" />
+                    {featuredPost.views} pembaca
+                  </span>
+                </div>
+
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-rose-700 dark:group-hover:text-rose-400 transition-colors leading-snug">
+                  {featuredPost.title}
+                </h2>
+
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed line-clamp-3 min-h-[3.75rem] sm:min-h-[4.5rem]">
+                  {featuredPost.excerpt}
+                </p>
+              </div>
+
+              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={getOptimizedAvatarUrl(featuredPost.authorAvatar, 36, 60)}
+                    alt={featuredPost.authorName}
+                    width={36}
+                    height={36}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-9 h-9 rounded-full object-cover border border-rose-300 shrink-0"
+                  />
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white">
+                      {featuredPost.authorName}
+                    </div>
+                    <div className="text-[10px] text-slate-700 dark:text-slate-300 font-semibold">
+                      {siteConfig?.site_name ? `Tim Redaksi ${siteConfig.site_name}` : 'Tim Redaksi'}
+                    </div>
+                  </div>
+                </div>
+
+                <span className="inline-flex items-center gap-1 text-xs font-black text-rose-800 dark:text-rose-300 group-hover:translate-x-1 transition-transform shrink-0 whitespace-nowrap self-start sm:self-auto pt-1 sm:pt-0">
+                  Baca Selengkapnya
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CUSTOM BANNER: BOTTOM OF FIRST HALF PAGE */}
+      {siteConfig?.ad_banner_first_half_code && (
+        <AdSlot
+          code={siteConfig.ad_banner_first_half_code}
+          enableAdsense={siteConfig.ad_banner_first_half_enable ?? true}
+          slotLabel="BOTTOM OF FIRST HALF PAGE"
+        />
+      )}
+
+      {/* PRODUCTS & CATALOG SEARCH RESULTS */}
+      {searchQuery && matchingProducts && matchingProducts.length > 0 && (
+        <section className="space-y-6 pt-2 pb-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <ShoppingBag className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <span>Hasil Produk, Paket &amp; Katalog ("{searchQuery}")</span>
+            </h2>
+            <span className="text-xs text-indigo-700 dark:text-indigo-300 font-bold bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-3 py-1 rounded-full">
+              {matchingProducts.length} Produk Ditemukan
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {matchingProducts.map((prod) => {
+              const baseNavPath = siteConfig?.products_nav_path || '/produk';
+              const cleanNavPath = baseNavPath.startsWith('/') ? baseNavPath : `/${baseNavPath}`;
+              const prodUrl = `${cleanNavPath}/${prod.slug}`;
+              const prodNavLabel = siteConfig?.products_nav_label || 'Produk Jualan';
+
+              return (
+                <div
+                  key={prod.id}
+                  onClick={() => onSelectProduct && onSelectProduct(prod.slug)}
+                  className="group cursor-pointer rounded-2xl overflow-hidden border border-indigo-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-xl hover:border-indigo-300 dark:hover:border-indigo-700 transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                      {prod.imageUrl ? (
+                        <img
+                          src={prod.imageUrl}
+                          alt={prod.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-indigo-50 dark:bg-slate-800 text-indigo-400">
+                          <ShoppingBag className="w-12 h-12" />
+                        </div>
+                      )}
+                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-indigo-700/90 text-white text-[10px] font-bold backdrop-blur-xs uppercase tracking-wider">
+                        {prodNavLabel}
+                      </span>
+                      <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-emerald-600/95 text-white text-[11px] font-extrabold shadow-sm">
+                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(prod.price)}
+                      </span>
+                    </div>
+
+                    <div className="p-5 space-y-2">
+                      <div className="flex items-center gap-1.5 text-[11px] text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider">
+                        <Tag className="w-3 h-3 shrink-0" />
+                        <span className="truncate">{prodUrl}</span>
+                      </div>
+
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
+                        {prod.title}
+                      </h3>
+
+                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                        {prod.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-5 pt-0 mt-2">
+                    <a
+                      href={prodUrl}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onSelectProduct) onSelectProduct(prod.slug);
+                      }}
+                      className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md shadow-indigo-600/20"
+                    >
+                      <span>Lihat Detail &amp; Pesan</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* ARTICLES GRID */}
+      <section className="space-y-6" id="artikel-terbaru">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-rose-500" />
+            <span>
+              {isLatestFallback
+                ? `Artikel Terkini Pilihan`
+                : isKeywordMatchFallback
+                ? `Artikel Terkait ("${selectedCategory}")`
+                : searchQuery
+                ? `Hasil Pencarian ("${searchQuery}")`
+                : selectedCategory === 'Semua'
+                ? 'Daftar Artikel Terbaru'
+                : `Kategori: ${selectedCategory}`}
+            </span>
+          </h2>
+          <span className="text-xs text-slate-700 dark:text-slate-300 font-bold bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+            {regularPosts.length} Artikel {isLatestFallback ? 'Terkini' : 'ditemukan'}
+          </span>
+        </div>
+
+        {/* INFORMATIVE NOTICE BANNER FOR UNMAPPED ROUTE / FALLBACK */}
+        {isLatestFallback && (
+          <div className="p-4.5 rounded-2xl bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 flex items-start gap-3.5 shadow-2xs">
+            <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div className="text-xs text-amber-900 dark:text-amber-200 space-y-1">
+              <p className="font-bold text-sm">Topik atau halaman yang Anda cari tidak ditemukan</p>
+              <p className="text-amber-800 dark:text-amber-300 leading-relaxed">
+                Halaman <code className="bg-amber-100 dark:bg-amber-900/60 px-1.5 py-0.5 rounded font-mono font-bold text-amber-900 dark:text-amber-200">{selectedCategory}</code> tidak tersedia. Berikut 4 artikel pilihan terbaru untuk Anda agar tetap mendapatkan informasi pengasuhan anak yang bermanfaat:
+              </p>
+            </div>
+          </div>
+        )}
+
+        {isKeywordMatchFallback && (
+          <div className="p-4.5 rounded-2xl bg-rose-50/90 dark:bg-slate-800/80 border border-rose-200 dark:border-slate-700 flex items-start gap-3.5 shadow-2xs">
+            <Sparkles className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+            <div className="text-xs text-slate-700 dark:text-slate-300 space-y-1">
+              <p className="font-bold text-sm text-slate-900 dark:text-white">Artikel Terkait Berdasarkan Kata Kunci</p>
+              <p className="leading-relaxed">
+                Kategori spesifik untuk <code className="bg-rose-100 dark:bg-slate-700 px-1.5 py-0.5 rounded font-mono font-bold text-rose-700 dark:text-rose-300">{selectedCategory}</code> tidak ditemukan, namun berikut 4 artikel rekomendasi hasil pencocokan kata kunci untuk Anda:
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ARTICLES LIST CARDS */}
+        {regularPosts.length > 0 ? (
+          <div className="space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedRegularPosts.map((post) => (
+                <article
+                  key={post.id}
+                  onClick={() => onSelectPost(post.slug)}
+                  className="group cursor-pointer rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-lg transition-colors duration-300 flex flex-col justify-between"
+                >
+                  <div className="space-y-4">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                      <img
+                        src={getOptimizedImageUrl(post.featuredImage, { width: 400, quality: 55 })}
+                        srcSet={getResponsiveSrcSet(post.featuredImage, [400, 750], 55)}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                        alt={post.title}
+                        width={400}
+                        height={225}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-rose-700/90 text-white text-[10px] font-bold backdrop-blur-xs">
+                        {post.category}
+                      </span>
+                    </div>
+
+                    <div className="p-5 space-y-3">
+                      <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                        <Clock className="w-3 h-3 text-slate-400" />
+                        <span>{post.readTimeMinutes} menit baca</span>
+                        <span>•</span>
+                        <Eye className="w-3 h-3 text-slate-400" />
+                        <span>{post.views} pembaca</span>
+                      </div>
+
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+
+                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                        {post.excerpt}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-5 pt-0 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800/60 mt-4 pt-3">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={getOptimizedAvatarUrl(post.authorAvatar, 24, 60)}
+                        alt={post.authorName}
+                        width={24}
+                        height={24}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-6 h-6 rounded-full object-cover border border-rose-200 shrink-0"
+                      />
+                      <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">
+                        {post.authorName}
+                      </span>
+                    </div>
+                    <span className="text-xs font-bold text-rose-600 dark:text-rose-400 group-hover:translate-x-1 transition-transform flex items-center gap-1 shrink-0 whitespace-nowrap">
+                      Baca <span>→</span>
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {/* ELEGANT HOMEPAGE PAGINATION CONTROLS */}
+            {totalPages > 1 && (
+              <div className="site-pagination-container flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-6">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  className="btn-pagination-prev px-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-black transition-colors disabled:opacity-40"
+                >
+                  <span className="arrow">←</span>
+                  <span className="text ml-1">Sebelumnya</span>
+                </button>
+
+                <div className="pagination-numbers flex items-center gap-1.5">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`w-9 h-9 flex items-center justify-center rounded-xl text-xs font-black transition-all ${
+                        currentPage === page
+                          ? 'bg-rose-700 text-white shadow-sm shadow-rose-500/20 scale-105'
+                          : 'border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                  className="btn-pagination-next px-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-black transition-colors disabled:opacity-40"
+                >
+                  <span className="text mr-1">Berikutnya</span>
+                  <span className="arrow">→</span>
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-8">
+            <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-2xs">
+              <BookOpen className="w-10 h-10 text-slate-400 mx-auto" />
+              <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">
+                Tidak ada artikel yang sesuai kata kunci pencarian
+              </h3>
+              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                Coba gunakan kata kunci lain atau lihat 4 artikel terbaru pilihan di bawah ini.
+              </p>
+            </div>
+
+            {/* FALLBACK 4 LATEST ARTICLES INSTEAD OF EMPTY PAGE */}
+            {fallbackPosts.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-rose-500" />
+                  <span>Rekomendasi 4 Artikel Terbaru Untuk Anda</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {fallbackPosts.slice(0, 4).map((post) => (
+                    <article
+                      key={post.id}
+                      onClick={() => onSelectPost(post.slug)}
+                      className="group cursor-pointer rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-md transition-colors flex flex-col justify-between"
+                    >
+                      <div className="space-y-3">
+                        <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                          <img
+                            src={getOptimizedImageUrl(post.featuredImage, { width: 400, height: 225, quality: 55 })}
+                            srcSet={getResponsiveSrcSet(post.featuredImage, [300, 450], 55)}
+                            sizes="(max-width: 640px) 100vw, 300px"
+                            alt={post.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="p-4 space-y-2">
+                          <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
+                            {post.category}
+                          </span>
+                          <h4 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-2 group-hover:text-rose-600 transition-colors">
+                            {post.title}
+                          </h4>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* STRATEGIC AD PLACEMENT: SIDEBAR / IN-FEED */}
+      <AdSlot
+        code={siteConfig?.adsense_sidebar}
+        enableAdsense={siteConfig?.enable_adsense}
+        slotLabel="IN-FEED STRATEGIC BANNER"
+      />
+    </div>
+  );
+}

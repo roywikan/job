@@ -1,0 +1,424 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+
+
+const rootDir = typeof __dirname !== 'undefined' ? path.resolve(__dirname, '..') : (typeof import.meta !== 'undefined' && import.meta.url ? path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..') : process.cwd());
+
+export function getSiteConfig() {
+  let siteName = process.env.SITE_NAME || 'Modern Edge Blog';
+  let siteDescription = process.env.SITE_DESCRIPTION || 'Portal informasi dan artikel terpercaya.';
+  let SITE_URL = process.env.SITE_URL || '';
+
+  try {
+    const configPath = path.join(rootDir, 'public', 'site_config.json');
+    if (fs.existsSync(configPath)) {
+      const fileData = fs.readFileSync(configPath, 'utf-8');
+      const parsed = JSON.parse(fileData);
+      siteName = parsed.site_name || siteName;
+      siteDescription = parsed.site_description || siteDescription;
+      if (parsed.site_url) {
+        SITE_URL = parsed.site_url;
+      } else if (parsed.site_domain) {
+        SITE_URL = `https://${parsed.site_domain}`;
+      }
+    }
+  } catch (err) {
+    console.error('Error loading config in getSiteConfig:', err);
+  }
+
+  if (!SITE_URL) {
+    SITE_URL = 'https://domain.com';
+  }
+
+  return {
+    siteName,
+    siteDescription,
+    SITE_URL: SITE_URL.replace(/\/$/, ''),
+  };
+}
+
+/**
+ * Load initial posts from src/data/initialData.ts if no posts array is provided
+ */
+export function loadPostsFromInitialData() {
+  try {
+    const initialDataPath = path.join(rootDir, 'src', 'data', 'initialData.ts');
+    if (fs.existsSync(initialDataPath)) {
+      const content = fs.readFileSync(initialDataPath, 'utf-8');
+      const cleanContent = content
+        .replace(/^import\s+.*?;/gm, '')
+        .replace(/:\s*User\[\]/g, '')
+        .replace(/:\s*AutoLink\[\]/g, '')
+        .replace(/:\s*Post\[\]/g, '')
+        .replace(/export\s+const/g, 'const');
+
+      const fn = new Function(`${cleanContent}; return INITIAL_POSTS;`);
+      const posts = fn();
+      if (Array.isArray(posts) && posts.length > 0) {
+        return posts;
+      }
+    }
+  } catch (err) {
+    console.error('Error loading posts from initialData.ts:', err);
+  }
+
+  // Fallback posts if reading fails
+  return [
+    {
+      title: 'Panduan Lengkap Pola Asuh Demokratis untuk Mendidik Anak Tangguh Masa Kini',
+      slug: 'panduan-lengkap-pola-asuh-demokratis-anak-masa-kini',
+      excerpt: 'Pola asuh demokratis menggabungkan kasih sayang, aturan yang konsisten, dan komunikasi terbuka. Simak strategi praktis penerapannya di rumah.',
+      status: 'published',
+      updatedAt: '2026-08-24T00:00:00.000Z',
+    },
+    {
+      title: '5 Aktivitas Sensory Play Seru untuk Melatih Motorik Halus Balita di Rumah',
+      slug: '5-aktivitas-sensory-play-seru-untuk-melatih-motorik-balita',
+      excerpt: 'Temukan 5 ide permainan sensory play mudah dan hemat bahan untuk mengasah indera serta ketangkasan motorik balita di rumah.',
+      status: 'published',
+      updatedAt: '2026-08-25T00:00:00.000Z',
+    },
+    {
+      title: 'Mengenal Bahaya Stunting dan Cara Pencegahannya Sejak 1000 Hari Pertama Kehidupan',
+      slug: 'mengenal-bahaya-stunting-dan-cara-pencegahannya-sejak-1000-hpk',
+      excerpt: 'Stunting berpengaruh besar pada kecerdasan anak. Pelajari langkah pencegahan stunting melalui pemberian ASI eksklusif dan MPASI tinggi protein.',
+      status: 'published',
+      updatedAt: '2026-08-26T00:00:00.000Z',
+    },
+  ];
+}
+
+export function escapeXml(unsafe) {
+  if (unsafe == null) return '';
+  return String(unsafe)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+export function escapeCdata(text) {
+  if (text == null) return '';
+  return String(text).replace(/\]\]>/g, ']]]]><![CDATA[>');
+}
+
+/**
+ * Generate feed.xml (RSS 2.0) string
+ * CRITICAL: Tag <?xml version="1.0" encoding="UTF-8"?> MUST be at index 0 (character 0).
+ */
+export function generateFeedXml(posts, overrideBaseUrl) {
+  const { siteName, siteDescription, SITE_URL } = getSiteConfig();
+  const baseUrl = overrideBaseUrl || SITE_URL;
+  const publishedPosts = (posts || []).filter((p) => p.status === 'published');
+
+  const items = publishedPosts
+    .map((p) => {
+      const pubDate = p.createdAt ? new Date(p.createdAt).toUTCString() : (p.updatedAt ? new Date(p.updatedAt).toUTCString() : new Date().toUTCString());
+      const link = escapeXml(`${baseUrl}/baca/${encodeURIComponent(p.slug)}`);
+      const titleClean = escapeXml(p.title || '');
+      const descClean = escapeXml(p.excerpt || '');
+      return `    <item>
+      <title>${titleClean}</title>
+      <link>${link}</link>
+      <guid>${link}</guid>
+      <description>${descClean}</description>
+      <pubDate>${pubDate}</pubDate>
+    </item>`;
+    })
+    .join('\n');
+
+  const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>${escapeXml(siteName)}</title>
+    <link>${escapeXml(baseUrl)}</link>
+    <description>${escapeXml(siteDescription)}</description>
+    <language>id-id</language>
+${items}
+  </channel>
+</rss>`;
+
+  return rss.trim();
+}
+
+/**
+ * Parse items directly from a feed.xml (RSS 2.0) string
+ */
+export function parseFeedXmlItems(feedXmlContent) {
+  if (!feedXmlContent || typeof feedXmlContent !== 'string') return [];
+  const items = [];
+  const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
+  let match;
+  while ((match = itemRegex.exec(feedXmlContent)) !== null) {
+    const itemBlock = match[1];
+
+    // Extract title (handles both CDATA and plain text)
+    const titleMatch = itemBlock.match(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/i);
+    const title = titleMatch ? titleMatch[1].trim() : '';
+
+    // Extract link
+    const linkMatch = itemBlock.match(/<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/i);
+    const link = linkMatch ? linkMatch[1].trim() : '';
+
+    // Extract description
+    const descMatch = itemBlock.match(/<description>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i);
+    const description = descMatch ? descMatch[1].trim() : '';
+
+    if (title && link) {
+      items.push({ title, link, description });
+    }
+  }
+  return items;
+}
+
+/**
+ * Sanitize text to remove newlines, carriage returns, tabs, and duplicate spaces.
+ * This guarantees single-line list entries for the llms.txt parser.
+ */
+function sanitizeLlmsText(text) {
+  return (text || '')
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Generate llms.txt string taken directly from feed.xml items (Summary index format)
+ */
+export function generateLlmsTxt(posts, feedXmlContent, overrideBaseUrl) {
+  const { siteName, siteDescription, SITE_URL } = getSiteConfig();
+  const baseUrl = overrideBaseUrl || SITE_URL;
+  let items = [];
+
+  if (feedXmlContent) {
+    items = parseFeedXmlItems(feedXmlContent);
+  }
+
+  // If no items found from feedXmlContent, fallback to posts directly
+  if (items.length === 0 && posts) {
+    const publishedPosts = (posts || []).filter((p) => p.status === 'published');
+    items = publishedPosts.map((p) => ({
+      title: p.title,
+      link: `${baseUrl}/baca/${p.slug}`,
+      description: p.excerpt || '',
+    }));
+  }
+
+  let articleLinks = items
+    .map((item) => {
+      let itemLink = item.link;
+      if (itemLink && (itemLink.includes('example.com') || itemLink.includes('domain.com'))) {
+        itemLink = itemLink.replace(/https?:\/\/[^\/]+/, baseUrl);
+      }
+      const cleanTitle = sanitizeLlmsText(item.title || '').replace(/[\[\]]/g, '').trim();
+      const cleanDesc = sanitizeLlmsText(item.description || '');
+      return `- [${cleanTitle}](${itemLink})${cleanDesc ? `: ${cleanDesc}` : ''}`;
+    })
+    .join('\n');
+
+  // Fallback item to ensure H2 section is never empty
+  if (!articleLinks.trim()) {
+    articleLinks = `- [Beranda](${baseUrl}): ${siteDescription}`;
+  }
+
+  return `# ${siteName}
+
+> ${siteDescription}
+
+## Artikel Terkait & Panduan Utama
+
+${articleLinks}
+
+## Optional
+
+- [Konten Lengkap LLMs](${baseUrl}/llms-full.txt): Kumpulan teks lengkap artikel untuk konsumsi dan inferensi model bahasa (LLM).
+- [Sitemap XML](${baseUrl}/sitemap.xml): Peta situs terstruktur untuk crawler.
+- [RSS Feed](${baseUrl}/feed.xml): Umpan sindikasi artikel terbaru.
+`.trim();
+}
+
+/**
+ * Generate llms-full.txt string containing full markdown content of published posts
+ */
+export function generateLlmsFullTxt(posts, customSiteUrl, customSiteName) {
+  const { siteName, SITE_URL } = getSiteConfig();
+  const activeSiteUrl = customSiteUrl || SITE_URL;
+  const activeSiteName = customSiteName || siteName;
+  const publishedPosts = (posts || []).filter((p) => p.status === 'published');
+
+  const fullArticles = publishedPosts.map((p) => {
+    const url = `${activeSiteUrl}/baca/${p.slug}`;
+    const author = p.authorName || `Tim Redaksi ${activeSiteName}`;
+    const category = p.category || 'Umum';
+    const date = p.updatedAt || p.createdAt || new Date().toISOString();
+    return `---
+
+# ${p.title}
+
+* **URL:** ${url}
+* **Penulis:** ${author}
+* **Kategori:** ${category}
+* **Terakhir Diperbarui:** ${date}
+* **Ringkasan:** ${p.excerpt || ''}
+
+${p.contentMarkdown || ''}
+`;
+  }).join('\n\n');
+
+  return `# Arsip Lengkap Artikel ${activeSiteName} (LLMs Full Text)
+
+Dokumen ini memuat kumpulan artikel lengkap dalam format Markdown untuk Large Language Models (LLMs).
+
+${fullArticles}
+`.trim();
+}
+
+/**
+ * Generate sitemap.xml string
+ * CRITICAL: Tag <?xml version="1.0" encoding="UTF-8"?> MUST be at index 0 (character 0).
+ */
+export function generateSitemapXml(posts, overrideBaseUrl) {
+  const { SITE_URL } = getSiteConfig();
+  const baseUrl = overrideBaseUrl || SITE_URL;
+  const publishedPosts = (posts || []).filter((p) => p.status === 'published');
+
+  const urls = publishedPosts
+    .map((p) => {
+      const lastMod = p.updatedAt ? p.updatedAt.split('T')[0] : new Date().toISOString().split('T')[0];
+      const safeLoc = escapeXml(`${baseUrl}/baca/${encodeURIComponent(p.slug)}`);
+      return `<url><loc>${safeLoc}</loc><lastmod>${lastMod}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`;
+    })
+    .join('');
+
+  // Categories derived from posts or fallbacks
+  const FALLBACK_CATEGORIES = ['pola-asuh', 'tumbuh-kembang', 'kesehatan-gizi', 'balita'];
+  const distinctCats = Array.from(
+    new Set(
+      publishedPosts
+        .map((p) =>
+          (p.category || '')
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9\-]/g, '')
+            .replace(/-+/g, '-')
+        )
+        .filter(Boolean)
+    )
+  );
+  const catList = distinctCats.length > 0 ? distinctCats : FALLBACK_CATEGORIES;
+  const categoryUrls = catList
+    .map(
+      (slug) =>
+        `<url><loc>${escapeXml(`${baseUrl}/kategori/${encodeURIComponent(slug)}`)}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`
+    )
+    .join('');
+
+  // Listing pages
+  const listingPages = [
+    { path: '/iklan-baris', priority: '0.7', changefreq: 'daily' },
+    { path: '/surat-pembaca', priority: '0.7', changefreq: 'daily' },
+    { path: '/balita', priority: '0.6', changefreq: 'weekly' },
+  ];
+  const listingUrls = listingPages
+    .map(
+      (p) =>
+        `<url><loc>${escapeXml(`${baseUrl}${p.path}`)}</loc><changefreq>${p.changefreq}</changefreq><priority>${p.priority}</priority></url>`
+    )
+    .join('');
+
+  const staticPages = [
+    { url: `${baseUrl}/privacy`, priority: '0.5' },
+    { url: `${baseUrl}/about`, priority: '0.6' },
+    { url: `${baseUrl}/contact`, priority: '0.6' },
+    { url: `${baseUrl}/disclaimer`, priority: '0.5' },
+    { url: `${baseUrl}/terms`, priority: '0.5' },
+  ];
+
+  const staticUrls = staticPages
+    .map(
+      (p) => `<url><loc>${escapeXml(p.url)}</loc><changefreq>monthly</changefreq><priority>${escapeXml(p.priority)}</priority></url>`
+    )
+    .join('');
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapeXml(baseUrl)}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>${staticUrls}${listingUrls}${categoryUrls}${urls}</urlset>`;
+
+  return xml.trim();
+}
+
+/**
+ * Main generator function that writes files to public/ and dist/
+ */
+export function generateStaticFiles(customPosts) {
+  const posts = customPosts || loadPostsFromInitialData();
+
+  // 1. Generate feed.xml first
+  const feedContent = generateFeedXml(posts);
+
+  // 2. Generate llms.txt strictly derived from feed.xml items & llms-full.txt
+  const llmsContent = generateLlmsTxt(posts, feedContent);
+  const llmsFullContent = generateLlmsFullTxt(posts);
+
+  // 3. Generate sitemap.xml
+  const sitemapContent = generateSitemapXml(posts);
+
+  // Validate XML index 0 rules
+  if (sitemapContent.indexOf('<?xml') !== 0) {
+    throw new Error('Sitemap XML declaration must start at index 0 without leading whitespace or newlines!');
+  }
+  if (feedContent.indexOf('<?xml') !== 0) {
+    throw new Error('Feed XML declaration must start at index 0 without leading whitespace or newlines!');
+  }
+
+  const publicDir = path.join(rootDir, 'public');
+  const distDir = path.join(rootDir, 'dist');
+
+  // Ensure directories exist
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
+
+  // Write to public/
+  const publicFeedPath = path.join(publicDir, 'feed.xml');
+  const publicLlmsPath = path.join(publicDir, 'llms.txt');
+  const publicLlmsFullPath = path.join(publicDir, 'llms-full.txt');
+  const publicSitemapPath = path.join(publicDir, 'sitemap.xml');
+  fs.writeFileSync(publicFeedPath, feedContent, 'utf-8');
+  fs.writeFileSync(publicLlmsPath, llmsContent, 'utf-8');
+  fs.writeFileSync(publicLlmsFullPath, llmsFullContent, 'utf-8');
+  fs.writeFileSync(publicSitemapPath, sitemapContent, 'utf-8');
+  console.log(`[Static Generator] Updated ${publicFeedPath}, ${publicLlmsPath}, ${publicLlmsFullPath}, and ${publicSitemapPath}`);
+
+  // Write to dist/ if dist directory exists or generate it
+  if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir, { recursive: true });
+  }
+  const distFeedPath = path.join(distDir, 'feed.xml');
+  const distLlmsPath = path.join(distDir, 'llms.txt');
+  const distLlmsFullPath = path.join(distDir, 'llms-full.txt');
+  const distSitemapPath = path.join(distDir, 'sitemap.xml');
+  fs.writeFileSync(distFeedPath, feedContent, 'utf-8');
+  fs.writeFileSync(distLlmsPath, llmsContent, 'utf-8');
+  fs.writeFileSync(distLlmsFullPath, llmsFullContent, 'utf-8');
+  fs.writeFileSync(distSitemapPath, sitemapContent, 'utf-8');
+  console.log(`[Static Generator] Updated ${distFeedPath}, ${distLlmsPath}, ${distLlmsFullPath}, and ${distSitemapPath}`);
+
+  return { feedContent, llmsContent, llmsFullContent, sitemapContent };
+}
+
+// Execute generator if script is executed directly via `node scripts/generate-static-files.js`
+if (process.argv[1] && (process.argv[1].endsWith('generate-static-files.js') || process.argv[1].includes('generate-static-files'))) {
+  try {
+    generateStaticFiles();
+    console.log('[Static Generator] Build static files generated successfully.');
+  } catch (err) {
+    console.error('[Static Generator] Failed to generate static files:', err);
+    process.exit(1);
+  }
+}

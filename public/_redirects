@@ -1,0 +1,22 @@
+# ============================================================
+# 301 PERMANENT REDIRECTS (DOMAIN AGNOSTIC)
+# ============================================================
+# Hanya redirect path artikel LEGACY → /baca/*
+# Jangan redirect /kategori/* (itu halaman archive kategori)
+# ============================================================
+
+# Specific legacy redirects
+/makanan/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil/ /baca/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil 301
+/makanan/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil /baca/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil 301
+
+/balita/kiat-merawat-gigi-bayi/ /baca/kiat-merawat-gigi-bayi 301
+/balita/kiat-merawat-gigi-bayi /baca/kiat-merawat-gigi-bayi 301
+
+# Legacy article path wildcards (bukan archive kategori)
+/makanan/* /baca/:splat 301
+/balita/* /baca/:splat 301
+/kesehatan/* /baca/:splat 301
+/parenting/* /baca/:splat 301
+
+# PENTING: JANGAN ada baris ini:
+# /kategori/* /baca/:splat 301
