@@ -1,0 +1,443 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark, .dark *));
+
+@theme {
+  --color-rose-50: color-mix(in srgb, var(--color-primary, #e11d48) 5%, white);
+  --color-rose-100: color-mix(in srgb, var(--color-primary, #e11d48) 15%, white);
+  --color-rose-200: color-mix(in srgb, var(--color-primary, #e11d48) 25%, white);
+  --color-rose-300: color-mix(in srgb, var(--color-primary, #e11d48) 40%, white);
+  --color-rose-400: color-mix(in srgb, var(--color-secondary, #f43f5e) 80%, white);
+  --color-rose-500: var(--color-secondary, #f43f5e);
+  --color-rose-600: var(--color-primary, #e11d48);
+  --color-rose-700: color-mix(in srgb, var(--color-primary, #e11d48) 85%, black);
+  --color-rose-800: color-mix(in srgb, var(--color-primary, #e11d48) 70%, black);
+  --color-rose-900: color-mix(in srgb, var(--color-primary, #e11d48) 55%, black);
+  --color-rose-950: color-mix(in srgb, var(--color-primary, #e11d48) 40%, black);
+  
+  --font-sans: var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif);
+  --font-heading: var(--font-heading, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif);
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading, var(--font-sans));
+}
+
+/* Zero CLS & Font Rendering Stabilization */
+html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reserve and prevent font shift during load */
+* {
+  font-display: optional;
+}
+
+/* HIGH READABILITY & EYE COMFORT TYPOGRAPHY FOR MOBILE / PARENTS */
+@layer utilities {
+  /* Article Content Body High Readability */
+  .article-body {
+    max-width: 68ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .article-body p {
+    font-size: 1.0625rem; /* 17px for eye-friendly mobile reading */
+    line-height: 1.6; /* 27px line-height for loose, spacious reading */
+    margin-bottom: 1.125rem; /* 18px margin bottom */
+  }
+
+  @media (min-width: 640px) {
+    .article-body p {
+      font-size: 1.125rem; /* 18px on tablet/desktop */
+      line-height: 1.65;
+      margin-bottom: 1.25rem; /* 20px margin bottom */
+    }
+  }
+
+  /* Headings Typography */
+  .article-body h1,
+  h1.readable-heading {
+    font-size: 1.75rem; /* 28px on mobile */
+    line-height: 1.25;
+    font-weight: 800;
+    margin-top: 1.75rem;
+    margin-bottom: 0.875rem;
+    color: inherit;
+  }
+
+  .article-body h2,
+  h2.readable-heading {
+    font-size: 1.45rem; /* 23px on mobile */
+    line-height: 1.3;
+    font-weight: 700;
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 2px solid var(--color-rose-200, rgba(225, 29, 72, 0.25));
+    color: inherit;
+  }
+
+  .article-body h3,
+  h3.readable-heading {
+    font-size: 1.25rem; /* 20px on mobile */
+    line-height: 1.35;
+    font-weight: 700;
+    margin-top: 1.35rem;
+    margin-bottom: 0.5rem;
+    color: inherit;
+  }
+
+  .article-body h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: inherit;
+  }
+
+  @media (min-width: 640px) {
+    .article-body h1,
+    h1.readable-heading {
+      font-size: 2.25rem; /* 36px on desktop */
+      line-height: 1.25;
+    }
+
+    .article-body h2,
+    h2.readable-heading {
+      font-size: 1.65rem; /* 26px on desktop */
+      line-height: 1.3;
+    }
+
+    .article-body h3,
+    h3.readable-heading {
+      font-size: 1.35rem; /* 21px on desktop */
+      line-height: 1.35;
+    }
+  }
+
+  .article-body strong {
+    font-weight: 700;
+  }
+
+  .article-body a {
+    color: var(--color-rose-600, #e11d48);
+    text-decoration: underline;
+  }
+
+  /* Lists & Blockquotes within article body */
+  .article-body ul {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    margin-bottom: 1.125rem;
+    padding-left: 1.5rem;
+    list-style-type: disc !important;
+  }
+
+  .article-body ol {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    margin-bottom: 1.125rem;
+    padding-left: 1.5rem;
+    list-style-type: decimal !important;
+  }
+
+  .article-body ul ul {
+    list-style-type: circle !important;
+    margin-bottom: 0.25rem;
+  }
+
+  .article-body ol ol {
+    list-style-type: lower-alpha !important;
+    margin-bottom: 0.25rem;
+  }
+
+  .article-body li {
+    margin-bottom: 0.5rem;
+  }
+
+  .article-body blockquote {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    padding-left: 1rem;
+    border-left: 3px solid currentColor;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  /* Medium-style Pull Quote (Tekan 2x pada ikon Quote Flying Toolbar) */
+  .article-body blockquote.pullquote,
+  blockquote.pullquote {
+    margin: 2.5rem auto !important;
+    padding: 1.25rem 2rem !important;
+    border-left: none !important;
+    text-align: center !important;
+    font-size: 1.55rem !important;
+    line-height: 1.45 !important;
+    font-style: italic !important;
+    font-weight: 700 !important;
+    position: relative !important;
+    max-width: 85% !important;
+  }
+
+  .article-body blockquote.pullquote::before,
+  blockquote.pullquote::before {
+    content: "“";
+    display: block;
+    font-size: 3.5rem;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary, #e11d48);
+    opacity: 0.6;
+    margin-bottom: 0.75rem;
+    font-family: Georgia, serif;
+  }
+
+  /* Metadata / Small text elements */
+  .meta-subtext {
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.4;
+  }
+}
+
+/* ZERO-CLS CLIPPING FOR ABSOLUTE DECORATIVE BLUR ELEMENTS */
+.absolute.blur-2xl,
+.absolute.blur-3xl,
+.absolute[class*="blur-"] {
+  pointer-events: none !important;
+  user-select: none !important;
+  overflow: hidden !important;
+  contain: strict !important; /* Forces browser to treat this completely independently from layout */
+}
+
+/* Ensure parents of absolute decorative nodes have clipping context */
+section.relative,
+div.relative {
+  overflow: hidden;
+}
+
+/* RESPONSIVE PAGINATION AND AUTO-WRAP FOR LONG STUFF */
+
+/* 1. AUTO-WRAP LONG URLS & REFERENCES IN NON-FRONTPAGE CONTENT */
+.article-body,
+.article-body *,
+.prose,
+.prose *,
+#article-content-body,
+#article-content-body * {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important; /* Standard break */
+}
+
+/* Specifically force links, journal refs, and long citations to break if too long */
+.article-body a,
+.prose a,
+#article-content-body a,
+#daftar-referensi a,
+#daftar-referensi li {
+  word-break: break-all !important; /* Force ultra-long URLs to break nicely */
+}
+
+/* 2. RESPONSIVE SITE PAGINATION CONTROLS */
+.site-pagination-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+/* Mobile responsive constraints for pagination at 480px and under */
+@media (max-width: 480px) {
+  .site-pagination-container {
+    justify-content: center !important;
+    gap: 0.375rem !important;
+  }
+
+  /* Hide the text label "Sebelumnya" and "Berikutnya", leaving only arrow symbol */
+  .site-pagination-container .btn-pagination-prev .text,
+  .site-pagination-container .btn-pagination-next .text {
+    display: none !important;
+  }
+
+  /* Reduce padding, font sizes, and sizes of pagination buttons on mobile */
+  .site-pagination-container button,
+  .site-pagination-container .pagination-numbers button {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 0.5rem !important;
+    min-width: 2rem !important;
+    height: 2rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Make sure spacing is clean inside numbers wrapper */
+  .site-pagination-container .pagination-numbers {
+    gap: 0.25rem !important;
+  }
+}
+
+/* TRADITIONAL PRINT NEWSPAPER CLASSIFIED ADS (IKLAN BARIS KORAN) MULTI-COLUMN FLOW */
+.newspaper-classified-container {
+  background-color: #ffffff;
+  color: #111111;
+  font-family: 'Arial Narrow', 'Nimbus Sans L', 'Helvetica Neue', Arial, 'Times New Roman', Georgia, serif;
+}
+
+.newspaper-columns-flow,
+.newspaper-columns {
+  column-gap: 14px;
+  column-fill: auto;
+}
+
+/* 1. SMARTPHONE VERTICAL (PORTRAIT): STRICTLY 1 KOLOM FOR EASY READING (MATA TUA) */
+@media screen and (max-width: 639px) and (orientation: portrait) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 1 !important;
+    max-height: none !important;
+  }
+  .newspaper-ad-item {
+    font-size: 14.5px !important;
+    line-height: 1.45 !important;
+    padding: 6px 4px !important;
+  }
+  .newspaper-cat-header {
+    font-size: 13.5px !important;
+    padding: 5px 6px !important;
+  }
+}
+
+/* 2. SMARTPHONE HORIZONTAL (LANDSCAPE): 2 KOLOM */
+@media screen and (max-width: 639px) and (orientation: landscape) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 2 !important;
+    max-height: 850px;
+  }
+  .newspaper-ad-item {
+    font-size: 13px !important;
+    padding: 4px 3px !important;
+  }
+}
+
+/* 3. TABLET VERTICAL (PORTRAIT): 2 KOLOM */
+@media screen and (min-width: 640px) and (max-width: 1023px) and (orientation: portrait) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 2 !important;
+    max-height: 950px;
+  }
+  .newspaper-ad-item {
+    font-size: 13.5px !important;
+  }
+}
+
+/* 4. TABLET HORIZONTAL (LANDSCAPE): 3 KOLOM */
+@media screen and (min-width: 640px) and (max-width: 1023px) and (orientation: landscape) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 3 !important;
+    max-height: 780px;
+  }
+}
+
+/* 5. DESKTOP VERTICAL: 3 KOLOM */
+@media screen and (min-width: 1024px) and (orientation: portrait) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 3 !important;
+    max-height: 1100px;
+  }
+}
+
+/* 6. DESKTOP HORIZONTAL: 4 KOLOM */
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 4 !important;
+    max-height: 800px;
+  }
+}
+
+/* DEFAULT FALLBACKS */
+@media screen and (max-width: 639px) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 1;
+  }
+}
+
+@media screen and (min-width: 640px) and (max-width: 1023px) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 2;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .newspaper-columns-flow,
+  .newspaper-columns {
+    column-count: 4;
+  }
+}
+
+.newspaper-block {
+  break-inside: auto;
+  page-break-inside: auto;
+  -webkit-column-break-inside: auto;
+  margin-bottom: 10px;
+}
+
+.newspaper-cat-header {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  break-after: avoid;
+  background-color: #111111;
+  color: #ffffff;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 8px;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  border: 1px solid #000000;
+}
+
+.newspaper-ad-item {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  padding: 6px 5px;
+  border-bottom: 1px dotted #444444;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: #111111;
+  background-color: #ffffff;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.newspaper-ad-item:hover {
+  background-color: #f3f4f6;
+}
+
+
+

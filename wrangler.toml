@@ -1,0 +1,21 @@
+# ============================================================
+# CLOUDFLARE WORKERS & PAGES CONFIGURATION
+# ============================================================
+
+name = "job-web-id"
+compatibility_date = "2024-09-25"
+compatibility_flags = ["nodejs_compat"]
+
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "job-cms-db"
+database_id = "013d4b1a-aa60-449d-9573-6a86943d3cfc"
+
+[vars]
+SITE_NAME = "Job Web ID"
+SITE_URL = "https://job.web.id"
+GITHUB_OWNER = "roywikan"
+GITHUB_REPO = "job"
+GITHUB_BRANCH = "main"
