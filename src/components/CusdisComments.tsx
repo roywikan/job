@@ -194,6 +194,7 @@ const CommentReplyForm: React.FC<ReplyFormProps> = ({
         <div className="scale-90 origin-left">
           <TurnstileWidget
             siteKey={turnstileSiteKey}
+            action="comment"
             onVerify={(token) => {
               setReplyToken(token);
               setErrorMsg('');
@@ -686,6 +687,7 @@ export const CusdisComments: React.FC<CusdisCommentsProps> = ({
                 <div className="space-y-1">
                   <TurnstileWidget
                     siteKey={turnstileSiteKey}
+                    action="comment"
                     onVerify={(token) => {
                       setTurnstileToken(token);
                       setSubmitError('');
