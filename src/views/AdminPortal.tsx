@@ -15,7 +15,7 @@ import RichPostEditor from '../components/RichPostEditor';
 import NavigationBuilder, { PRESET_NAV_ITEMS } from '../components/NavigationBuilder';
 import { sanitizeAndOptimizeImageUrl, getOptimizedAvatarUrl } from '../lib/imageUtils';
 import { getAuthHeaders } from '../lib/auth';
-import TurnstileWidget from '../components/TurnstileWidget';
+import TurnstileWidget, { TurnstileWidgetHandle } from '../components/TurnstileWidget';
 import DatabaseBackupManager from '../components/DatabaseBackupManager';
 import InteractiveProductSale from '../components/InteractiveProductSale';
 import AdminSuratPembacaManager from '../components/AdminSuratPembacaManager';
@@ -58,6 +58,7 @@ export default function AdminPortal({
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null);
 
   // Emergency Recovery State (Bypass Turnstile in Emergency)
   const [emergencyKeyInput, setEmergencyKeyInput] = useState('');
@@ -1306,6 +1307,10 @@ export default function AdminPortal({
     const result = await onLogin(emailInput, passwordInput, turnstileToken, cleanEmergency);
     setIsLoggingIn(false);
 
+    // Single-use token contract: reset Turnstile widget after request completes
+    turnstileRef.current?.reset();
+    setTurnstileToken('');
+
     if (typeof result === 'object') {
       if (!result.success) {
         setLoginError(result.error || 'Email atau password salah, atau verifikasi gagal.');
@@ -2128,7 +2133,9 @@ export default function AdminPortal({
             ) : (
               <div className="space-y-2">
                 <TurnstileWidget
+                  ref={turnstileRef}
                   siteKey={siteConfig?.turnstile_site_key}
+                  action="login"
                   onVerify={(token) => setTurnstileToken(token)}
                   onExpire={() => setTurnstileToken('')}
                   onError={() => setTurnstileLoadError(true)}
