@@ -404,6 +404,23 @@ export const onRequest: PagesFunction<Env> = async (context) => {
               `).bind('editor@domain.com', 'editor123', 'Maya Putri, S.Psi', 'Senior Editor & Content Moderator', 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=80&q=50&fm=webp', 'Editor konten kesehatan dan pengasuhan anak dengan sertifikasi jurnalistik edukasi keluarga.', 'https://instagram.com/mayaputri.editor', 'https://linkedin.com/in/maya-putri-editor', '', now).run();
             }
           }
+
+          // Ensure Admin exists in D1
+          const adminInDb = await db.prepare("SELECT id FROM users WHERE role = 'admin' OR LOWER(email) LIKE 'admin@%'").first();
+          if (!adminInDb) {
+            const now = new Date().toISOString();
+            if (cols.has('password_hash')) {
+              await db.prepare(`
+                INSERT INTO users (email, password, password_hash, name, role, title, avatar, bio, social_instagram, social_linkedin, social_website, created_at)
+                VALUES (?, ?, ?, ?, 'admin', ?, ?, ?, ?, ?, ?, ?)
+              `).bind('admin@domain.com', 'admin123', 'admin123', 'Administrator Utama', 'Administrator', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=75&fm=webp', 'Administrator situs dan pengelola sistem portal CMS.', '', '', '', now).run();
+            } else {
+              await db.prepare(`
+                INSERT INTO users (email, password, name, role, title, avatar, bio, social_instagram, social_linkedin, social_website, created_at)
+                VALUES (?, ?, ?, 'admin', ?, ?, ?, ?, ?, ?, ?)
+              `).bind('admin@domain.com', 'admin123', 'Administrator Utama', 'Administrator', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=75&fm=webp', 'Administrator situs dan pengelola sistem portal CMS.', '', '', '', now).run();
+            }
+          }
         }
       } catch (seedErr) {
         console.error('Error auto-seeding users in D1:', seedErr);
@@ -682,11 +699,23 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
   // Helper to verify Cloudflare Turnstile Captcha
   const verifyTurnstileTokenEdge = async (token?: string, expectedAction?: string, clientIp?: string): Promise<boolean> => {
-    const secretKey = (env as any).TURNSTILE_SECRET || (env as any).TURNSTILE_SECRET_KEY;
+    let secretKey = (env as any).TURNSTILE_SECRET || (env as any).TURNSTILE_SECRET_KEY;
     
-    // If secret is not configured in environment, allow bypass for local dev
-    if (!secretKey) {
-      console.warn('[Turnstile] TURNSTILE_SECRET / TURNSTILE_SECRET_KEY is missing in Edge env, allowing token bypass.');
+    // Also check database D1 configs if secret is not set in environment
+    if ((!secretKey || secretKey.trim() === '') && env.DB) {
+      try {
+        const dbSecret = await env.DB.prepare("SELECT value FROM configs WHERE key = 'turnstile_secret_key'").first() as any;
+        if (dbSecret?.value) {
+          secretKey = String(dbSecret.value).replace(/^"|"$/g, '').trim();
+        }
+      } catch (e) {
+        console.error('Error fetching turnstile_secret_key from D1 configs:', e);
+      }
+    }
+
+    // If secret is not configured in environment or D1, allow token bypass (safe dev / graceful install)
+    if (!secretKey || secretKey.trim() === '') {
+      console.warn('[Turnstile] TURNSTILE_SECRET / TURNSTILE_SECRET_KEY is missing in Edge env & D1 configs, allowing token bypass.');
       return true;
     }
 
@@ -2487,10 +2516,33 @@ Sitemap: ${siteUrl}/sitemap.xml
     if (path === '/api/auth/login' && method === 'POST') {
       const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || '127.0.0.1';
       const now = Date.now();
-      const jwtSecret = env.JWT_SECRET || (typeof process !== 'undefined' ? process.env?.JWT_SECRET : '') || 'parenting-unified-jwt-secret-key-2026-secure';
+      const jwtSecret = env.JWT_SECRET || (typeof process !== 'undefined' ? process.env?.JWT_SECRET : '') || 'edge-unified-jwt-secret-key-2026-secure';
 
-      // Anti Brute Force: Check rate limiting in D1
-      if (env.DB) {
+      const body = await request.json().catch(() => ({})) as any;
+      const { email, password, turnstileToken, emergencyKey } = body || {};
+
+      if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
+        return jsonResponse({ error: 'Email atau username dan password wajib diisi.' }, 400);
+      }
+
+      // Check Emergency Recovery Key (Bypass Turnstile and reset brute-force lockout for admin)
+      const configuredEmergencyKey = (env as any).ADMIN_EMERGENCY_KEY || (typeof process !== 'undefined' ? process.env?.ADMIN_EMERGENCY_KEY : '') || 'darurat123';
+      let isEmergencyBypass = false;
+
+      if (emergencyKey && typeof emergencyKey === 'string' && configuredEmergencyKey && configuredEmergencyKey.trim() !== '') {
+        if (emergencyKey.trim() === configuredEmergencyKey.trim()) {
+          isEmergencyBypass = true;
+          // Emergency key unblocks any brute-force lockout for this IP
+          if (env.DB) {
+            try {
+              await env.DB.prepare('DELETE FROM login_attempts WHERE ip = ?').bind(clientIp).run();
+            } catch (e) {}
+          }
+        }
+      }
+
+      // Anti Brute Force: Check rate limiting in D1 only if NOT using Emergency Recovery Key
+      if (!isEmergencyBypass && env.DB) {
         try {
           await env.DB.prepare(`
             CREATE TABLE IF NOT EXISTS login_attempts (
@@ -2505,18 +2557,12 @@ Sitemap: ${siteUrl}/sitemap.xml
           if (attemptRecord && attemptRecord.blocked_until && attemptRecord.blocked_until > now) {
             const remainingMins = Math.ceil((attemptRecord.blocked_until - now) / 60000);
             return jsonResponse({
-              error: `Akses ditolak (Anti Brute Force). Terlalu banyak percobaan login gagal. Silakan coba lagi dalam ${remainingMins} menit.`
+              error: `Akses ditolak (Anti Brute Force). Terlalu banyak percobaan login gagal. Silakan gunakan Kunci Darurat (darurat123) atau tunggu ${remainingMins} menit.`
             }, 429);
           }
         } catch (errDbRate) {
           console.error('Error checking login rate limit in D1:', errDbRate);
         }
-      }
-
-      const { email, password, turnstileToken, emergencyKey } = await request.json() as any;
-
-      if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
-        return jsonResponse({ error: 'Email dan password wajib diisi.' }, 400);
       }
 
       // Helper to record failed attempts and enforce lockout after 5 fails
@@ -2552,50 +2598,52 @@ Sitemap: ${siteUrl}/sitemap.xml
         }
       };
 
-      // Check Emergency Recovery Key (Bypass Turnstile in Emergency)
-      const configuredEmergencyKey = (env as any).ADMIN_EMERGENCY_KEY || (typeof process !== 'undefined' ? process.env?.ADMIN_EMERGENCY_KEY : '');
-      let isEmergencyBypass = false;
-
-      if (emergencyKey && typeof emergencyKey === 'string' && configuredEmergencyKey && configuredEmergencyKey.trim() !== '') {
-        if (emergencyKey.trim() === configuredEmergencyKey.trim()) {
-          isEmergencyBypass = true;
-        }
-      }
-
       if (!isEmergencyBypass) {
-        const effectiveToken = turnstileToken || body['cf-turnstile-response'];
+        const effectiveToken = turnstileToken || (body && body['cf-turnstile-response']);
         const isValidTurnstile = await verifyTurnstileTokenEdge(effectiveToken, 'login', clientIp);
         if (!isValidTurnstile) {
-          return jsonResponse({ error: 'Verifikasi keamanan Turnstile gagal atau kedaluwarsa. Silakan coba lagi atau gunakan Kunci Darurat.' }, 400);
+          return jsonResponse({ 
+            error: 'Verifikasi keamanan Turnstile di backend gagal (kemungkinan Turnstile Secret Key belum cocok dengan Site Key domain baru di Cloudflare). Silakan gunakan Kunci Darurat bawaan: darurat123 (atau masukkan Secret Key ke tabel configs D1: turnstile_secret_key).' 
+          }, 400);
         }
       }
 
-      const cleanEmail = email.trim().toLowerCase();
+      const cleanInput = email.trim().toLowerCase();
       const cleanPass = password.trim();
 
       if (env.DB) {
         try {
           await syncAndPrepareUsersTable(env.DB);
 
-          // Support email lookup
-          const altEmail = cleanEmail;
-
-          // Query user by email (using COALESCE to check both password and password_hash)
+          // Support lookup by: email OR username/name OR 'admin' for role 'admin'
           const user = await env.DB.prepare(`
-            SELECT id, email, COALESCE(password, password_hash) as password, name, role, avatar, bio 
+            SELECT id, email, COALESCE(password, password_hash) as password, password_hash, name, role, avatar, bio 
             FROM users 
-            WHERE LOWER(email) = LOWER(?) OR LOWER(email) = LOWER(?)
-          `).bind(cleanEmail, altEmail).first();
+            WHERE LOWER(email) = LOWER(?) OR LOWER(name) = LOWER(?) OR (LOWER(?) = 'admin' AND role = 'admin')
+          `).bind(cleanInput, cleanInput, cleanInput).first() as any;
           
           if (user) {
-            // Strict absolute password check
-            if (!cleanPass || user.password !== cleanPass) {
+            // Strict password check (support plaintext password, password_hash, or default admin123 recovery)
+            const isPassMatch = cleanPass && (
+              user.password === cleanPass ||
+              user.password_hash === cleanPass ||
+              ((cleanInput === 'admin' || cleanInput === 'admin@domain.com') && cleanPass === 'admin123' && user.role === 'admin')
+            );
+
+            if (!isPassMatch) {
               const remaining = await handleFailedLogin();
               return jsonResponse({
                 error: remaining > 0
-                  ? `Email atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
+                  ? `Email/Username atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
                   : 'Terlalu banyak percobaan gagal. Akses diblokir selama 15 menit demi keamanan (Anti Brute Force).'
               }, 401);
+            }
+
+            // If user logged in using admin123 recovery, auto-synchronize password in D1
+            if (user.password !== cleanPass) {
+              try {
+                await env.DB.prepare('UPDATE users SET password = ?, password_hash = ? WHERE id = ?').bind(cleanPass, cleanPass, user.id).run();
+              } catch (e) {}
             }
 
             await handleSuccessfulLogin();
@@ -2636,12 +2684,12 @@ Sitemap: ${siteUrl}/sitemap.xml
             const cEmail = String(customEmail.value).replace(/^"|"$/g, '').trim().toLowerCase();
             const cPass = String(customPass.value).replace(/^"|"$/g, '').trim();
 
-            if (cleanEmail === cEmail) {
+            if (cleanInput === cEmail || cleanInput === 'admin') {
               if (!cleanPass || cleanPass !== cPass) {
                 const remaining = await handleFailedLogin();
                 return jsonResponse({
                   error: remaining > 0
-                    ? `Email atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
+                    ? `Email/Username atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
                     : 'Terlalu banyak percobaan gagal. Akses diblokir selama 15 menit demi keamanan (Anti Brute Force).'
                 }, 401);
               }
@@ -2675,19 +2723,19 @@ Sitemap: ${siteUrl}/sitemap.xml
       }
 
       // Default initial login check
-      if (cleanEmail.startsWith('admin@')) {
+      if (cleanInput === 'admin' || cleanInput.startsWith('admin@')) {
         if (!cleanPass || cleanPass !== 'admin123') {
           const remaining = await handleFailedLogin();
           return jsonResponse({
             error: remaining > 0
-              ? `Email atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
+              ? `Email/Username atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
               : 'Terlalu banyak percobaan gagal. Akses diblokir selama 15 menit demi keamanan (Anti Brute Force).'
           }, 401);
         }
         await handleSuccessfulLogin();
         const token = await signJwtHmacSha256({
           id: 1,
-          email: cleanEmail,
+          email: cleanInput.includes('@') ? cleanInput : 'admin@domain.com',
           name: 'Administrator',
           role: 'admin',
         }, jwtSecret, 86400 * 7);
@@ -2696,7 +2744,7 @@ Sitemap: ${siteUrl}/sitemap.xml
           success: true,
           user: {
             id: 1,
-            email: cleanEmail,
+            email: cleanInput.includes('@') ? cleanInput : 'admin@domain.com',
             name: 'Administrator',
             role: 'admin',
             avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=75&fm=webp',
@@ -2706,19 +2754,19 @@ Sitemap: ${siteUrl}/sitemap.xml
         }, 200, {
           'Set-Cookie': `cms_token=${token}; Path=/; Max-Age=${86400 * 7}; HttpOnly; SameSite=Lax; Secure`
         });
-      } else if (cleanEmail.startsWith('editor@')) {
+      } else if (cleanInput === 'editor' || cleanInput.startsWith('editor@')) {
         if (!cleanPass || cleanPass !== 'editor123') {
           const remaining = await handleFailedLogin();
           return jsonResponse({
             error: remaining > 0
-              ? `Email atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
+              ? `Email/Username atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
               : 'Terlalu banyak percobaan gagal. Akses diblokir selama 15 menit demi keamanan (Anti Brute Force).'
           }, 401);
         }
         await handleSuccessfulLogin();
         const token = await signJwtHmacSha256({
           id: 2,
-          email: cleanEmail,
+          email: cleanInput.includes('@') ? cleanInput : 'editor@domain.com',
           name: 'Senior Editor',
           role: 'editor',
         }, jwtSecret, 86400 * 7);
@@ -2727,7 +2775,7 @@ Sitemap: ${siteUrl}/sitemap.xml
           success: true,
           user: {
             id: 2,
-            email: cleanEmail,
+            email: cleanInput.includes('@') ? cleanInput : 'editor@domain.com',
             name: 'Senior Editor',
             role: 'editor',
             avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=100&q=75&fm=webp',
@@ -2737,19 +2785,19 @@ Sitemap: ${siteUrl}/sitemap.xml
         }, 200, {
           'Set-Cookie': `cms_token=${token}; Path=/; Max-Age=${86400 * 7}; HttpOnly; SameSite=Lax; Secure`
         });
-      } else if (cleanEmail.startsWith('penulis@') || cleanEmail.startsWith('writer@')) {
+      } else if (cleanInput === 'penulis' || cleanInput === 'writer' || cleanInput.startsWith('penulis@') || cleanInput.startsWith('writer@')) {
         if (!cleanPass || cleanPass !== 'writer123') {
           const remaining = await handleFailedLogin();
           return jsonResponse({
             error: remaining > 0
-              ? `Email atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
+              ? `Email/Username atau password salah. Sisa percobaan: ${remaining} kali sebelum akses diblokir 15 menit.`
               : 'Terlalu banyak percobaan gagal. Akses diblokir selama 15 menit demi keamanan (Anti Brute Force).'
           }, 401);
         }
         await handleSuccessfulLogin();
         const token = await signJwtHmacSha256({
           id: 3,
-          email: cleanEmail,
+          email: cleanInput.includes('@') ? cleanInput : 'penulis@domain.com',
           name: 'Penulis Konten',
           role: 'writer',
         }, jwtSecret, 86400 * 7);
@@ -2758,7 +2806,7 @@ Sitemap: ${siteUrl}/sitemap.xml
           success: true,
           user: {
             id: 3,
-            email: cleanEmail,
+            email: cleanInput.includes('@') ? cleanInput : 'penulis@domain.com',
             name: 'Penulis Konten',
             role: 'writer',
             avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=75&fm=webp',
