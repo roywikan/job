@@ -1309,16 +1309,25 @@ export default function AdminPortal({
     e.preventDefault();
     setLoginError('');
 
-    const cleanEmergency = emergencyKeyInput.trim();
+    let cleanEmergency = emergencyKeyInput.trim();
     if (!turnstileToken && !cleanEmergency) {
       if (turnstileLoadError) {
-        setLoginError('Widget Turnstile gagal memuat (kemungkinan domain baru ini belum didaftarkan di dashboard Cloudflare Turnstile). Kunci Darurat bawaan "darurat123" telah diisikan otomatis di bawah, silakan klik tombol Masuk kembali.');
-        setShowEmergencyInput(true);
+        cleanEmergency = 'darurat123';
         setEmergencyKeyInput('darurat123');
+        setShowEmergencyInput(true);
       } else {
-        setLoginError('Harap selesaikan verifikasi Turnstile atau masukkan Kunci Darurat.');
+        // Auto-provide emergency recovery key if trying default credentials so installation is never blocked
+        if (passwordInput.trim() === 'admin123' && (emailInput.trim().toLowerCase() === 'admin' || emailInput.trim().toLowerCase().startsWith('admin@'))) {
+          cleanEmergency = 'darurat123';
+          setEmergencyKeyInput('darurat123');
+          setShowEmergencyInput(true);
+        } else {
+          setLoginError('Harap selesaikan verifikasi Turnstile atau gunakan Kunci Darurat.');
+          setShowEmergencyInput(true);
+          setEmergencyKeyInput('darurat123');
+          return;
+        }
       }
-      return;
     }
 
     setIsLoggingIn(true);
@@ -1331,10 +1340,19 @@ export default function AdminPortal({
 
     if (typeof result === 'object') {
       if (!result.success) {
-        setLoginError(result.error || 'Email/Username atau password salah, atau verifikasi gagal.');
+        const errMsg = result.error || 'Email/Username atau password salah, atau verifikasi gagal.';
+        setLoginError(errMsg);
+        setShowEmergencyInput(true);
+        if (!emergencyKeyInput.trim()) {
+          setEmergencyKeyInput('darurat123');
+        }
       }
     } else if (!result) {
       setLoginError('Email/Username atau password salah, atau verifikasi Turnstile/Kunci Darurat gagal.');
+      setShowEmergencyInput(true);
+      if (!emergencyKeyInput.trim()) {
+        setEmergencyKeyInput('darurat123');
+      }
     }
   };
 
@@ -2217,9 +2235,25 @@ export default function AdminPortal({
             )}
 
             {loginError && (
-              <p className="text-xs text-rose-600 font-medium text-center bg-rose-50 p-2 rounded-lg">
-                {loginError}
-              </p>
+              <div className="space-y-2">
+                <p className="text-xs text-rose-600 dark:text-rose-400 font-medium text-center bg-rose-50 dark:bg-rose-950/40 p-2.5 rounded-xl border border-rose-200 dark:border-rose-900/60">
+                  {loginError}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmailInput('admin@domain.com');
+                    setPasswordInput('admin123');
+                    setEmergencyKeyInput('darurat123');
+                    setShowEmergencyInput(true);
+                    setLoginError('');
+                  }}
+                  className="w-full py-2.5 px-3 rounded-xl bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/60 dark:hover:bg-amber-900/80 text-amber-900 dark:text-amber-300 text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border border-amber-300 dark:border-amber-700 shadow-sm"
+                >
+                  <Key className="w-4 h-4" />
+                  <span>Buka Akses Instan dengan Kunci Darurat (darurat123)</span>
+                </button>
+              </div>
             )}
 
             <button
@@ -2241,11 +2275,14 @@ export default function AdminPortal({
                 onClick={() => {
                   setEmailInput('admin@domain.com');
                   setPasswordInput('admin123');
+                  setEmergencyKeyInput('darurat123');
+                  setShowEmergencyInput(true);
+                  setLoginError('');
                 }}
-                className="px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 font-mono font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/80 transition-colors"
-                title="Klik untuk mengisi email dan password default"
+                className="px-2.5 py-1 rounded bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 font-mono font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/80 transition-colors shadow-sm"
+                title="Klik untuk mengisi email, password, dan kunci darurat default"
               >
-                admin@domain.com / admin123 (Isi Otomatis)
+                admin@domain.com / admin123 + darurat123 (Isi Otomatis)
               </button>
             </div>
             <p>
