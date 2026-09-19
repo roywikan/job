@@ -178,3 +178,18 @@ CREATE INDEX IF NOT EXISTS idx_autolinks_keyword ON autolinks(keyword);
 CREATE INDEX IF NOT EXISTS idx_surat_pembaca_status ON surat_pembaca(status);
 CREATE INDEX IF NOT EXISTS idx_iklan_baris_status ON iklan_baris(status);
 CREATE INDEX IF NOT EXISTS idx_iklan_baris_kategori ON iklan_baris(kategori);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
+-- Default Initial Users (Clean Install Seed)
+INSERT OR IGNORE INTO users (id, email, password, password_hash, name, role, title, created_at)
+VALUES 
+  (1, 'admin@domain.com', 'admin123', 'admin123', 'Admin', 'admin', 'Administrator Utama', datetime('now')),
+  (2, 'editor@domain.com', 'editor123', 'editor123', 'Editor', 'editor', 'Senior Editor', datetime('now')),
+  (3, 'penulis@domain.com', 'writer123', 'writer123', 'Penulis', 'writer', 'Content Writer', datetime('now'));
+
+-- Default Initial Configurations (Clean Install Seed)
+-- Anda dapat langsung mengubah value turnstile_site_key ini dengan Cloudflare Turnstile Site Key domain baru Anda
+INSERT OR IGNORE INTO configs (key, value)
+VALUES 
+  ('turnstile_site_key', '0x4AAAAAAE8nGvnUYOz8qCjM');
+
