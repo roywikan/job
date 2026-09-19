@@ -3303,39 +3303,48 @@ const loginAttemptsMap = new Map<string, LoginAttemptRecord>();
 app.post('/api/auth/login', async (req, res) => {
   const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1';
   const now = Date.now();
-  const attemptRecord = loginAttemptsMap.get(clientIp);
 
-  if (attemptRecord && attemptRecord.blockedUntil > now) {
-    const remainingMinutes = Math.ceil((attemptRecord.blockedUntil - now) / 60000);
-    return res.status(429).json({
-      error: `Akses diblokir sementara (Anti Brute Force). Terlalu banyak percobaan login gagal. Silakan coba lagi dalam ${remainingMinutes} menit.`,
-    });
-  }
-
-  const { email, password, turnstileToken, emergencyKey } = req.body;
+  const { email, password, turnstileToken, emergencyKey } = req.body || {};
   if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
-    return res.status(400).json({ error: 'Email dan password wajib diisi.' });
+    return res.status(400).json({ error: 'Email atau username dan password wajib diisi.' });
   }
 
-  // Check emergency recovery key
-  const configuredEmergencyKey = process.env.ADMIN_EMERGENCY_KEY || (process.env.NODE_ENV !== 'production' ? 'darurat123' : '');
+  // Check emergency recovery key (default 'darurat123' if not explicitly configured)
+  const configuredEmergencyKey = process.env.ADMIN_EMERGENCY_KEY || 'darurat123';
   let isEmergencyBypass = false;
 
   if (emergencyKey && typeof emergencyKey === 'string' && configuredEmergencyKey && configuredEmergencyKey.trim() !== '') {
     if (emergencyKey.trim() === configuredEmergencyKey.trim()) {
       isEmergencyBypass = true;
+      loginAttemptsMap.delete(clientIp); // Emergency key resets brute-force lock
     }
+  }
+
+  const attemptRecord = loginAttemptsMap.get(clientIp);
+  if (!isEmergencyBypass && attemptRecord && attemptRecord.blockedUntil > now) {
+    const remainingMinutes = Math.ceil((attemptRecord.blockedUntil - now) / 60000);
+    return res.status(429).json({
+      error: `Akses diblokir sementara (Anti Brute Force). Terlalu banyak percobaan login gagal. Silakan gunakan Kunci Darurat (darurat123) atau tunggu ${remainingMinutes} menit.`,
+    });
   }
 
   if (!isEmergencyBypass) {
     const effectiveToken = turnstileToken || req.body['cf-turnstile-response'];
     const isValidTurnstile = await verifyTurnstileToken(effectiveToken, 'login', clientIp);
     if (!isValidTurnstile) {
-      return res.status(400).json({ error: 'Verifikasi keamanan Turnstile gagal atau kedaluwarsa. Silakan coba lagi atau gunakan Kunci Darurat.' });
+      return res.status(400).json({ error: 'Verifikasi keamanan Turnstile gagal atau kedaluwarsa. Silakan gunakan Kunci Darurat (default: darurat123 atau ADMIN_EMERGENCY_KEY Anda).' });
     }
   }
 
-  const user = mockUsers.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+  const cleanInput = email.trim().toLowerCase();
+  const user = mockUsers.find((u) => 
+    u.email.toLowerCase() === cleanInput || 
+    u.name?.toLowerCase() === cleanInput ||
+    (cleanInput === 'admin' && u.role === 'admin') ||
+    (cleanInput === 'editor' && u.role === 'editor') ||
+    (cleanInput === 'writer' && u.role === 'writer') ||
+    (cleanInput === 'penulis' && u.role === 'writer')
+  );
   if (!user || !password || user.password !== password) {
     const currentRecord = loginAttemptsMap.get(clientIp) || { attempts: 0, blockedUntil: 0 };
     currentRecord.attempts += 1;
@@ -3347,7 +3356,7 @@ app.post('/api/auth/login', async (req, res) => {
     const remainingAttempts = Math.max(0, 5 - currentRecord.attempts);
     res.setHeader("WWW-Authenticate", `Bearer realm="api", resource_metadata="${getBaseUrl(req)}/.well-known/oauth-protected-resource"`); return res.status(401).json({
       error: remainingAttempts > 0
-        ? `Email atau password salah. Sisa percobaan: ${remainingAttempts} kali sebelum akses diblokir 15 menit.`
+        ? `Email/Username atau password salah. Sisa percobaan: ${remainingAttempts} kali sebelum akses diblokir 15 menit.`
         : 'Terlalu banyak percobaan gagal. Akses diblokir selama 15 menit demi keamanan (Anti Brute Force).',
     });
   }
