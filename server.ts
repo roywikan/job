@@ -1419,6 +1419,7 @@ function requireAuth(allowedRoles: string[] = ['admin', 'editor', 'writer']) {
 
 // 0. Site Config Handlers
 app.get('/api/config', (req, res) => {
+  const hasTurnstileSecret = !!(process.env.TURNSTILE_SECRET || process.env.TURNSTILE_SECRET_KEY);
   try {
     const configPath = path.join(process.cwd(), 'public', 'site_config.json');
     if (fs.existsSync(configPath)) {
@@ -1427,6 +1428,8 @@ app.get('/api/config', (req, res) => {
       return res.json({
         turnstile_site_key: process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAE8nGvnUYOz8qCjM',
         enable_comment_turnstile: true,
+        enable_turnstile_fallback: true,
+        has_turnstile_secret: hasTurnstileSecret,
         ...parsed,
       });
     }
@@ -1436,6 +1439,8 @@ app.get('/api/config', (req, res) => {
   return res.json({
     turnstile_site_key: process.env.TURNSTILE_SITE_KEY || '0x4AAAAAAE8nGvnUYOz8qCjM',
     enable_comment_turnstile: true,
+    enable_turnstile_fallback: true,
+    has_turnstile_secret: hasTurnstileSecret,
   });
 });
 
@@ -3235,10 +3240,33 @@ BEGIN TRANSACTION;
 const verifyTurnstileToken = async (token?: string, expectedAction?: string, clientIp?: string): Promise<boolean> => {
   const secretKey = process.env.TURNSTILE_SECRET || process.env.TURNSTILE_SECRET_KEY;
   
-  // If secret is not configured in environment, allow bypass for local dev
+  // Check if Graceful Fallback is enabled (default: true for initial setup / migration)
+  let isFallbackEnabled = true;
+  try {
+    const configPath = path.join(process.cwd(), 'public', 'site_config.json');
+    if (fs.existsSync(configPath)) {
+      const parsed = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+      if (parsed.enable_turnstile_fallback === false || parsed.enable_turnstile_fallback === 'false') {
+        isFallbackEnabled = false;
+      }
+    }
+  } catch (e) {}
+
+  if (process.env.ENABLE_TURNSTILE_FALLBACK === 'false' || process.env.ENABLE_TURNSTILE_FALLBACK === '0') {
+    isFallbackEnabled = false;
+  } else if (process.env.ENABLE_TURNSTILE_FALLBACK === 'true' || process.env.ENABLE_TURNSTILE_FALLBACK === '1') {
+    isFallbackEnabled = true;
+  }
+
+  // If secret is not configured in environment
   if (!secretKey) {
-    console.warn('[Turnstile] TURNSTILE_SECRET / TURNSTILE_SECRET_KEY is missing, allowing token bypass for local development/testing.');
-    return true;
+    if (isFallbackEnabled) {
+      console.warn('[Turnstile] TURNSTILE_SECRET / TURNSTILE_SECRET_KEY is missing, allowing token bypass (Graceful Fallback Mode).');
+      return true;
+    } else {
+      console.error('[Turnstile] Strict Mode Active: TURNSTILE_SECRET is missing, rejecting verification.');
+      return false;
+    }
   }
 
   // If using the official dummy test keys, always pass
@@ -3280,8 +3308,8 @@ const verifyTurnstileToken = async (token?: string, expectedAction?: string, cli
       } else {
         const errorCodes = (data['error-codes'] || []) as string[];
         console.warn('[Turnstile] Siteverify validation failed:', errorCodes);
-        if (errorCodes.includes('invalid-input-secret') || errorCodes.includes('bad-request')) {
-          console.warn('[Turnstile] Server secret key mismatched on new domain. Allowing graceful pass since client generated token.');
+        if (isFallbackEnabled && (errorCodes.includes('invalid-input-secret') || errorCodes.includes('bad-request'))) {
+          console.warn('[Turnstile] Server secret key mismatched on new domain. Allowing graceful pass since client generated token and fallback is ENABLED.');
           return true;
         }
         return false;
