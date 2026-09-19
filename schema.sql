@@ -191,5 +191,6 @@ VALUES
 -- Anda dapat langsung mengubah value turnstile_site_key ini dengan Cloudflare Turnstile Site Key domain baru Anda
 INSERT OR IGNORE INTO configs (key, value)
 VALUES 
-  ('turnstile_site_key', '0x4AAAAAAE8nGvnUYOz8qCjM');
+  ('turnstile_site_key', '0x4AAAAAAE8nGvnUYOz8qCjM'),
+  ('enable_turnstile_fallback', 'true');
 
