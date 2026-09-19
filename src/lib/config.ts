@@ -153,6 +153,10 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   metric3_duration: 2000,
   metric3_unit: 'ms',
 
+  // Cloudflare Turnstile Configuration
+  turnstile_site_key: '0x4AAAAAAE8nGvnUYOz8qCjM',
+  enable_comment_turnstile: true,
+
   // Strategic AdSense Placements
   enable_adsense: true,
   adsense_client_id: '',
