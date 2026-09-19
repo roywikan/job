@@ -3,12 +3,7 @@ import { join } from 'path';
 
 const DIST = 'dist';
 
-// Folder yang wajib dihidupkan kembali (sesuai pola URL lama)
- 
-
-
 const LEGACY_FOLDERS = [
-  // yang sudah ada sebelumnya
   'country',
   'sector',
   'tips-karir',
@@ -23,8 +18,6 @@ const LEGACY_FOLDERS = [
   'cookie-policy',
   'categories-grid',
   'logo-logo-online',
-
-  // === TAMBAHKAN INI ===
   'wp-content',
   'wp-includes',
   'images',
@@ -37,21 +30,26 @@ const LEGACY_FOLDERS = [
   'spmb',
 ];
 
+const LEGACY_FILES = [
+  'job-loker-lowongan-kerja.js',
+];
 
-
-console.log('[Legacy Assets] Mulai menyalin folder lama ke dist/ ...');
+console.log('[Legacy Assets] Mulai menyalin folder & file lama ke dist/ ...');
 
 if (!existsSync(DIST)) {
   mkdirSync(DIST, { recursive: true });
 }
 
-let copied = 0;
+let copiedFolders = 0;
+let copiedFiles = 0;
+
+// Copy folders
 for (const folder of LEGACY_FOLDERS) {
   if (existsSync(folder)) {
     try {
       cpSync(folder, join(DIST, folder), { recursive: true });
       console.log(`  ✓ ${folder}/`);
-      copied++;
+      copiedFolders++;
     } catch (err) {
       console.warn(`  ✗ Gagal copy ${folder}:`, err.message);
     }
@@ -60,10 +58,19 @@ for (const folder of LEGACY_FOLDERS) {
   }
 }
 
-console.log(`[Legacy Assets] Selesai. ${copied} folder berhasil disalin.`);
-
-// Copy single important JS file
-if (existsSync('job-loker-lowongan-kerja.js')) {
-  cpSync('job-loker-lowongan-kerja.js', join(DIST, 'job-loker-lowongan-kerja.js'));
-  console.log('  ✓ job-loker-lowongan-kerja.js beres dari main/scripts/copy-legacy-assets.js');
+// Copy single files
+for (const file of LEGACY_FILES) {
+  if (existsSync(file)) {
+    try {
+      cpSync(file, join(DIST, file));
+      console.log(`  ✓ ${file}`);
+      copiedFiles++;
+    } catch (err) {
+      console.warn(`  ✗ Gagal copy ${file}:`, err.message);
+    }
+  } else {
+    console.log(`  - ${file} (tidak ditemukan, dilewati)`);
+  }
 }
+
+console.log(`[Legacy Assets] Selesai. ${copiedFolders} folder + ${copiedFiles} file berhasil disalin.`);
