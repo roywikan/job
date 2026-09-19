@@ -19,18 +19,20 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   }
 
   // 2. Legacy Category Path Redirection (dari engine parenting)
-  if (pathname.startsWith('/makanan/')) {
-    shouldRedirect = true;
-    targetPath = pathname.replace(/^\/makanan\//, '/baca/');
-  } else if (pathname.startsWith('/balita/')) {
-    shouldRedirect = true;
-    targetPath = pathname.replace(/^\/balita\//, '/baca/');
-  } else if (pathname.startsWith('/kesehatan/')) {
-    shouldRedirect = true;
-    targetPath = pathname.replace(/^\/kesehatan\//, '/baca/');
-  } else if (pathname.startsWith('/parenting/')) {
-    shouldRedirect = true;
-    targetPath = pathname.replace(/^\/parenting\//, '/baca/');
+  // Menggunakan regex array agar rapi dan mencakup case tanpa trailing slash
+  const redirectRules = [
+    { prefix: /^\/makanan(\/|$)/ },
+    { prefix: /^\/balita(\/|$)/ },
+    { prefix: /^\/kesehatan(\/|$)/ },
+    { prefix: /^\/parenting(\/|$)/ },
+  ];
+
+  for (const rule of redirectRules) {
+    if (rule.prefix.test(pathname)) {
+      shouldRedirect = true;
+      targetPath = pathname.replace(rule.prefix, '/baca/');
+      break;
+    }
   }
 
   if (shouldRedirect) {
@@ -39,31 +41,14 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   }
 
   // 3. Deteksi path legacy (konten lama)
-  const isLegacyPath =
-    pathname.startsWith('/country/') ||
-    pathname.startsWith('/sector/') ||
-    pathname.startsWith('/tips-karir/') ||
-    pathname.startsWith('/id/') ||
-    pathname.startsWith('/us/') ||
-    pathname.startsWith('/ae/') ||
-    pathname.startsWith('/sg/') ||
-    pathname.startsWith('/ca/') ||
-    pathname.startsWith('/ch/') ||
-    pathname.startsWith('/au/') ||
-    pathname.startsWith('/wp-content/') ||
-    pathname.startsWith('/wp-includes/') ||
-    pathname.startsWith('/images/') ||
-    pathname.startsWith('/flagwebp/') ||
-    pathname.startsWith('/tools/') ||
-    pathname.startsWith('/page/') ||
-    pathname.startsWith('/feed/') ||
-    pathname.startsWith('/author/') ||
-    pathname.startsWith('/edukasi/') ||
-    pathname.startsWith('/spmb/') ||
-    pathname.startsWith('/contactus/') ||
-    pathname.startsWith('/cookie-policy/') ||
-    pathname.startsWith('/categories-grid/') ||
-    pathname.startsWith('/logo-logo-online/');
+  const legacyPrefixes = [
+    '/country/', '/sector/', '/tips-karir/', '/id/', '/us/', '/ae/', '/sg/',
+    '/ca/', '/ch/', '/au/', '/wp-content/', '/wp-includes/', '/images/',
+    '/flagwebp/', '/tools/', '/page/', '/feed/', '/author/', '/edukasi/',
+    '/spmb/', '/contactus/', '/cookie-policy/', '/categories-grid/', '/logo-logo-online/'
+  ];
+  
+  const isLegacyPath = legacyPrefixes.some(prefix => pathname.startsWith(prefix));
 
   // Ambil response asli
   const response = await next();
