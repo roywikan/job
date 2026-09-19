@@ -1,13 +1,21 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+
+export interface TurnstileWidgetHandle {
+  reset: () => void;
+}
 
 interface TurnstileWidgetProps {
   onVerify: (token: string) => void;
   onExpire?: () => void;
   onError?: (errorMsg: string) => void;
   siteKey?: string;
+  action?: string;
 }
 
-export default function TurnstileWidget({ onVerify, onExpire, onError, siteKey }: TurnstileWidgetProps) {
+const TurnstileWidget = forwardRef<TurnstileWidgetHandle, TurnstileWidgetProps>(function TurnstileWidget(
+  { onVerify, onExpire, onError, siteKey, action },
+  ref
+) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
 
@@ -17,15 +25,28 @@ export default function TurnstileWidget({ onVerify, onExpire, onError, siteKey }
     callbacksRef.current = { onVerify, onExpire, onError };
   });
 
-  // Default Turnstile sitekey for local development & testing (Always Passes)
-  const effectiveSiteKey = siteKey || '1x00000000000000000000AA';
-  const isTestKey = !siteKey || effectiveSiteKey.startsWith('1x') || effectiveSiteKey.startsWith('2x') || effectiveSiteKey.startsWith('3x');
+  // Effective Turnstile sitekey: user provided key as authoritative default
+  const effectiveSiteKey = siteKey || '0x4AAAAAAE8nGvnUYOz8qCjM';
+  const isTestKey = effectiveSiteKey.startsWith('1x') || effectiveSiteKey.startsWith('2x') || effectiveSiteKey.startsWith('3x');
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      const turnstile = (window as any).turnstile;
+      if (turnstile && widgetIdRef.current) {
+        try {
+          turnstile.reset(widgetIdRef.current);
+        } catch (e) {
+          console.warn('[Turnstile] Reset failed:', e);
+        }
+      }
+    },
+  }));
 
   useEffect(() => {
     let active = true;
     let timer: any = null;
     let retries = 0;
-    const MAX_RETRIES = 15; // ~4.5s wait time
+    const MAX_RETRIES = 20; // ~6s wait time
 
     const renderWidget = () => {
       if (!containerRef.current || !active) return;
@@ -63,6 +84,7 @@ export default function TurnstileWidget({ onVerify, onExpire, onError, siteKey }
 
         widgetIdRef.current = turnstile.render(containerRef.current, {
           sitekey: effectiveSiteKey,
+          action: action || 'default',
           callback: (token: string) => {
             if (active && callbacksRef.current.onVerify) {
               callbacksRef.current.onVerify(token);
@@ -105,11 +127,16 @@ export default function TurnstileWidget({ onVerify, onExpire, onError, siteKey }
         }
       }
     };
-  }, [effectiveSiteKey]);
+  }, [effectiveSiteKey, action]);
 
   return (
     <div className="flex flex-col items-center justify-center my-2">
-      <div ref={containerRef} className="cf-turnstile"></div>
+      <div
+        ref={containerRef}
+        className="cf-turnstile"
+        data-sitekey={effectiveSiteKey}
+        data-action={action || 'default'}
+      ></div>
       {isTestKey && (
         <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium text-center mt-1.5 max-w-sm leading-tight">
           💡 Status: Mode Pengetesan (Test Key). Untuk menghapus status pengujian & mengaktifkan proteksi Cloudflare Turnstile resmi, masukkan Site Key produksi di Pengaturan Admin &gt; Config Situs.
@@ -117,4 +144,6 @@ export default function TurnstileWidget({ onVerify, onExpire, onError, siteKey }
       )}
     </div>
   );
-}
+});
+
+export default TurnstileWidget;
