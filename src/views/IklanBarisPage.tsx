@@ -628,6 +628,7 @@ export default function IklanBarisPage({ siteConfig, onNavigate }: IklanBarisPag
                 <div className="pt-2">
                   <TurnstileWidget
                     siteKey={siteConfig?.turnstile_site_key}
+                    action="iklan_baris"
                     onVerify={(token) => setTurnstileToken(token)}
                     onExpire={() => setTurnstileToken('')}
                     onError={(err) => {
