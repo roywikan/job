@@ -61,3 +61,9 @@ for (const folder of LEGACY_FOLDERS) {
 }
 
 console.log(`[Legacy Assets] Selesai. ${copied} folder berhasil disalin.`);
+
+// Copy single important JS file
+if (existsSync('job-loker-lowongan-kerja.js')) {
+  cpSync('job-loker-lowongan-kerja.js', join(DIST, 'job-loker-lowongan-kerja.js'));
+  console.log('  ✓ job-loker-lowongan-kerja.js beres dari main/scripts/copy-legacy-assets.js');
+}
