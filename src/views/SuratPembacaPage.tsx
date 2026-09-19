@@ -364,6 +364,7 @@ export default function SuratPembacaPage({ siteConfig, onNavigate }: SuratPembac
                 <div className="pt-2">
                   <TurnstileWidget
                     siteKey={siteConfig?.turnstile_site_key}
+                    action="contact"
                     onVerify={(token) => setTurnstileToken(token)}
                     onExpire={() => setTurnstileToken('')}
                     onError={(err) => {
