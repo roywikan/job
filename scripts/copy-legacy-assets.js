@@ -4,7 +4,11 @@ import { join } from 'path';
 const DIST = 'dist';
 
 // Folder yang wajib dihidupkan kembali (sesuai pola URL lama)
+ 
+
+
 const LEGACY_FOLDERS = [
+  // yang sudah ada sebelumnya
   'country',
   'sector',
   'tips-karir',
@@ -19,7 +23,21 @@ const LEGACY_FOLDERS = [
   'cookie-policy',
   'categories-grid',
   'logo-logo-online',
+
+  // === TAMBAHKAN INI ===
+  'wp-content',
+  'wp-includes',
+  'images',
+  'flagwebp',
+  'tools',
+  'page',
+  'feed',
+  'author',
+  'edukasi',
+  'spmb',
 ];
+
+
 
 console.log('[Legacy Assets] Mulai menyalin folder lama ke dist/ ...');
 
