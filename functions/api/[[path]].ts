@@ -3826,7 +3826,6 @@ Berdasarkan judul artikel: "${title}" dan isi: "${(content || '').slice(0, 500)}
           }
         }
 
-        const clientIp = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '127.0.0.1';
         const cleanNama = String(nama).replace(/<[^>]*>?/gm, '').trim();
         const cleanKota = String(kota).replace(/<[^>]*>?/gm, '').trim();
         const cleanPekerjaan = String(pekerjaan).replace(/<[^>]*>?/gm, '').trim();
