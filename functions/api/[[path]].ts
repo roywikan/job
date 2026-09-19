@@ -722,10 +722,40 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       }
     }
 
-    // If secret is not configured in environment or D1, allow token bypass (safe dev / graceful install)
+    // Check if Graceful Fallback is enabled (default: true for smooth initial setup and migration)
+    // When disabled (strict mode), no bypass is permitted and siteverify must strictly succeed with matching Secret Key
+    let isFallbackEnabled = true;
+    if (env.DB) {
+      try {
+        const fallbackConfig = await env.DB.prepare("SELECT value FROM configs WHERE key = 'enable_turnstile_fallback'").first() as any;
+        if (fallbackConfig?.value !== undefined && fallbackConfig?.value !== null) {
+          const valStr = String(fallbackConfig.value).replace(/^"|"$/g, '').trim().toLowerCase();
+          if (valStr === 'false' || valStr === '0') {
+            isFallbackEnabled = false;
+          }
+        }
+      } catch (e) {
+        console.error('Error checking enable_turnstile_fallback config in D1:', e);
+      }
+    }
+    if (typeof (env as any).ENABLE_TURNSTILE_FALLBACK !== 'undefined') {
+      const envVal = String((env as any).ENABLE_TURNSTILE_FALLBACK).trim().toLowerCase();
+      if (envVal === 'false' || envVal === '0') {
+        isFallbackEnabled = false;
+      } else if (envVal === 'true' || envVal === '1') {
+        isFallbackEnabled = true;
+      }
+    }
+
+    // If secret is not configured in environment or D1:
     if (!secretKey || secretKey.trim() === '') {
-      console.warn('[Turnstile] TURNSTILE_SECRET / TURNSTILE_SECRET_KEY is missing in Edge env & D1 configs, allowing token bypass.');
-      return true;
+      if (isFallbackEnabled) {
+        console.warn('[Turnstile] TURNSTILE_SECRET / TURNSTILE_SECRET_KEY is missing in Edge env & D1 configs, allowing token bypass (Graceful Fallback Mode).');
+        return true;
+      } else {
+        console.error('[Turnstile] Strict Mode Active: TURNSTILE_SECRET is missing, rejecting verification.');
+        return false;
+      }
     }
 
     // If using the official dummy test keys, always pass
@@ -767,11 +797,11 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         } else {
           const errorCodes = (data['error-codes'] || []) as string[];
           console.warn('[Turnstile] Siteverify validation rejected on edge:', errorCodes);
-          // Graceful fallback for domain migrations:
+          // Graceful fallback for domain migrations (only if fallback is enabled):
           // If secret key is invalid/mismatched for this new domain (invalid-input-secret),
           // but the client browser successfully completed Turnstile and generated a token, allow pass.
-          if (errorCodes.includes('invalid-input-secret') || errorCodes.includes('bad-request')) {
-            console.warn('[Turnstile] Turnstile secret key mismatched on new domain. Allowing graceful pass since client solved Turnstile challenge.');
+          if (isFallbackEnabled && (errorCodes.includes('invalid-input-secret') || errorCodes.includes('bad-request'))) {
+            console.warn('[Turnstile] Turnstile secret key mismatched on new domain. Allowing graceful pass since client solved Turnstile challenge and fallback is ENABLED.');
             return true;
           }
           return false;
@@ -1988,15 +2018,20 @@ Sitemap: ${siteUrl}/sitemap.xml
       const defaultConfig: Record<string, any> = {
         turnstile_site_key: (env as any).TURNSTILE_SITE_KEY || '0x4AAAAAAE8nGvnUYOz8qCjM',
         enable_comment_turnstile: true,
+        enable_turnstile_fallback: true,
       };
       if (env.DB) {
         try {
           const { results } = await env.DB.prepare('SELECT key, value FROM configs').all();
           if (results && results.length > 0) {
             const configObj: Record<string, any> = {};
-            const SENSITIVE_KEYS = ['admin_email', 'admin_password', 'admin_name', 'admin_avatar', 'admin_bio', 'password', 'secret', 'token'];
+            const SENSITIVE_KEYS = ['admin_email', 'admin_password', 'admin_name', 'admin_avatar', 'admin_bio', 'password', 'turnstile_secret_key', 'secret', 'token'];
+            let hasTurnstileSecret = !!((env as any).TURNSTILE_SECRET || (env as any).TURNSTILE_SECRET_KEY);
             
             for (const row of results) {
+              if (row.key === 'turnstile_secret_key' && row.value && String(row.value).trim()) {
+                hasTurnstileSecret = true;
+              }
               const kLower = String(row.key).toLowerCase();
               if (SENSITIVE_KEYS.includes(row.key) || kLower.includes('password') || kLower.includes('secret') || kLower.includes('token')) {
                 continue; // STRIKT: Exclude credential keys from public site config response
@@ -2007,6 +2042,7 @@ Sitemap: ${siteUrl}/sitemap.xml
                 configObj[row.key] = row.value;
               }
             }
+            configObj.has_turnstile_secret = hasTurnstileSecret;
             return jsonResponse({ ...defaultConfig, ...configObj }, 200, cacheHeaders);
           }
         } catch (e) {
@@ -2300,12 +2336,16 @@ Sitemap: ${siteUrl}/sitemap.xml
 
       // Filter out sensitive credential keys from being written to configs table or public/site_config.json
       const safeConfigObj: Record<string, any> = {};
-      const SENSITIVE_KEYS = ['admin_email', 'admin_password', 'admin_name', 'admin_avatar', 'admin_bio', 'password', 'secret', 'token'];
+      const SENSITIVE_KEYS = ['admin_email', 'admin_password', 'admin_name', 'admin_avatar', 'admin_bio', 'password', 'turnstile_secret_key', 'secret', 'token'];
+      let turnstileSecretToSave: string | null = null;
+      if (body.turnstile_secret_key && typeof body.turnstile_secret_key === 'string' && body.turnstile_secret_key.trim()) {
+        turnstileSecretToSave = body.turnstile_secret_key.trim();
+      }
 
       for (const [key, value] of Object.entries(body)) {
         const kLower = key.toLowerCase();
-        if (SENSITIVE_KEYS.includes(key) || kLower.includes('password') || kLower.includes('secret') || kLower.includes('token')) {
-          continue; // DO NOT SAVE SENSITIVE CREDENTIALS INTO CONFIGS TABLE
+        if (SENSITIVE_KEYS.includes(key) || kLower.includes('password') || (kLower.includes('secret') && key !== 'turnstile_secret_key') || kLower.includes('token')) {
+          continue; // DO NOT SAVE SENSITIVE CREDENTIALS INTO PUBLIC CONFIGS OR GITHUB
         }
         safeConfigObj[key] = value;
       }
@@ -2319,10 +2359,17 @@ Sitemap: ${siteUrl}/sitemap.xml
             )
           `).run();
 
-          // Delete any existing credential keys in DB
+          // Delete any existing credential keys in DB, but preserve turnstile_secret_key
           try {
-            await env.DB.prepare("DELETE FROM configs WHERE key IN ('admin_email', 'admin_password', 'admin_name', 'admin_avatar', 'admin_bio') OR key LIKE '%password%' OR key LIKE '%secret%' OR key LIKE '%token%'").run();
+            await env.DB.prepare("DELETE FROM configs WHERE key IN ('admin_email', 'admin_password', 'admin_name', 'admin_avatar', 'admin_bio') OR key LIKE '%password%' OR (key LIKE '%secret%' AND key != 'turnstile_secret_key') OR key LIKE '%token%'").run();
           } catch {}
+
+          if (turnstileSecretToSave) {
+            await env.DB.prepare(`
+              INSERT INTO configs (key, value) VALUES ('turnstile_secret_key', ?)
+              ON CONFLICT(key) DO UPDATE SET value = excluded.value
+            `).bind(turnstileSecretToSave).run();
+          }
 
           for (const [key, value] of Object.entries(safeConfigObj)) {
             const strVal = typeof value === 'object' ? JSON.stringify(value) : String(value);
