@@ -154,7 +154,10 @@ export interface SiteConfig {
   footer_badge_2?: string;
   footer_badge_3?: string;
   turnstile_site_key?: string;
+  turnstile_secret_key?: string;
   enable_comment_turnstile?: boolean;
+  enable_turnstile_fallback?: boolean;
+  has_turnstile_secret?: boolean;
 
   // 8 GUI Manageable Component Configs
   enable_top_announcement?: boolean;
