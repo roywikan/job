@@ -2402,11 +2402,11 @@ export default function AdminPortal({
       )}
 
       {/* TWO-COLUMN LAYOUT: SIDEBAR + MAIN CONTENT */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
+      <div className="flex flex-col md:flex-row gap-3 lg:gap-4 items-start">
         
         {/* MOBILE NAVIGATION BAR (< MD): SEBARIS KALIMAT MENU NAVIGASI DENGAN DROPDOWN PENUH SAAT DIKLIK */}
         {!(isZenMode && activeTab === 'editor') && (
-          <div className="md:hidden col-span-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden mb-2">
+          <div className="md:hidden w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden mb-2">
             <button
               type="button"
               id="mobile-nav-toggle-btn"
@@ -2439,14 +2439,14 @@ export default function AdminPortal({
                     {activeTab === 'writers' && 'Penulis & Editor'}
                     {activeTab === 'autolinks' && 'Auto-Linking'}
                     {activeTab === 'sitemap' && 'SEO & AI Agent Discovery'}
-                    {activeTab === 'comments' && '💬 Moderasi Komentar'}
-                    {activeTab === 'config' && '⚙️ Configs Situs'}
-                    {activeTab === 'database' && '🗄️ Database D1'}
-                    {activeTab === 'products' && '🎨 Produk Jualan'}
-                    {activeTab === 'wa_leads' && '📊 Laporan WA'}
-                    {activeTab === 'surat_pembaca' && '✉️ Surat Pembaca'}
-                    {activeTab === 'iklan_baris' && '📢 Iklan Baris'}
-                    {activeTab === 'security' && '🔐 Akun Admin'}
+                    {activeTab === 'comments' && 'Komentar'}
+                    {activeTab === 'config' && 'Configs Situs'}
+                    {activeTab === 'database' && 'Database D1'}
+                    {activeTab === 'products' && 'Produk Jualan'}
+                    {activeTab === 'wa_leads' && 'Laporan WA'}
+                    {activeTab === 'surat_pembaca' && 'Surat Pembaca'}
+                    {activeTab === 'iklan_baris' && 'Iklan Baris'}
+                    {activeTab === 'security' && 'Akun Admin'}
                   </span>
                 </div>
               </div>
@@ -2563,7 +2563,7 @@ export default function AdminPortal({
                     >
                       <div className="flex items-center gap-2.5">
                         <MessageSquare className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                        <span>💬 Moderasi Komentar</span>
+                        <span>Komentar</span>
                       </div>
                       <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
                         activeTab === 'comments' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/40' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
@@ -2582,7 +2582,7 @@ export default function AdminPortal({
                       }`}
                     >
                       <Settings className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                      <span>⚙️ Configs Situs</span>
+                      <span>Configs Situs</span>
                     </button>
 
                     <button
@@ -2595,7 +2595,7 @@ export default function AdminPortal({
                       }`}
                     >
                       <Database className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                      <span>🗄️ Database D1</span>
+                      <span>Database D1</span>
                     </button>
 
                     <button
@@ -2608,7 +2608,7 @@ export default function AdminPortal({
                       }`}
                     >
                       <ShoppingBag className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                      <span>🎨 Produk Jualan</span>
+                      <span>Produk Jualan</span>
                     </button>
 
                     <button
@@ -2621,7 +2621,7 @@ export default function AdminPortal({
                       }`}
                     >
                       <BarChart2 className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                      <span>📊 Laporan WA</span>
+                      <span>Laporan WA</span>
                     </button>
                   </>
                 )}
@@ -2638,7 +2638,7 @@ export default function AdminPortal({
                       }`}
                     >
                       <Mail className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                      <span>✉️ Surat Pembaca</span>
+                      <span>Surat Pembaca</span>
                     </button>
 
                     <button
@@ -2651,7 +2651,7 @@ export default function AdminPortal({
                       }`}
                     >
                       <Tag className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                      <span>📢 Iklan Baris</span>
+                      <span>Iklan Baris</span>
                     </button>
 
                     <button
@@ -2664,7 +2664,7 @@ export default function AdminPortal({
                       }`}
                     >
                       <Key className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
-                      <span>🔐 Akun Admin</span>
+                      <span>Akun Admin</span>
                     </button>
                   </>
                 )}
@@ -2684,50 +2684,49 @@ export default function AdminPortal({
           </div>
         )}
 
-        {/* LEFT COLUMN: THE GORGEOUS SIDEBAR NAVIGATION (TABLET & DESKTOP >= MD) */}
-        <div className={`hidden md:block ${
+        {/* LEFT COLUMN: THE COMPACT VERTICAL SIDEBAR (TABLET & DESKTOP >= MD) */}
+        <aside className={`hidden md:block shrink-0 ${
           isZenMode && activeTab === 'editor'
             ? 'hidden'
             : isSidebarCollapsed
-              ? 'md:col-span-1 p-3 text-center'
-              : 'md:col-span-4 lg:col-span-3 p-5'
-        } bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 md:sticky md:top-8 transition-all duration-300`}>
+              ? 'w-14 p-1.5'
+              : 'w-44 lg:w-48 p-2'
+        } bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2 md:sticky md:top-4 transition-all duration-200`}>
           
-          <div className={`px-3 py-1.5 border-b border-slate-100 dark:border-slate-800/60 pb-3 flex items-center ${isSidebarCollapsed ? 'justify-center' : 'justify-between'}`}>
+          <div className={`px-2 py-1 border-b border-slate-100 dark:border-slate-800/60 pb-2 flex items-center ${isSidebarCollapsed ? 'justify-center' : 'justify-between'}`}>
             {!isSidebarCollapsed && (
               <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 dark:text-slate-500 whitespace-nowrap">
-                Menu Navigasi
+                Navigasi
               </span>
             )}
             <button
               onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              className="p-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white shadow-md transition-all hover:scale-110 active:scale-95 duration-200 border border-rose-400 dark:border-rose-300 ring-2 ring-rose-100 dark:ring-rose-950 flex items-center justify-center animate-pulse"
-              style={{ animationDuration: '2.5s' }}
+              className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-all flex items-center justify-center"
               title={isSidebarCollapsed ? "Lebarkan Sidebar" : "Sembunyikan Label Sidebar"}
             >
               {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
             </button>
           </div>
 
-          <nav className="space-y-1">
+          <nav className="space-y-0.5">
             {/* 1. Daftar Artikel */}
             <button
               onClick={() => setActiveTab('posts')}
               title="Daftar Artikel"
-              className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+              className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
               } ${
                 activeTab === 'posts'
-                  ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                  : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
               }`}
             >
-              <FileText className={`w-4 h-4 shrink-0 ${activeTab === 'posts' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+              <FileText className={`w-5 h-5 shrink-0 ${activeTab === 'posts' ? 'text-rose-600 dark:text-rose-400' : 'text-sky-600 dark:text-sky-400'}`} />
               {!isSidebarCollapsed && (
                 <div className="flex-1 text-left flex items-center justify-between whitespace-nowrap overflow-hidden">
                   <span>Daftar Artikel</span>
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
-                    activeTab === 'posts' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/40' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                  <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
+                    activeTab === 'posts' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/60' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                   }`}>
                     {userRole === 'writer' ? userPosts.length : posts.length}
                   </span>
@@ -2739,15 +2738,15 @@ export default function AdminPortal({
             <button
               onClick={() => setActiveTab('editor')}
               title="Tulis Artikel"
-              className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+              className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
               } ${
                 activeTab === 'editor'
-                  ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                  : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
               }`}
             >
-              <Edit3 className={`w-4 h-4 shrink-0 ${activeTab === 'editor' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+              <Edit3 className={`w-5 h-5 shrink-0 ${activeTab === 'editor' ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`} />
               {!isSidebarCollapsed && (
                 <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Tulis Artikel</span>
               )}
@@ -2759,20 +2758,20 @@ export default function AdminPortal({
                 <button
                   onClick={() => setActiveTab('writers')}
                   title="Penulis & Editor"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'writers'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <Users className={`w-4 h-4 shrink-0 ${activeTab === 'writers' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <Users className={`w-5 h-5 shrink-0 ${activeTab === 'writers' ? 'text-rose-600 dark:text-rose-400' : 'text-indigo-600 dark:text-indigo-400'}`} />
                   {!isSidebarCollapsed && (
                     <div className="flex-1 text-left flex items-center justify-between whitespace-nowrap overflow-hidden">
                       <span>Penulis & Editor</span>
-                      <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
-                        activeTab === 'writers' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/40' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                      <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
+                        activeTab === 'writers' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/60' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                       }`}>
                         {writers.length}
                       </span>
@@ -2784,20 +2783,20 @@ export default function AdminPortal({
                 <button
                   onClick={() => setActiveTab('autolinks')}
                   title="Auto-Linking"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'autolinks'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <LinkIcon className={`w-4 h-4 shrink-0 ${activeTab === 'autolinks' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <LinkIcon className={`w-5 h-5 shrink-0 ${activeTab === 'autolinks' ? 'text-rose-600 dark:text-rose-400' : 'text-teal-600 dark:text-teal-400'}`} />
                   {!isSidebarCollapsed && (
                     <div className="flex-1 text-left flex items-center justify-between whitespace-nowrap overflow-hidden">
                       <span>Auto-Linking</span>
-                      <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
-                        activeTab === 'autolinks' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/40' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                      <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
+                        activeTab === 'autolinks' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/60' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                       }`}>
                         {autolinks.length}
                       </span>
@@ -2812,15 +2811,15 @@ export default function AdminPortal({
                     fetchDnsAid(false);
                   }}
                   title="SEO"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'sitemap'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <Zap className={`w-4 h-4 shrink-0 ${activeTab === 'sitemap' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <Zap className={`w-5 h-5 shrink-0 ${activeTab === 'sitemap' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-500 dark:text-amber-400'}`} />
                   {!isSidebarCollapsed && (
                     <span className="flex-1 text-left whitespace-nowrap overflow-hidden">SEO</span>
                   )}
@@ -2833,20 +2832,20 @@ export default function AdminPortal({
                     fetchComments();
                   }}
                   title="Komentar"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'comments'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <MessageSquare className={`w-4 h-4 shrink-0 ${activeTab === 'comments' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <MessageSquare className={`w-5 h-5 shrink-0 ${activeTab === 'comments' ? 'text-rose-600 dark:text-rose-400' : 'text-purple-600 dark:text-purple-400'}`} />
                   {!isSidebarCollapsed && (
                     <div className="flex-1 text-left flex items-center justify-between whitespace-nowrap overflow-hidden">
-                      <span>💬 Komentar</span>
-                      <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
-                        activeTab === 'comments' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/40' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                      <span>Komentar</span>
+                      <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded ${
+                        activeTab === 'comments' ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/60' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                       }`}>
                         {comments.length}
                       </span>
@@ -2858,17 +2857,17 @@ export default function AdminPortal({
                 <button
                   onClick={() => setActiveTab('config')}
                   title="Configs Situs"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'config'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <Settings className={`w-4 h-4 shrink-0 ${activeTab === 'config' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <Settings className={`w-5 h-5 shrink-0 ${activeTab === 'config' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-400'}`} />
                   {!isSidebarCollapsed && (
-                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">⚙️ Configs Situs</span>
+                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Configs Situs</span>
                   )}
                 </button>
 
@@ -2876,17 +2875,17 @@ export default function AdminPortal({
                 <button
                   onClick={() => setActiveTab('database')}
                   title="Database D1"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'database'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <Database className={`w-4 h-4 shrink-0 ${activeTab === 'database' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <Database className={`w-5 h-5 shrink-0 ${activeTab === 'database' ? 'text-rose-600 dark:text-rose-400' : 'text-cyan-600 dark:text-cyan-400'}`} />
                   {!isSidebarCollapsed && (
-                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">🗄️ Database D1</span>
+                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Database D1</span>
                   )}
                 </button>
 
@@ -2894,17 +2893,17 @@ export default function AdminPortal({
                 <button
                   onClick={() => setActiveTab('products')}
                   title="Produk Jualan"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'products'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <ShoppingBag className={`w-4 h-4 shrink-0 ${activeTab === 'products' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <ShoppingBag className={`w-5 h-5 shrink-0 ${activeTab === 'products' ? 'text-rose-600 dark:text-rose-400' : 'text-pink-600 dark:text-pink-400'}`} />
                   {!isSidebarCollapsed && (
-                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">🎨 Produk Jualan</span>
+                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Produk Jualan</span>
                   )}
                 </button>
 
@@ -2916,17 +2915,17 @@ export default function AdminPortal({
                     fetchProductOrders();
                   }}
                   title="Laporan WA"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'wa_leads'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <BarChart2 className={`w-4 h-4 shrink-0 ${activeTab === 'wa_leads' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <BarChart2 className={`w-5 h-5 shrink-0 ${activeTab === 'wa_leads' ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`} />
                   {!isSidebarCollapsed && (
-                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">📊 Laporan WA</span>
+                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Laporan WA</span>
                   )}
                 </button>
               </>
@@ -2938,34 +2937,34 @@ export default function AdminPortal({
                 <button
                   onClick={() => setActiveTab('surat_pembaca')}
                   title="Surat Pembaca"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'surat_pembaca'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <Mail className={`w-4 h-4 shrink-0 ${activeTab === 'surat_pembaca' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <Mail className={`w-5 h-5 shrink-0 ${activeTab === 'surat_pembaca' ? 'text-rose-600 dark:text-rose-400' : 'text-orange-500 dark:text-orange-400'}`} />
                   {!isSidebarCollapsed && (
-                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">✉️ Surat Pembaca</span>
+                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Surat Pembaca</span>
                   )}
                 </button>
 
                 <button
                   onClick={() => setActiveTab('iklan_baris')}
                   title="Iklan Baris"
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                    isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                  className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                    isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                   } ${
                     activeTab === 'iklan_baris'
-                      ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                   }`}
                 >
-                  <Tag className={`w-4 h-4 shrink-0 ${activeTab === 'iklan_baris' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                  <Tag className={`w-5 h-5 shrink-0 ${activeTab === 'iklan_baris' ? 'text-rose-600 dark:text-rose-400' : 'text-rose-500 dark:text-rose-400'}`} />
                   {!isSidebarCollapsed && (
-                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">📢 Iklan Baris</span>
+                    <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Iklan Baris</span>
                   )}
                 </button>
               </>
@@ -2976,17 +2975,17 @@ export default function AdminPortal({
               <button
                 onClick={() => setActiveTab('security')}
                 title="Akun Admin"
-                className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
-                  isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+                className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 ${
+                  isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
                 } ${
                   activeTab === 'security'
-                    ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/20 dark:text-rose-400'
-                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-xs'
+                    : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white border border-transparent'
                 }`}
               >
-                <Key className={`w-4 h-4 shrink-0 ${activeTab === 'security' ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
+                <Key className={`w-5 h-5 shrink-0 ${activeTab === 'security' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'}`} />
                 {!isSidebarCollapsed && (
-                  <span className="flex-1 text-left whitespace-nowrap overflow-hidden">🔐 Akun Admin</span>
+                  <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Akun Admin</span>
                 )}
               </button>
             )}
@@ -2994,26 +2993,20 @@ export default function AdminPortal({
             <button
               onClick={onLogout}
               title="Safe Logout"
-              className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400 border border-transparent hover:border-red-100 ${
-                isSidebarCollapsed ? 'justify-center px-2' : 'px-4'
+              className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 text-slate-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400 border border-transparent hover:border-red-100 ${
+                isSidebarCollapsed ? 'justify-center px-1.5' : 'px-2.5'
               }`}
             >
-              <LogOut className="w-4 h-4 shrink-0 text-slate-400" />
+              <LogOut className="w-5 h-5 shrink-0 text-slate-400 group-hover:text-red-600" />
               {!isSidebarCollapsed && (
                 <span className="flex-1 text-left whitespace-nowrap overflow-hidden">Safe Logout</span>
               )}
             </button>
           </nav>
-        </div>
+        </aside>
 
         {/* RIGHT COLUMN: MAIN CONTENT FOR ACTIVE TAB */}
-        <div className={`${
-          isZenMode && activeTab === 'editor'
-            ? 'md:col-span-12'
-            : isSidebarCollapsed
-              ? 'md:col-span-11'
-              : 'md:col-span-8 lg:col-span-9'
-        } space-y-8 transition-all duration-300`}>
+        <div className="flex-1 min-w-0 space-y-8 transition-all duration-300">
 
       {/* ------------------------------------------------------------- */}
       {/* TAB 1: MANAGE POSTS LIST */}
