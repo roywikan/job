@@ -156,6 +156,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   // Cloudflare Turnstile Configuration
   turnstile_site_key: '0x4AAAAAAE8nGvnUYOz8qCjM',
   enable_comment_turnstile: true,
+  enable_turnstile_fallback: true,
 
   // Strategic AdSense Placements
   enable_adsense: true,
