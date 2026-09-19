@@ -3,7 +3,7 @@ import { Post, AutoLink, User, SiteConfig, PostRevision, NavLink, HomepageDispla
 import { THEME_PRESETS } from '../lib/themes';
 import { DEFAULT_SITE_CONFIG } from '../lib/config';
 import { 
-  ShieldCheck, FileText, Link as LinkIcon, Plus, Trash2, Edit3, Save, 
+  ShieldCheck, ShieldAlert, FileText, Link as LinkIcon, Plus, Trash2, Edit3, Save, 
   Upload, Eye, Sparkles, CheckCircle2, RefreshCw, Bold, Italic, Heading2, 
   Heading3, List, ListOrdered, Quote, Image as ImageIcon, Code, UserCheck, 
   ExternalLink, Search, Zap, AlertCircle, Settings, Key, Copy, Check, 
@@ -490,6 +490,8 @@ export default function AdminPortal({
   const [cfgSiteLogoIcon, setCfgSiteLogoIcon] = useState(siteConfig?.site_logo_icon || 'Heart');
   const [cfgSiteFaviconUrl, setCfgSiteFaviconUrl] = useState(siteConfig?.site_favicon_url || '/favicon.ico');
   const [cfgTurnstileSiteKey, setCfgTurnstileSiteKey] = useState(siteConfig?.turnstile_site_key || '');
+  const [cfgTurnstileSecretKey, setCfgTurnstileSecretKey] = useState('');
+  const [cfgEnableTurnstileFallback, setCfgEnableTurnstileFallback] = useState<boolean>(siteConfig?.enable_turnstile_fallback ?? true);
   const [cfgHeaderNavLinksArray, setCfgHeaderNavLinksArray] = useState<NavLink[]>(() => {
     if (siteConfig?.header_nav_links && Array.isArray(siteConfig.header_nav_links)) {
       return siteConfig.header_nav_links;
@@ -739,6 +741,7 @@ export default function AdminPortal({
       setCfgSiteLogoIcon(siteConfig.site_logo_icon || 'Heart');
       setCfgSiteFaviconUrl(siteConfig.site_favicon_url || '/favicon.ico');
       setCfgTurnstileSiteKey(siteConfig.turnstile_site_key || '');
+      setCfgEnableTurnstileFallback(siteConfig.enable_turnstile_fallback ?? true);
       if (siteConfig.header_nav_links && Array.isArray(siteConfig.header_nav_links) && siteConfig.header_nav_links.length > 0) {
         setCfgHeaderNavLinksArray(siteConfig.header_nav_links);
       } else if (!hasInitializedFromPropsRef.current) {
@@ -1038,6 +1041,7 @@ export default function AdminPortal({
         footer_badge_2: cfgFooterBadge2,
         footer_badge_3: cfgFooterBadge3,
         turnstile_site_key: cfgTurnstileSiteKey,
+        enable_turnstile_fallback: cfgEnableTurnstileFallback,
         site_tagline: cfgSiteTagline,
         site_description: cfgSiteDescription,
         site_logo_url: cfgSiteLogoUrl,
@@ -1463,6 +1467,8 @@ export default function AdminPortal({
         cusdis_host: cfgCusdisHost,
 
         turnstile_site_key: cfgTurnstileSiteKey,
+        enable_turnstile_fallback: cfgEnableTurnstileFallback,
+        ...(cfgTurnstileSecretKey.trim() ? { turnstile_secret_key: cfgTurnstileSecretKey.trim() } : {}),
 
         site_tagline: cfgSiteTagline,
         site_description: cfgSiteDescription,
@@ -4529,23 +4535,82 @@ export default function AdminPortal({
                     placeholder="domain.com"
                   />
                 </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                      Cloudflare Turnstile Site Key (turnstile_site_key)
-                    </label>
-                    <span className="text-[10px] text-slate-400 font-medium">Format: 0x4... (Produksi)</span>
+                {/* CLOUDFLARE TURNSTILE & FALLBACK SECURITY CONFIG */}
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 space-y-4">
+                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-3">
+                    <div className="flex items-center gap-2">
+                      <ShieldAlert className="w-4 h-4 text-rose-500" />
+                      <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200">
+                        Cloudflare Turnstile & Mode Keamanan Login
+                      </span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                      cfgEnableTurnstileFallback
+                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                        : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+                    }`}>
+                      {cfgEnableTurnstileFallback ? 'Mode Toleran (Fallback ON)' : 'Mode Ketat Maksimal (Strict)'}
+                    </span>
                   </div>
-                  <input
-                    type="text"
-                    value={cfgTurnstileSiteKey}
-                    onChange={(e) => setCfgTurnstileSiteKey(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs font-semibold focus:ring-2 focus:ring-rose-500"
-                    placeholder="Contoh: 0x4AAAAAAAEr... (atau kosongkan untuk test key)"
-                  />
-                  <p className="text-[10px] text-slate-500 mt-1 leading-normal">
-                    Dapatkan di Cloudflare Dashboard &gt; Turnstile &gt; Add Widget. Jika field ini kosong atau menggunakan test key (1x...), widget akan menampilkan status <em>&ldquo;For testing only. If seen, report to site owner&rdquo;</em>.
-                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                          Turnstile Site Key (Publik)
+                        </label>
+                        <span className="text-[10px] text-slate-400 font-medium">Format: 0x4...</span>
+                      </div>
+                      <input
+                        type="text"
+                        value={cfgTurnstileSiteKey}
+                        onChange={(e) => setCfgTurnstileSiteKey(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-mono font-semibold focus:ring-2 focus:ring-rose-500"
+                        placeholder="Contoh: 0x4AAAAAAAEr..."
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                          Turnstile Secret Key (Backend)
+                        </label>
+                        <span className="text-[10px] text-slate-400 font-medium">
+                          {siteConfig?.has_turnstile_secret ? '🟢 Tersimpan di D1/Env' : '⚪ Belum Disetel'}
+                        </span>
+                      </div>
+                      <input
+                        type="password"
+                        value={cfgTurnstileSecretKey}
+                        onChange={(e) => setCfgTurnstileSecretKey(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-mono font-semibold focus:ring-2 focus:ring-rose-500"
+                        placeholder={siteConfig?.has_turnstile_secret ? '•••••••••••••••• (Tersimpan aman)' : 'Contoh: 0x4AAAAAAAEr...'}
+                      />
+                    </div>
+                  </div>
+
+                  {/* TOGGLE GRACEFUL FALLBACK */}
+                  <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="enable_turnstile_fallback_toggle"
+                      checked={cfgEnableTurnstileFallback}
+                      onChange={(e) => setCfgEnableTurnstileFallback(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer"
+                    />
+                    <label htmlFor="enable_turnstile_fallback_toggle" className="cursor-pointer select-none space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200">
+                          Aktifkan Mode Toleran (Graceful Fallback Turnstile)
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <strong>Saat Dicentang (Aktif / Default):</strong> Backend tidak akan memblokir login jika Secret Key di Cloudflare belum sinkron atau domain baru belum selesai di-setting, selama pengunjung berhasil menyelesaikan widget Turnstile di browser.
+                        <br />
+                        <strong>Saat Tidak Dicentang (Nonaktif / Strict):</strong> Mode Keamanan Maksimal. Verifikasi ke Cloudflare Siteverify wajib 100% valid dan cocok dengan domain. Jika Secret Key salah atau token ditolak, login diblokir total.
+                      </p>
+                    </label>
+                  </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1">
@@ -8295,6 +8360,95 @@ export default function AdminPortal({
                     </>
                   )}
                 </button>
+              </div>
+            </div>
+          )}
+
+          {/* CLOUDFLARE TURNSTILE & LOGIN SECURITY CARD */}
+          {currentUser?.role === 'admin' && (
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 text-[11px] font-extrabold border border-rose-200 dark:border-rose-900">
+                    <ShieldAlert className="w-3.5 h-3.5" />
+                    <span>Cloudflare Turnstile & Anti-Brute Force</span>
+                  </div>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                    Mode Keamanan & Toleransi Turnstile
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Atur apakah proteksi login menerapkan Mode Toleran (Graceful Fallback) atau Mode Ketat (Strict Security).
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className={`px-3 py-1 rounded-full text-xs font-extrabold border ${
+                    cfgEnableTurnstileFallback
+                      ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border-amber-300 dark:border-amber-800'
+                      : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                  }`}>
+                    {cfgEnableTurnstileFallback ? '⚠️ Mode Toleran Aktif' : '🛡️ Mode Ketat Aktif'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 space-y-2">
+                  <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">
+                    Mode Toleran (Graceful Fallback)
+                  </span>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Sangat cocok saat <strong>migrasi domain baru atau pertama kali setup</strong>. Jika Secret Key belum sempat disetel di Cloudflare atau D1, backend tidak akan memblokir login admin selama token Turnstile frontend berhasil dibuat.
+                  </p>
+                </div>
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 space-y-2">
+                  <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200 block">
+                    Mode Ketat (Strict Production)
+                  </span>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Sangat disarankan <strong>setelah website berjalan normal</strong>. Verifikasi token wajib 100% valid dari server Cloudflare `siteverify` dengan Secret Key yang cocok. Tolak semua percobaan login tanpa pengecualian.
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl border border-rose-100 dark:border-rose-950/60 bg-rose-50/40 dark:bg-rose-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <span className="text-xs font-extrabold text-slate-900 dark:text-white block">
+                    Ubah Status Toleransi Turnstile
+                  </span>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Klik tombol di samping untuk beralih antara Mode Toleran dan Mode Ketat, lalu klik Simpan.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!onSaveConfig || !siteConfig) return;
+                      const nextVal = !cfgEnableTurnstileFallback;
+                      setCfgEnableTurnstileFallback(nextVal);
+                      setIsSavingConfig(true);
+                      await onSaveConfig({
+                        ...siteConfig,
+                        turnstile_site_key: cfgTurnstileSiteKey,
+                        enable_turnstile_fallback: nextVal,
+                      });
+                      setIsSavingConfig(false);
+                      setConfigSuccessMsg(nextVal ? '✅ Mode Toleran (Graceful Fallback) diaktifkan!' : '🛡️ Mode Ketat (Strict Turnstile) diaktifkan!');
+                      setTimeout(() => setConfigSuccessMsg(''), 3000);
+                    }}
+                    disabled={isSavingConfig}
+                    className={`px-4 py-2.5 rounded-xl font-extrabold text-xs shadow-sm transition-all flex items-center gap-2 ${
+                      cfgEnableTurnstileFallback
+                        ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                        : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    }`}
+                  >
+                    <ShieldAlert className="w-4 h-4" />
+                    <span>{cfgEnableTurnstileFallback ? 'Terapkan Mode Ketat (Nonaktifkan Fallback)' : 'Terapkan Mode Toleran (Aktifkan Fallback)'}</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
