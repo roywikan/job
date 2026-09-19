@@ -1,11 +1,11 @@
--- Schema Cloudflare D1 Database (SQLite) Niche-Agnostic CMS Blog Engine
+-- Schema Cloudflare D1 Database (SQLite) - Complete & Merged Version
 
-CREATE TABLE IF NOT EXISTS  _cf_KV (
+CREATE TABLE IF NOT EXISTS _cf_KV (
   key TEXT PRIMARY KEY,
   value BLOB
 ) WITHOUT ROWID;
 
-CREATE TABLE IF NOT EXISTS  autolinks (
+CREATE TABLE IF NOT EXISTS autolinks (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   keyword TEXT UNIQUE NOT NULL,
   target_url TEXT NOT NULL,
@@ -14,12 +14,12 @@ CREATE TABLE IF NOT EXISTS  autolinks (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS  configs (
+CREATE TABLE IF NOT EXISTS configs (
   key TEXT PRIMARY KEY,
   value TEXT
 );
 
-CREATE TABLE IF NOT EXISTS  comments (
+CREATE TABLE IF NOT EXISTS comments (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   post_slug TEXT NOT NULL,
   user_name TEXT NOT NULL,
@@ -31,13 +31,13 @@ CREATE TABLE IF NOT EXISTS  comments (
   parent_id INTEGER DEFAULT NULL
 );
 
-CREATE TABLE IF NOT EXISTS  site_config (
+CREATE TABLE IF NOT EXISTS site_config (
   id INTEGER PRIMARY KEY DEFAULT 1,
   config_json TEXT NOT NULL,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS  posts (
+CREATE TABLE IF NOT EXISTS posts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
@@ -73,14 +73,14 @@ CREATE TABLE IF NOT EXISTS  posts (
   custom_disclaimer_text TEXT
 );
 
-CREATE TABLE IF NOT EXISTS  login_attempts (
+CREATE TABLE IF NOT EXISTS login_attempts (
   ip TEXT PRIMARY KEY,
   attempts INTEGER DEFAULT 0,
   last_attempt INTEGER,
   blocked_until INTEGER
 );
 
-CREATE TABLE IF NOT EXISTS  "users" (
+CREATE TABLE IF NOT EXISTS "users" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "email" TEXT NOT NULL,
   "password_hash" TEXT NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS  "users" (
   "social_website" TEXT
 );
 
-CREATE TABLE IF NOT EXISTS  products (
+CREATE TABLE IF NOT EXISTS products (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS  products (
   third_party_checkout_url TEXT
 );
 
-CREATE TABLE IF NOT EXISTS  chat_leads (
+CREATE TABLE IF NOT EXISTS chat_leads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   customer_name TEXT,
   customer_phone TEXT,
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS  chat_leads (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS  product_orders (
+CREATE TABLE IF NOT EXISTS product_orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   buyer_name TEXT,
   buyer_phone TEXT,
@@ -173,6 +173,7 @@ CREATE TABLE IF NOT EXISTS iklan_baris (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Indexes
 CREATE INDEX IF NOT EXISTS idx_autolinks_keyword ON autolinks(keyword);
 CREATE INDEX IF NOT EXISTS idx_surat_pembaca_status ON surat_pembaca(status);
 CREATE INDEX IF NOT EXISTS idx_iklan_baris_status ON iklan_baris(status);
