@@ -4,6 +4,7 @@ import { join } from 'path';
 const DIST = 'dist';
 
 const LEGACY_FOLDERS = [
+  // Negara / lokasi
   'country',
   'sector',
   'tips-karir',
@@ -14,20 +15,32 @@ const LEGACY_FOLDERS = [
   'ca',
   'ch',
   'au',
+
+  // Halaman statis & utilitas
   'contactus',
   'cookie-policy',
   'categories-grid',
   'logo-logo-online',
+  'edukasi',
+  'spmb',
+  'page',
+  'feed',
+  'author',
+  'tools',
+
+  // Asset & WordPress residual
   'wp-content',
   'wp-includes',
   'images',
   'flagwebp',
-  'tools',
-  'page',
-  'feed',
-  'author',
-  'edukasi',
-  'spmb',
+
+  // Konten berdasar tahun (sebelumnya belum masuk)
+  '2016',
+  '2023',
+  '2024',
+
+  // Konten spesifik yang masih ada di repo
+  'saung-plataran-resto-karawang',
 ];
 
 const LEGACY_FILES = [
