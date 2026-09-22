@@ -18,8 +18,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     targetDomain = hostname.substring(4);
   }
 
-  // 2. Legacy Category Path Redirection (dari engine parenting)
-  // Menggunakan regex array agar rapi dan mencakup case tanpa trailing slash
+  // 2. Legacy Category Path Redirection (sisa dari engine parenting)
+  // Bisa dihapus nanti kalau path ini benar-benar tidak pernah dipakai di job.web.id
   const redirectRules = [
     { prefix: /^\/makanan(\/|$)/ },
     { prefix: /^\/balita(\/|$)/ },
@@ -40,15 +40,51 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     return Response.redirect(redirectUrl, 301);
   }
 
-  // 3. Deteksi path legacy (konten lama)
+  // 3. Deteksi path legacy (konten static HTML lama)
   const legacyPrefixes = [
-    '/country/', '/sector/', '/tips-karir/', '/id/', '/us/', '/ae/', '/sg/',
-    '/ca/', '/ch/', '/au/', '/wp-content/', '/wp-includes/', '/images/',
-    '/flagwebp/', '/tools/', '/page/', '/feed/', '/author/', '/edukasi/',
-    '/spmb/', '/contactus/', '/cookie-policy/', '/categories-grid/', '/logo-logo-online/'
+    // Negara / lokasi
+    '/country/',
+    '/sector/',
+    '/tips-karir/',
+    '/id/',
+    '/us/',
+    '/ae/',
+    '/sg/',
+    '/ca/',
+    '/ch/',
+    '/au/',
+
+    // Tahun
+    '/2016/',
+    '/2023/',
+    '/2024/',
+
+    // Halaman & utilitas
+    '/contactus/',
+    '/cookie-policy/',
+    '/categories-grid/',
+    '/logo-logo-online/',
+    '/edukasi/',
+    '/spmb/',
+    '/page/',
+    '/feed/',
+    '/author/',
+    '/tools/',
+    '/about/',
+    '/privacy-policy/',
+    '/disclaimer/',
+
+    // Asset & WordPress residual
+    '/wp-content/',
+    '/wp-includes/',
+    '/images/',
+    '/flagwebp/',
+
+    // Konten spesifik
+    '/saung-plataran-resto-karawang/',
   ];
-  
-  const isLegacyPath = legacyPrefixes.some(prefix => pathname.startsWith(prefix));
+
+  const isLegacyPath = legacyPrefixes.some((prefix) => pathname.startsWith(prefix));
 
   // Ambil response asli
   const response = await next();
@@ -57,7 +93,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   const newHeaders = new Headers(response.headers);
 
   if (isLegacyPath) {
-    // CSP longgar khusus path lama (biar jQuery, Font Awesome, dll bisa jalan)
+    // CSP longgar khusus path lama (biar jQuery, Font Awesome, inline script lama bisa jalan)
     newHeaders.set(
       'Content-Security-Policy',
       [
