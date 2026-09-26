@@ -41,6 +41,7 @@ const LEGACY_FOLDERS = [
 
   // Konten spesifik yang masih ada di repo
   'saung-plataran-resto-karawang',
+  'atscvresume',
 ];
 
 const LEGACY_FILES = [
