@@ -24,3 +24,11 @@ Dokumen ini dibaca dan diinjeksikan secara otomatis oleh Google AI Studio ke dal
 - Proyek ini dirancang sepenuhnya bersifat **Niche Agnostic** (dapat digunakan untuk topik atau domain apa pun tanpa terikat pada satu topik spesifik).
 - Dalam antarmuka pengguna (UI), interaksi manusia, maupun output yang disajikan ke hadapan Googlebot/mesin pencari (HTML meta tags, title, Open Graph, JSON-LD schema, RSS feed, sitemap, llms.txt, footer, dsb.), **DILARANG MENG-HARDCODE** kata "parenting", "parenting.my.id", atau "Parenting my.id" sebagai teks statis yang tidak dapat diubah (unconfigurable/unchangeable).
 - Seluruh nama situs, nama domain, deskripsi, meta title, kategori, topik, dan branding WAJIB selalu bersumber secara dinamis dari pengaturan konfigurasi database/sistem (`configs`), variabel lingkungan (`SITE_URL`, `SITE_NAME`, dsb.), atau state dinamis yang dapat diubah secara bebas oleh pemilik situs melalui portal konfigurasi admin.
+
+## 6. Instruksi dan aturan permanen operasional:
+schema.sql sebagai Single Source of Truth (SSOT) Skema Database:
+Seluruh inisialisasi tabel, kolom, tipe data, indeks, dan relasi database Cloudflare D1 (SQLite) berpatokan penuh pada berkas schema.sql.
+Setiap kali ada kode/skrip baru yang membutuhkan query ke tabel atau kolom baru, definisi SQL-nya wajib merujuk dan diselaraskan secara konsisten dengan schema.sql.
+Sinkronisasi Otomatis untuk Fitur Baru:
+Setiap penambahan fitur baru di masa mendatang yang memerlukan tabel atau kolom tambahan, berkas schema.sql wajib diperbarui secara bersamaan (menggunakan pernyataan DDL aman seperti CREATE TABLE IF NOT EXISTS atau ALTER TABLE ... ADD COLUMN yang terdokumentasi rapi).
+Penyelarasan ini menjamin proses instalasi dari awal (clean install) pada database Cloudflare D1 baru selalu 100% lengkap dan siap pakai tanpa ada tabel atau kolom yang tertinggal.
