@@ -1,0 +1,109 @@
+interface Env {
+  [key: string]: any;
+}
+
+export const onRequest: PagesFunction<Env> = async () => {
+  const skillsData = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "version": "1.0.0",
+    "name": "Site AI Skills Catalog",
+    "description": "Index of interactive tools and API skills offered by this site to autonomous AI agents.",
+    "skills": [
+      {
+        "id": "search_articles",
+        "name": "Search & Query Articles",
+        "description": "Search published articles, news, and posts by keyword, category, or tag",
+        "endpoint": "/api/posts",
+        "method": "GET",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "search": { "type": "string", "description": "Search keyword" },
+            "category": { "type": "string", "description": "Category slug" },
+            "tag": { "type": "string", "description": "Tag filter" },
+            "page": { "type": "integer", "default": 1 },
+            "limit": { "type": "integer", "default": 10 }
+          }
+        }
+      },
+      {
+        "id": "read_surat_pembaca",
+        "name": "Get Surat Pembaca (Reader Letters)",
+        "description": "Retrieve published guest reader letters and public opinion posts",
+        "endpoint": "/api/surat-pembaca",
+        "method": "GET",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "page": { "type": "integer", "default": 1 },
+            "limit": { "type": "integer", "default": 5 }
+          }
+        }
+      },
+      {
+        "id": "submit_surat_pembaca",
+        "name": "Submit Surat Pembaca",
+        "description": "Submit a new guest reader letter or public opinion",
+        "endpoint": "/api/surat-pembaca",
+        "method": "POST",
+        "parameters": {
+          "type": "object",
+          "required": ["nama", "kota", "pekerjaan", "tahunLahir", "phone", "judul", "isi"],
+          "properties": {
+            "nama": { "type": "string", "description": "Sender full name" },
+            "kota": { "type": "string", "description": "City of origin" },
+            "pekerjaan": { "type": "string", "description": "Occupation" },
+            "tahunLahir": { "type": "integer", "description": "Birth year" },
+            "phone": { "type": "string", "description": "Contact phone or WhatsApp" },
+            "judul": { "type": "string", "description": "Letter title" },
+            "isi": { "type": "string", "description": "Letter body content" }
+          }
+        }
+      },
+      {
+        "id": "read_iklan_baris",
+        "name": "Get Iklan Baris (Classified Ads)",
+        "description": "Fetch active classified ad listings",
+        "endpoint": "/api/iklan-baris",
+        "method": "GET",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "kategori": { "type": "string", "description": "Filter by ad category" },
+            "page": { "type": "integer", "default": 1 },
+            "limit": { "type": "integer", "default": 12 }
+          }
+        }
+      },
+      {
+        "id": "submit_iklan_baris",
+        "name": "Submit Iklan Baris",
+        "description": "Place a new classified advertisement",
+        "endpoint": "/api/iklan-baris",
+        "method": "POST",
+        "parameters": {
+          "type": "object",
+          "required": ["nama", "kota", "pekerjaan", "tahunLahir", "phone", "kategori", "keteranganBarang", "harga"],
+          "properties": {
+            "nama": { "type": "string" },
+            "kota": { "type": "string" },
+            "pekerjaan": { "type": "string" },
+            "tahunLahir": { "type": "integer" },
+            "phone": { "type": "string" },
+            "kategori": { "type": "string" },
+            "keteranganBarang": { "type": "string" },
+            "harga": { "type": "string" }
+          }
+        }
+      }
+    ]
+  };
+
+  return new Response(JSON.stringify(skillsData, null, 2), {
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+};
