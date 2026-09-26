@@ -147,3 +147,4 @@ const TurnstileWidget = forwardRef<TurnstileWidgetHandle, TurnstileWidgetProps>(
 });
 
 export default TurnstileWidget;
+
