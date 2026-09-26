@@ -1,9 +1,22 @@
+import { ensureD1Bootstrap } from './_d1_bootstrap';
+
 interface Env {
+  DB?: any;
   [key: string]: any;
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
-  const { request, next } = context;
+  const { request, next, env } = context;
+
+  // 0. D1 auto-bootstrap (dari parenting)
+  if (env?.DB) {
+    try {
+      await ensureD1Bootstrap(env.DB);
+    } catch (dbErr) {
+      console.error('D1 Auto-Bootstrap error in middleware:', dbErr);
+    }
+  }
+
   const url = new URL(request.url);
   const hostname = url.hostname.toLowerCase();
   const pathname = url.pathname;
@@ -12,20 +25,21 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   let targetDomain = hostname;
   let targetPath = pathname;
 
-  // 1. Domain Canonicalization: www.anydomain.com -> anydomain.com
+  // 1. www → non-www
   if (hostname.startsWith('www.')) {
     shouldRedirect = true;
     targetDomain = hostname.substring(4);
   }
 
-  // 2. Legacy Category Path Redirection (sisa dari engine parenting)
-  // Bisa dihapus nanti kalau path ini benar-benar tidak pernah dipakai di job.web.id
+  // 2. Redirect kategori parenting (+ atscvresume → /baca/ jika memang itu niatnya)
+  // CATATAN: jika /atscvresume/ harus TETAP sebagai halaman legacy (bukan redirect ke /baca/),
+  // hapus baris atscvresume dari redirectRules di bawah.
   const redirectRules = [
     { prefix: /^\/makanan(\/|$)/ },
     { prefix: /^\/balita(\/|$)/ },
     { prefix: /^\/kesehatan(\/|$)/ },
     { prefix: /^\/parenting(\/|$)/ },
-{ prefix: /^\/atscvresume(\/|$)/ },
+    // { prefix: /^\/atscvresume(\/|$)/ },  // aktifkan HANYA jika ingin redirect ke /baca/
   ];
 
   for (const rule of redirectRules) {
@@ -41,9 +55,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     return Response.redirect(redirectUrl, 301);
   }
 
-  // 3. Deteksi path legacy (konten static HTML lama)
+  // 3. Path legacy → CSP longgar
   const legacyPrefixes = [
-    // Negara / lokasi
     '/country/',
     '/sector/',
     '/tips-karir/',
@@ -54,13 +67,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     '/ca/',
     '/ch/',
     '/au/',
-
-    // Tahun
     '/2016/',
     '/2023/',
     '/2024/',
-
-    // Halaman & utilitas
     '/contactus/',
     '/cookie-policy/',
     '/categories-grid/',
@@ -75,27 +84,19 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     '/privacy-policy/',
     '/disclaimer/',
     '/atscvresume/',
-
-    // Asset & WordPress residual
     '/wp-content/',
     '/wp-includes/',
     '/images/',
     '/flagwebp/',
-
-    // Konten spesifik
     '/saung-plataran-resto-karawang/',
   ];
 
   const isLegacyPath = legacyPrefixes.some((prefix) => pathname.startsWith(prefix));
 
-  // Ambil response asli
   const response = await next();
-
-  // Clone headers supaya bisa dimodifikasi
   const newHeaders = new Headers(response.headers);
 
   if (isLegacyPath) {
-    // CSP longgar khusus path lama (biar jQuery, Font Awesome, inline script lama bisa jalan)
     newHeaders.set(
       'Content-Security-Policy',
       [
