@@ -266,7 +266,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   const getSiteConfig = async (): Promise<{ site_name: string; site_description: string; site_url: string }> => {
     const activeHost = new URL(request.url).hostname.replace('www.', '');
     const defaultSiteName = activeHost || 'Portal Informasi';
-    const defaultSiteDesc = 'Portal informasi dan edukasi terpercaya.';
+    const defaultSiteDesc = 'Job board and career insights for professionals in Indonesia and beyond.';
     
     if (!env.DB) {
       return { site_name: defaultSiteName, site_description: defaultSiteDesc, site_url: siteUrl };
@@ -345,46 +345,46 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
         if (totalCount === 0) {
           const initialSeed = [
-            {
-              id: 1,
-              email: 'admin@domain.com',
-              password: 'admin123',
-              name: 'Dr. Ratna Sari, M.Psi',
-              role: 'admin',
-              title: 'Psikolog Anak & Pakar Parenting',
-              avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=75&fm=webp',
-              bio: 'Psikolog anak dan praktisi parenting terkemuka di Indonesia.',
-              instagram: 'https://instagram.com/ratnasari.mpsi',
-              linkedin: 'https://linkedin.com/in/ratnasari-mpsi',
-              website: ''
-            },
-            {
-              id: 2,
-              email: 'editor@domain.com',
-              password: 'editor123',
-              name: 'Maya Putri, S.Psi',
-              role: 'editor',
-              title: 'Senior Editor & Content Moderator',
-              avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=80&q=50&fm=webp',
-              bio: 'Editor konten kesehatan dan pengasuhan anak dengan sertifikasi jurnalistik edukasi keluarga.',
-              instagram: 'https://instagram.com/mayaputri.editor',
-              linkedin: 'https://linkedin.com/in/maya-putri-editor',
-              website: ''
-            },
-            {
-              id: 3,
-              email: 'penulis@domain.com',
-              password: 'writer123',
-              name: 'Ahmad Zulkarnain, S.Ked',
-              role: 'writer',
-              title: 'Edukator Kesehatan Anak & Balita',
-              avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=75&fm=webp',
-              bio: 'Edukator kesehatan anak dan spesialis gizi tumbuh kembang balita.',
-              instagram: 'https://instagram.com/ahmad.zk',
-              linkedin: '',
-              website: ''
-            }
-          ];
+  {
+    id: 1,
+    email: 'admin@domain.com',
+    password: 'admin123',
+    name: 'Site Administrator',
+    role: 'admin',
+    title: 'Platform Admin & Career Portal Manager',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=75&fm=webp',
+    bio: 'Manages Job Web ID CMS, listings, and editorial workflow.',
+    instagram: '',
+    linkedin: '',
+    website: ''
+  },
+  {
+    id: 2,
+    email: 'editor@domain.com',
+    password: 'editor123',
+    name: 'Senior Editor',
+    role: 'editor',
+    title: 'Career Content Editor',
+    avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=80&q=50&fm=webp',
+    bio: 'Edits job tips, labor news, and career guides.',
+    instagram: '',
+    linkedin: '',
+    website: ''
+  },
+  {
+    id: 3,
+    email: 'penulis@domain.com',
+    password: 'writer123',
+    name: 'Career Writer',
+    role: 'writer',
+    title: 'Jobs & Career Contributor',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=75&fm=webp',
+    bio: 'Writes about job openings, interviews, and workplace skills.',
+    instagram: '',
+    linkedin: '',
+    website: ''
+  }
+];
 
           for (const u of initialSeed) {
             if (cols.has('password_hash')) {
@@ -4841,7 +4841,7 @@ async function syncStaticFilesToGitHub(
       : (env.GITHUB_OWNER || '').trim();
 
     const repo = isBadRepo((env.GITHUB_REPO || '').trim())
-      ? 'parenting-my-id'
+      ? 'job'
       : (env.GITHUB_REPO || '').trim();
 
     const branch = (env.GITHUB_BRANCH || '').trim() || 'main';
