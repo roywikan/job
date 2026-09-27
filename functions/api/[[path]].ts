@@ -1029,7 +1029,7 @@ ${articleLinks}
         const fullArticles = postsList.map((p: any) => {
           const url = `${siteUrl}/baca/${p.slug}`;
           const author = p.authorName || `Tim Redaksi ${siteMeta.site_name}`;
-          const category = p.category || 'Berita';
+          const category = p.category || 'Karir';
           const date = p.updatedAt || p.createdAt || new Date().toISOString();
           return `---
 
@@ -3416,47 +3416,47 @@ Berdasarkan judul artikel: "${title}" dan isi: "${(content || '').slice(0, 500)}
     // =========================================================================
     // SURAT PEMBACA & IKLAN BARIS ENDPOINTS (Cloudflare Pages & D1)
     // =========================================================================
-    const cfMockSuratPembaca = [
-      {
-        id: 1,
-        nama: 'Siti Rahmawati',
-        kota: 'Surabaya',
-        pekerjaan: 'Ibu Rumah Tangga',
-        tahunLahir: 1988,
-        phone: '081234567890',
-        judul: 'Apresiasi untuk Pembenahan Taman Kota & Fasilitas Bermain Anak',
-        isi: 'Saya ingin menyampaikan apresiasi tinggi kepada pemerintah kota yang telah membenahi fasilitas taman bermain anak di pusat kota. Wahana kini bersih, aman, dan dilengkapi keran cuci tangan serta bangku pendamping yang nyaman. Diharapkan seluruh pengunjung ikut menjaga kebersihannya.',
-        status: 'published',
-        createdAt: '2026-09-12T15:42:09.441Z',
-        updatedAt: '2026-09-12T15:42:09.441Z'
-      },
-      {
-        id: 2,
-        nama: 'Bambang Wijaya',
-        kota: 'Bandung',
-        pekerjaan: 'Karyawan Swasta',
-        tahunLahir: 1982,
-        phone: '085678901234',
-        judul: 'Mohon Perbaikan Penerangan Jalan Umum Wilayah Melati',
-        isi: 'Lampu penerangan jalan umum (PJU) di kawasan perumahan Melati telah padam selama hampir tiga minggu. Hal ini meresahkan warga saat beraktivitas malam hari. Mohon dinas terkait segera menindaklanjuti demi keamanan dan kenyamanan bersama.',
-        status: 'published',
-        createdAt: '2026-09-09T15:42:09.441Z',
-        updatedAt: '2026-09-09T15:42:09.441Z'
-      }
-    ];
+const cfMockSuratPembaca = [
+  {
+    id: 1,
+    nama: 'Andi Pratama',
+    kota: 'Jakarta',
+    pekerjaan: 'Software Engineer',
+    tahunLahir: 1992,
+    phone: '081234567890',
+    judul: 'Thanks for the overseas job guides',
+    isi: 'The country and visa tips on Job Web ID helped me prepare applications for Singapore roles. More salary benchmarking articles would be great.',
+    status: 'published',
+    createdAt: '2026-09-12T15:42:09.441Z',
+    updatedAt: '2026-09-12T15:42:09.441Z'
+  },
+  {
+    id: 2,
+    nama: 'Siti Nurhaliza',
+    kota: 'Bandung',
+    pekerjaan: 'HR Specialist',
+    tahunLahir: 1988,
+    phone: '085678901234',
+    judul: 'Request: more entry-level listings',
+    isi: 'Please feature more fresh-graduate and internship openings. Many readers are starting their careers.',
+    status: 'published',
+    createdAt: '2026-09-09T15:42:09.441Z',
+    updatedAt: '2026-09-09T15:42:09.441Z'
+  }
+];
 
     const cfMockIklanBaris = [
       // JASA NANNY & BABYSITTER
-      { id: 1, kategori: 'JASA NANNY & BABYSITTER', keteranganBarang: 'Penyaluran Babysitter & Nanny Terlatih Bersertifikasi. Pengalaman min 3 thn, telaten, sabar, paham stimulasi balita & masak MPASI. Garansi ganti 3x.', harga: 'Gaji Rp 2.8jt - 4.2jt/bln', nama: 'Yayasan Ananda Ceria', kota: 'Jakarta Selatan', pekerjaan: 'Penyalur Resmi', tahunLahir: 1980, phone: '0812-3456-7890', status: 'published', createdAt: '2026-09-14T15:00:00.000Z', updatedAt: '2026-09-14T15:00:00.000Z' },
-      { id: 2, kategori: 'JASA NANNY & BABYSITTER', keteranganBarang: 'Mencari Lowongan Perawat Bayi / Nanny Menginap. Wanita 28th, jujur, telaten, pengalaman rawat new born & balita 4 thn. SKCK lengkap.', harga: 'Gaji Nego (Pengalaman)', nama: 'Siti Aminah', kota: 'Tangerang Selatan', pekerjaan: 'Babysitter Senior', tahunLahir: 1996, phone: '0813-9876-5432', status: 'published', createdAt: '2026-09-13T15:00:00.000Z', updatedAt: '2026-09-13T15:00:00.000Z' },
-      { id: 3, kategori: 'JASA NANNY & BABYSITTER', keteranganBarang: 'Jasa Governess / Pendamping Belajar Anak Usia Dini (PAUD-SD). Lulusan S1 PGPAUD, ramah, menguasai metode Montessori & Inggris dasar.', harga: 'Rp 150.000 / Sesi 2 Jam', nama: 'Kak Nurul, S.Pd', kota: 'Depok', pekerjaan: 'Tutor Anak', tahunLahir: 1998, phone: '0857-1122-3344', status: 'published', createdAt: '2026-09-12T15:00:00.000Z', updatedAt: '2026-09-12T15:00:00.000Z' },
-      { id: 4, kategori: 'JASA NANNY & BABYSITTER', keteranganBarang: 'Perawat Lansia & Pendamping Balita Harian (Non-Menginap). Jam kerja 08.00-17.00. Area Bekasi Barat & sekitarnya.', harga: 'Rp 120.000 / Hari', nama: 'Mbak Sri', kota: 'Bekasi', pekerjaan: 'Perawat Harian', tahunLahir: 1989, phone: '0878-5544-3322', status: 'published', createdAt: '2026-09-11T15:00:00.000Z', updatedAt: '2026-09-11T15:00:00.000Z' },
-      { id: 5, kategori: 'JASA NANNY & BABYSITTER', keteranganBarang: 'Jasa Caregiver & Pendamping Bayi Kembar. Pengalaman khusus bayi kembar prematur & stimulasi tumbuh kembang.', harga: 'Nego Sesuai Shift', nama: 'Bidan Ratna', kota: 'Bogor', pekerjaan: 'Bidan Praktisi', tahunLahir: 1991, phone: '0821-6677-8899', status: 'published', createdAt: '2026-09-10T15:00:00.000Z', updatedAt: '2026-09-10T15:00:00.000Z' },
-
-      // SEWA & JUAL STROLLER
-      { id: 6, kategori: 'SEWA & JUAL STROLLER', keteranganBarang: 'Stroller Bugaboo Bee 5 Second Mulus 92%. Warna Navy, kanopi utuh, pengereman pakem, lipatan lancar. Bonus seat liner ori.', harga: 'Rp 4.200.000 (Nego)', nama: 'Mama Abel', kota: 'Jakarta Selatan', pekerjaan: 'Ibu Rumah Tangga', tahunLahir: 1992, phone: '0811-9000-1234', status: 'published', createdAt: '2026-09-14T14:00:00.000Z', updatedAt: '2026-09-14T14:00:00.000Z' },
-      { id: 7, kategori: 'SEWA & JUAL STROLLER', keteranganBarang: 'Sewa Stroller Cabin Size Babyzen Yoyo2 & Hamilton. Steril UV sebelum dikirim. Cocok untuk traveling liburan keluarga.', harga: 'Rp 35.000 / Hari', nama: 'RentBabyku', kota: 'Surabaya', pekerjaan: 'Sewa Alat Bayi', tahunLahir: 1990, phone: '0853-4433-2211', status: 'published', createdAt: '2026-09-13T14:00:00.000Z', updatedAt: '2026-09-13T14:00:00.000Z' },
-      { id: 8, kategori: 'SEWA & JUAL STROLLER', keteranganBarang: 'Stroller Joie Meet Litetrax 4 Mulus Like New. Pemakaian baru 4 bulan indoor mall. Lengkap dengan kardus & manual book.', harga: 'Rp 1.850.000', nama: 'Papa Darren', kota: 'Bandung', pekerjaan: 'Karyawan', tahunLahir: 1994, phone: '0812-7788-9900', status: 'published', createdAt: '2026-09-12T14:00:00.000Z', updatedAt: '2026-09-12T14:00:00.000Z' },
+      
+      { id: 1, kategori: 'LOWONGAN KERJA', keteranganBarang: 'Hiring Frontend Developer (React). Remote-friendly, 1–3 years experience. Send CV + portfolio.', harga: 'Salary negotiable', nama: 'TechHire ID', kota: 'Jakarta', pekerjaan: 'Recruiter', tahunLahir: 1990, phone: '0812-3456-7890', status: 'published', createdAt: '2026-09-14T15:00:00.000Z', updatedAt: '2026-09-14T15:00:00.000Z' },
+  { id: 2, kategori: 'LOWONGAN KERJA', keteranganBarang: 'Looking for work: Digital Marketing Specialist, 4 years experience, Google Ads & Meta Ads certified.', harga: 'Expected 8–12jt', nama: 'Rina S.', kota: 'Bandung', pekerjaan: 'Job Seeker', tahunLahir: 1995, phone: '0813-9876-5432', status: 'published', createdAt: '2026-09-13T15:00:00.000Z', updatedAt: '2026-09-13T15:00:00.000Z' },
+  { id: 3, kategori: 'JASA PROFESIONAL', keteranganBarang: 'CV writing & LinkedIn optimization for overseas applications (EN/ID). 48h turnaround.', harga: 'From Rp 150.000', nama: 'Career Coach Budi', kota: 'Surabaya', pekerjaan: 'Career Coach', tahunLahir: 1987, phone: '0857-1122-3344', status: 'published', createdAt: '2026-09-12T15:00:00.000Z', updatedAt: '2026-09-12T15:00:00.000Z' },
+  { id: 4, kategori: 'TRAINING & SERTIFIKASI', keteranganBarang: 'Weekend bootcamp: Interview skills & salary negotiation. Online via Zoom.', harga: 'Rp 250.000 / batch', nama: 'JobReady Academy', kota: 'Jakarta', pekerjaan: 'Training Provider', tahunLahir: 1985, phone: '021-5551234', status: 'published', createdAt: '2026-09-11T15:00:00.000Z', updatedAt: '2026-09-11T15:00:00.000Z' },
+  { id: 5, kategori: 'LOWONGAN LUAR NEGERI', keteranganBarang: 'Nurse / caregiver placement info for Japan & Middle East. Official agency partners only.', harga: 'Contact for details', nama: 'Global Work Desk', kota: 'Jakarta', pekerjaan: 'Placement Info', tahunLahir: 1980, phone: '0811-9000-1234', status: 'published', createdAt: '2026-09-10T15:00:00.000Z', updatedAt: '2026-09-10T15:00:00.000Z' },
+  { id: 6, kategori: 'MAGANG & FRESH GRADUATE', keteranganBarang: 'Internship: Data Analyst (3 months). Students & fresh grads welcome. Hybrid Jakarta.', harga: 'Allowance provided', nama: 'DataLab ID', kota: 'Jakarta Selatan', pekerjaan: 'HR', tahunLahir: 1992, phone: '0812-7788-9900', status: 'published', createdAt: '2026-09-09T15:00:00.000Z', updatedAt: '2026-09-09T15:00:00.000Z' },
+  { id: 7, kategori: 'JASA PROFESIONAL', keteranganBarang: 'Freelance bookkeeping for SMEs. Accurate reports, monthly close.', harga: 'From Rp 500.000/mo', nama: 'Akuntan Raya', kota: 'Bekasi', pekerjaan: 'Accountant', tahunLahir: 1989, phone: '0878-5544-3322', status: 'published', createdAt: '2026-09-08T15:00:00.000Z', updatedAt: '2026-09-08T15:00:00.000Z' },
+  { id: 8, kategori: 'LOWONGAN KERJA', keteranganBarang: 'Warehouse Supervisor – Cikarang. Shift work, experience in logistics preferred.', harga: 'Competitive', nama: 'LogiMove', kota: 'Cikarang', pekerjaan: 'Ops Manager', tahunLahir: 1984, phone: '0818-0400-0500', status: 'published', createdAt: '2026-09-07T15:00:00.000Z', updatedAt: '2026-09-07T15:00:00.000Z' },
+      
       { id: 9, kategori: 'SEWA & JUAL STROLLER', keteranganBarang: 'Car Seat Joie Steadi Isofix 0-4 Tahun. Kondisi super bersih, kain busa empuk tidak ada noda. Alasan jual anak sudah besar.', harga: 'Rp 1.100.000', nama: 'Ibu Claris', kota: 'Yogyakarta', pekerjaan: 'Dosen', tahunLahir: 1988, phone: '0818-0400-0500', status: 'published', createdAt: '2026-09-11T14:00:00.000Z', updatedAt: '2026-09-11T14:00:00.000Z' },
       { id: 10, kategori: 'SEWA & JUAL STROLLER', keteranganBarang: 'Baby Carrier Ergobaby Omni 360 Cool Air Mesh Midnight Blue Original. Kondisi 95% jarang pakai. Dus & buku komplit.', harga: 'Rp 1.350.000', nama: 'Bunda Sarah', kota: 'Semarang', pekerjaan: 'Wiraswasta', tahunLahir: 1993, phone: '0819-3322-1100', status: 'published', createdAt: '2026-09-10T14:00:00.000Z', updatedAt: '2026-09-10T14:00:00.000Z' },
       { id: 11, kategori: 'SEWA & JUAL STROLLER', keteranganBarang: 'Sewa Carseat & Box Bayi Kayu Minimalis. Tarif mingguan & bulanan terjangkau. Free antar jemput area Malang Kota.', harga: 'Mulai Rp 150rb/Bulan', nama: 'Malang Baby Rent', kota: 'Malang', pekerjaan: 'Rental Peralatan', tahunLahir: 1987, phone: '0851-9988-7766', status: 'published', createdAt: '2026-09-09T14:00:00.000Z', updatedAt: '2026-09-09T14:00:00.000Z' },
@@ -4847,9 +4847,9 @@ async function syncStaticFilesToGitHub(
     const branch = (env.GITHUB_BRANCH || '').trim() || 'main';
 
     let siteUrl = (env.SITE_URL || requestUrlOrigin || '').replace(/\/$/, '');
-    let siteName = env.SITE_NAME || 'Blog Engine';
-    let siteDescription =
-      'Platform publikasi jobs, career, lowongan dan konten interaktif modern.';
+    let siteName = env.SITE_NAME || 'Job Web ID';
+let siteDescription =
+  'Job openings, career tips, and workplace guides for Indonesia and overseas.';
 
     try {
       const results = await env.DB.prepare(
@@ -4955,7 +4955,7 @@ ${items}
     } catch (_) {}
 
     // Kategori dari tabel categories (slug / name)
-    const FALLBACK_CATEGORIES = ['pola-asuh', 'tumbuh-kembang', 'kesehatan-gizi', 'balita'];
+    const FALLBACK_CATEGORIES = ['lowongan', 'tips-karir', 'karir', 'luar-negeri'];
     let categoryList: { slug: string; updatedAt?: string }[] = FALLBACK_CATEGORIES.map((slug) => ({ slug }));
     try {
       const catRes = await env.DB.prepare(
@@ -5007,7 +5007,8 @@ ${items}
     const listingUrls = [
       { path: '/iklan-baris', priority: '0.7', changefreq: 'daily' },
       { path: '/surat-pembaca', priority: '0.7', changefreq: 'daily' },
-      { path: '/balita', priority: '0.6', changefreq: 'weekly' },
+      { path: '/tips-karir', priority: '0.7', changefreq: 'weekly' },
+      { path: '/country', priority: '0.6', changefreq: 'weekly' },
     ]
       .map(
         (p) =>
@@ -5071,7 +5072,7 @@ ${articleLinks || `- [Beranda](${siteUrl}): ${siteDescription}`}
       .map((p: any) => {
         const url = `${siteUrl}/baca/${p.slug}`;
         const author = p.authorName || `Tim Redaksi ${siteName}`;
-        const category = p.category || 'Umum';
+        const category = p.category || 'Karir';
         const date = p.updatedAt || p.createdAt || new Date().toISOString();
         return `---
 
