@@ -163,7 +163,7 @@ const resolveGitHubOwner = (v?: string) => {
 
 const resolveGitHubRepo = (v?: string) => {
   const trimmed = (v || '').trim();
-  return isBadGitHubRepo(trimmed) ? 'parenting-my-id' : trimmed;
+  return isBadGitHubRepo(trimmed) ? 'job' : trimmed;
 };
 
 const resolveGitHubBranch = (v?: string) => {
@@ -628,7 +628,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       };
     }
 
-    const jwtSecret = env.JWT_SECRET || (typeof process !== 'undefined' ? process.env?.JWT_SECRET : '') || 'parenting-unified-jwt-secret-key-2026-secure';
+    const jwtSecret = env.JWT_SECRET || (typeof process !== 'undefined' ? process.env?.JWT_SECRET : '') || 'job-jwt-secret-change-me-in-production';
 
     // 1. STATELESS SIGNED JWT VALIDATION (Zero D1 reads, verified cryptographically via HMAC-SHA256)
     if (token.includes('.') && token.split('.').length === 3) {
