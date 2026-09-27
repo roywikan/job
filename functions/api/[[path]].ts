@@ -408,12 +408,12 @@ export const onRequest: PagesFunction<Env> = async (context) => {
               await db.prepare(`
                 INSERT INTO users (email, password, password_hash, name, role, title, avatar, bio, social_instagram, social_linkedin, social_website, created_at)
                 VALUES (?, ?, ?, ?, 'editor', ?, ?, ?, ?, ?, ?, ?)
-              `).bind('editor@domain.com', 'editor123', 'editor123', 'Maya Putri, S.Psi', 'Senior Editor & Content Moderator', 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=80&q=50&fm=webp', 'Editor konten kesehatan dan pengasuhan anak dengan sertifikasi jurnalistik edukasi keluarga.', 'https://instagram.com/mayaputri.editor', 'https://linkedin.com/in/maya-putri-editor', '', now).run();
+              `).bind('editor@domain.com', 'editor123', 'editor123', 'Senior Editor', 'Career Content Editor', 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=80&q=50&fm=webp', 'Edits job tips, labor market news, and career guides.', 'https://instagram.com/mayaputri.editor', 'https://linkedin.com/in/maya-putri-editor', '', now).run();
             } else {
               await db.prepare(`
                 INSERT INTO users (email, password, name, role, title, avatar, bio, social_instagram, social_linkedin, social_website, created_at)
                 VALUES (?, ?, ?, 'editor', ?, ?, ?, ?, ?, ?, ?)
-              `).bind('editor@domain.com', 'editor123', 'Maya Putri, S.Psi', 'Senior Editor & Content Moderator', 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=80&q=50&fm=webp', 'Editor konten kesehatan dan pengasuhan anak dengan sertifikasi jurnalistik edukasi keluarga.', 'https://instagram.com/mayaputri.editor', 'https://linkedin.com/in/maya-putri-editor', '', now).run();
+              `).bind('editor@domain.com', 'editor123', 'Senior Editor', 'Career Content Editor', 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=80&q=50&fm=webp', 'Edits job tips, labor market news, and career guides.', 'https://instagram.com/mayaputri.editor', 'https://linkedin.com/in/maya-putri-editor', '', now).run();
             }
           }
 
@@ -689,7 +689,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       if (userId === 1) {
         user = { id: 1, email: `admin@${activeHost}`, role: 'admin', name: 'Dr. Ratna Sari, M.Psi' };
       } else if (userId === 2) {
-        user = { id: 2, email: `editor@${activeHost}`, role: 'editor', name: 'Maya Putri, S.Psi' };
+        user = { id: 2, email: `editor@${activeHost}`, role: 'editor', name: 'Senior Editor' };
       } else if (userId === 3) {
         user = { id: 3, email: `penulis@${activeHost}`, role: 'writer', name: 'Ahmad Zulkarnain, S.Ked' };
       } else {
@@ -835,7 +835,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       .trim()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
-    if (!cleanBase) cleanBase = 'artikel';
+    if (!cleanBase) cleanBase = 'article';
 
     if (!env.DB) return cleanBase;
 
@@ -1146,7 +1146,7 @@ Sitemap: ${siteUrl}/sitemap.xml
       const website = socials?.website || body.socialWebsite || '';
       const userRole = role || 'writer';
       const userAvatar = avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
-      const userTitle = title || 'Edukator Parenting';
+      const userTitle = title || 'Career Contributor';
       const userBio = bio || 'Penulis dan kontributor artikel.';
       const passVal = String(password && String(password).trim().length > 0 ? password : 'writer123');
       const now = new Date().toISOString();
@@ -1516,13 +1516,13 @@ Sitemap: ${siteUrl}/sitemap.xml
       const generatedSlug = await getUniqueSlugD1(slug || title, id);
       const postExcerpt = excerpt || contentMarkdown.slice(0, 150) + '...';
       const image = featuredImage || 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=700&q=75&fm=webp';
-      const cat = category || 'Pola Asuh';
+      const cat = category || 'Karir';
       const readMin = readTimeMinutes || Math.max(1, Math.ceil(contentMarkdown.split(' ').length / 200));
       const postStatus = status || 'draft';
       const rejReason = rejectionReason || null;
       const mTitle = metaTitle || `${title}`;
       const mDesc = metaDescription || postExcerpt;
-      const tagList = tags || 'berita, artikel';
+      const tagList = tags || 'jobs, career, lowongan';
       const coAuthorsStr = Array.isArray(coAuthorIds) ? JSON.stringify(coAuthorIds) : null;
       const now = new Date().toISOString();
 
