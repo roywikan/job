@@ -3102,7 +3102,7 @@ Sitemap: ${siteUrl}/sitemap.xml
       const dateStr = new Date().toISOString().slice(0, 10);
       const cleanName = (filename || 'image.png').toLowerCase().replace(/[^a-z0-9.-]/g, '-');
       const filePath = `public/uploads/${dateStr}/${Date.now()}-${cleanName}`;
-      const message = `upload: image ${filename} via Parenting CMS`;
+      const message = `upload: image ${filename} via Job Web ID CMS`;
 
       const ghUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
       const ghRes = await fetch(ghUrl, {
@@ -3175,7 +3175,7 @@ Sitemap: ${siteUrl}/sitemap.xml
         return {
           metaTitle: `${t} | ${siteMeta.site_name}`,
           metaDescription: firstSentence,
-          tags: 'artikel, informasi, panduan, edukasi',
+          tags: 'jobs, career, lowongan, tips-karir',
           excerpt: excerpt,
           aiGenerated: false,
         };
@@ -4849,7 +4849,7 @@ async function syncStaticFilesToGitHub(
     let siteUrl = (env.SITE_URL || requestUrlOrigin || '').replace(/\/$/, '');
     let siteName = env.SITE_NAME || 'Blog Engine';
     let siteDescription =
-      'Platform publikasi berita, artikel, dan konten interaktif modern.';
+      'Platform publikasi jobs, career, lowongan dan konten interaktif modern.';
 
     try {
       const results = await env.DB.prepare(
@@ -5036,7 +5036,7 @@ Allow: /
 Disallow: /admin
 Disallow: /redaksi-login
 Disallow: /portal-redaksi
-Disallow: /kelola-parenting
+Disallow: /kelola-job
 Disallow: /dashboard-redaksi
 
 Sitemap: ${siteUrl}/sitemap.xml
@@ -5113,7 +5113,7 @@ ${fullArticles}
         headers: {
           Authorization: `token ${token}`,
           Accept: 'application/vnd.github.v3+json',
-          'User-Agent': 'CloudflarePages-ParentingApp',
+          'User-Agent': 'CloudflarePages-JobWebId',
         },
       });
       if (getRes.ok) {
