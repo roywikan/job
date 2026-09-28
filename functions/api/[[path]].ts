@@ -628,7 +628,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       };
     }
 
-    const jwtSecret = env.JWT_SECRET || (typeof process !== 'undefined' ? process.env?.JWT_SECRET : '') || 'job-jwt-secret-change-me-in-production';
+    const jwtSecret = env.JWT_SECRET || (typeof process !== 'undefined' ? process.env?.JWT_SECRET : '') || 'jwt-ini-rahasia-sekali-jwt-ini-rahasia-sekali';
 
     // 1. STATELESS SIGNED JWT VALIDATION (Zero D1 reads, verified cryptographically via HMAC-SHA256)
     if (token.includes('.') && token.split('.').length === 3) {
@@ -4623,7 +4623,7 @@ BEGIN TRANSACTION;
     if (path === '/api/hero-affiliate-widget' && method === 'GET') {
       const defaultSnippet = `<!-- Contoh Widget Affiliate Travelpayouts / Booking.com / GetYourGuide / Wego / Trip.com -->
 <div id="tp-hero-search" style="text-align: center; padding: 10px; color: #fff;">
-  <p style="font-size: 13px; font-weight: bold; margin-bottom: 8px;">✈️ Cari & Bandingkan Tiket Pesawat & Hotel</p>
+  <p style="font-size: 13px; font-weight: bold; margin-bottom: 8px;">💼 Explore career tools & partner offers</p>
   <!-- Tempelkan kode script asinkron dari dashboard affiliate Anda di sini -->
 </div>`;
 
