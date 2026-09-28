@@ -15,9 +15,6 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Enable pnpm
-        run: corepack enable && corepack prepare pnpm@latest --activate
-
       - name: Install and build
         working-directory: atscvresume
         env:
@@ -25,10 +22,8 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: "/atscvresume"
           NEXT_PUBLIC_SITE_URL: "https://job.web.id"
         run: |
-          corepack enable
-          corepack prepare pnpm@9.15.9 --activate
-          pnpm install --frozen-lockfile --dangerously-allow-all-builds
-          pnpm run build:cloudflare
+          npm install
+          npm run build:cloudflare
           test -d out
 
       - name: Publish to public/atscvresume
@@ -36,7 +31,7 @@ jobs:
           rm -rf public/atscvresume
           mkdir -p public/atscvresume
           cp -R atscvresume/out/. public/atscvresume/
-          find public/atscvresume -name "index.html" | head -10
+          find public/atscvresume -name "*.html" | head -15
 
       - name: Commit
         run: |
