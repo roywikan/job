@@ -1,0 +1,43 @@
+name: Build atscvresume static
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install and build
+        working-directory: atscvresume
+        run: |
+          corepack enable
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile
+            pnpm run build:cloudflare
+          else
+            npm ci || npm install
+            npm run build:cloudflare
+          fi
+
+      - name: Publish to public/atscvresume
+        run: |
+          rm -rf public/atscvresume
+          mkdir -p public/atscvresume
+          cp -R atscvresume/out/. public/atscvresume/
+          test -f public/atscvresume/en/index.html
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/atscvresume
+          git diff --staged --quiet || git commit -m "chore: build public/atscvresume for job.web.id"
+          git push
