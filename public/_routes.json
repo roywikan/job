@@ -4,6 +4,7 @@
     "/*"
   ],
   "exclude": [
+    "/atscvresume/*",
     "/assets/*",
     "/uploads/*",
     "/favicon.ico",
