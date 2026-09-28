@@ -1,0 +1,42 @@
+name: Build atscvresume static
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install and build
+        working-directory: atscvresume
+        env:
+          STATIC_EXPORT: "1"
+          NEXT_PUBLIC_BASE_PATH: "/atscvresume"
+          NEXT_PUBLIC_SITE_URL: "https://job.web.id"
+        run: |
+          npm install
+          npm run build:cloudflare
+          test -d out
+
+      - name: Publish to public/atscvresume
+        run: |
+          rm -rf public/atscvresume
+          mkdir -p public/atscvresume
+          cp -R atscvresume/out/. public/atscvresume/
+          find public/atscvresume -name "*.html" | head -15
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A public/atscvresume
+          git diff --staged --quiet || git commit -m "chore: build public/atscvresume for job.web.id"
+          git push
