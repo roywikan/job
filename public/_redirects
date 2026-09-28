@@ -4,7 +4,8 @@
 # Hanya redirect path artikel LEGACY → /baca/*
 # Jangan redirect /kategori/* (itu halaman archive kategori)
 # ============================================================
-
+/atscvresume  /atscvresume/en/  302
+/atscvresume/ /atscvresume/en/  302
 # Specific legacy redirects
 /makanan/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil/ /baca/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil 301
 /makanan/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil /baca/hal-yang-perlu-dicermati-dalam-memberikan-nutrisi-untuk-anak-kecil 301
